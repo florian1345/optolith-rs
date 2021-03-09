@@ -420,7 +420,7 @@ impl Translatable<NonProfaneSkillLocalization> for ZibiljaRitual {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct AnimistForce {
+pub struct AnimistPower {
     pub id: u32,
     pub check: [u32; 3],
 
@@ -435,20 +435,20 @@ pub struct AnimistForce {
     pub translations: Translations<NoRangeTimeLocalization>
 }
 
-impl Identifiable for AnimistForce {
+impl Identifiable for AnimistPower {
     fn id(&self) -> Id {
-        Id::new(Category::AnimistForces, self.id)
+        Id::new(Category::AnimistPowers, self.id)
     }
 }
 
-impl Translatable<NoRangeTimeLocalization> for AnimistForce {
+impl Translatable<NoRangeTimeLocalization> for AnimistPower {
     fn translations(&self) -> &Translations<NoRangeTimeLocalization> {
         &self.translations
     }
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct RogueSpell {
+pub struct JesterTrick {
     pub id: u32,
     pub check: [u32; 3],
 
@@ -466,13 +466,13 @@ pub struct RogueSpell {
     pub translations: Translations<NonProfaneSkillLocalization>
 }
 
-impl Identifiable for RogueSpell {
+impl Identifiable for JesterTrick {
     fn id(&self) -> Id {
-        Id::new(Category::RogueSpells, self.id)
+        Id::new(Category::JesterTricks, self.id)
     }
 }
 
-impl Translatable<NonProfaneSkillLocalization> for RogueSpell {
+impl Translatable<NonProfaneSkillLocalization> for JesterTrick {
     fn translations(&self) -> &Translations<NonProfaneSkillLocalization> {
         &self.translations
     }

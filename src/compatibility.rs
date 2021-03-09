@@ -14,7 +14,7 @@ const ADVANCED_MAGICAL_SPECIAL_ABILITIES_FILE: &'static str =
     "AdvancedMagicalSpecialAbilitiesidMap.yml";
 const ADVANTAGES_FILE: &'static str = "AdvantagesIdMap.yml";
 const ANCESTOR_GLYPHS_FILE: &'static str = "AncestorGlyphsIdMap.yml";
-const ANIMIST_FORCES_FILE: &'static str = "AnimistForcesIdMap.yml";
+const ANIMIST_POWERS_FILE: &'static str = "AnimistPowersIdMap.yml";
 const ASPECTS_FILE: &'static str = "AspectsIdMap.yml";
 const ATTIRE_ENCHANTMENTS_FILE: &'static str = "AttireEnchantmentsIdMap.yml";
 const BLESSED_TRADITIONS_FILE: &'static str = "BlessedTraditionsIdMap.yml";
@@ -49,6 +49,7 @@ const GENERAL_SPECIAL_ABILITIES_FILE: &'static str =
 const GEODE_RITUALS_FILE: &'static str = "GeodeRitualsIdMap.yml";
 const INSTRUMENT_ENCHANTMENTS_FILE: &'static str =
     "InstrumentEnchantmentsIdMap.yml";
+const JESTER_TRICKS_FILE: &'static str = "JesterTricksIdMap.yml";
 const FOOLS_HAT_ENCHANTMENTS_FILE: &'static str =
     "FoolsHatEnchantmentsIdMap.yml";
 const KARMA_SPECIAL_ABILITIES_FILE: &'static str =
@@ -201,7 +202,7 @@ impl Compatibility {
             Category::AdvancedMagicalSpecialAbilities)?;
         res.load_str_id_map(ADVANTAGES_FILE, Category::Advantages)?;
         res.load_str_id_map(ANCESTOR_GLYPHS_FILE, Category::AncestorGlyphs)?;
-        res.load_str_id_map(ANIMIST_FORCES_FILE, Category::AnimistForces)?;
+        res.load_str_id_map(ANIMIST_POWERS_FILE, Category::AnimistPowers)?;
         res.load_str_id_map(ASPECTS_FILE, Category::Aspects)?;
         res.load_str_id_map(ATTIRE_ENCHANTMENTS_FILE,
             Category::AttireEnchantments)?;
@@ -238,6 +239,7 @@ impl Compatibility {
         res.load_str_id_map(GEODE_RITUALS_FILE, Category::GeodeRituals)?;
         res.load_str_id_map(INSTRUMENT_ENCHANTMENTS_FILE,
             Category::InstrumentEnchantments)?;
+        res.load_str_id_map(JESTER_TRICKS_FILE, Category::JesterTricks)?;
         res.load_str_id_map(FOOLS_HAT_ENCHANTMENTS_FILE,
             Category::FoolsHatEnchantments)?;
         res.load_str_id_map(KARMA_SPECIAL_ABILITIES_FILE,

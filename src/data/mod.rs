@@ -39,15 +39,15 @@ use crate::data::non_profane_skill::karmal::{
     LiturgicalChant
 };
 use crate::data::non_profane_skill::magical::{
-    AnimistForce,
+    AnimistPower,
     Curse,
     DominationRitual,
     ElvenMagicalSong,
     GeodeRitual,
+    JesterTrick,
     MagicalDance,
     MagicalMelody,
     Ritual,
-    RogueSpell,
     Spell,
     ZibiljaRitual
 };
@@ -128,6 +128,7 @@ const GENERAL_SPECIAL_ABILITY_DIR: &'static str = "GeneralSpecialAbilities";
 const GEODE_RITUAL_DIR: &'static str = "GeodeRituals";
 const HAIR_COLOR_DIR: &'static str = "HairColors";
 const ITEM_GROUP_DIR: &'static str = "ItemGroups";
+const JESTER_TRICK_DIR: &'static str = "JesterTricks";
 const KARMA_SPECIAL_ABILITY_DIR: &'static str = "KarmaSpecialAbilities";
 const LANGUAGE_DIR: &'static str = "Languages";
 const LITURGICAL_CHANT_DIR: &'static str = "LiturgicalChants";
@@ -143,7 +144,6 @@ const MAGIC_STYLE_SPECIAL_ABILITY_DIR: &'static str =
 const RACE_DIR: &'static str = "Races";
 const REACH_DIR: &'static str = "Reaches";
 const RITUAL_DIR: &'static str = "Rituals";
-const ROGUE_SPELL_DIR: &'static str = "RogueSpells";
 const SCRIPT_DIR: &'static str = "Scripts";
 const SKILL_DIR: &'static str = "Skills";
 const SKILL_GROUP_DIR: &'static str = "SkillGroups";
@@ -168,7 +168,7 @@ pub struct OptolithData {
     advanced_magical_special_abilities: IdMap<AdvancedMagicalSpecialAbility>,
     advantages: IdMap<Advantage>,
     ancestor_glyphs: IdMap<AncestorGlyph>,
-    animist_forces: IdMap<AnimistForce>,
+    animist_forces: IdMap<AnimistPower>,
     arcane_bard_traditions: IdMap<ArcaneBardTradition>,
     arcane_dancer_traditions: IdMap<ArcaneDancerTradition>,
     aspects: IdMap<Aspect>,
@@ -194,6 +194,7 @@ pub struct OptolithData {
     geode_rituals: IdMap<GeodeRitual>,
     hair_colors: IdMap<HairColor>,
     item_groups: IdMap<ItemGroup>,
+    jester_tricks: IdMap<JesterTrick>,
     karma_special_abilities: IdMap<KarmaSpecialAbility>,
     languages: IdMap<Language>,
     liturgical_chants: IdMap<LiturgicalChant>,
@@ -207,7 +208,6 @@ pub struct OptolithData {
     races: IdMap<Race>,
     reaches: IdMap<Reach>,
     rituals: IdMap<Ritual>,
-    rogue_spells: IdMap<RogueSpell>,
     scripts: IdMap<Script>,
     skills: IdMap<Skill>,
     skill_groups: IdMap<SkillGroup>,
@@ -313,6 +313,8 @@ impl OptolithData {
             construct_u32_map(util::join(path, GEODE_RITUAL_DIR))?;
         let hair_colors = construct_u32_map(util::join(path, HAIR_COLOR_DIR))?;
         let item_groups = construct_u32_map(util::join(path, ITEM_GROUP_DIR))?;
+        let jester_tricks =
+            construct_u32_map(util::join(path, JESTER_TRICK_DIR))?;
         let karma_special_abilities =
             construct_u32_map(util::join(path, KARMA_SPECIAL_ABILITY_DIR))?;
         let languages = construct_u32_map(util::join(path, LANGUAGE_DIR))?;
@@ -337,8 +339,6 @@ impl OptolithData {
         let races = construct_u32_map(util::join(path, RACE_DIR))?;
         let reaches = construct_u32_map(util::join(path, REACH_DIR))?;
         let rituals = construct_u32_map(util::join(path, RITUAL_DIR))?;
-        let rogue_spells =
-            construct_u32_map(util::join(path, ROGUE_SPELL_DIR))?;
         let scripts = construct_u32_map(util::join(path, SCRIPT_DIR))?;
         let skills = construct_u32_map(util::join(path, SKILL_DIR))?;
         let skill_groups =
@@ -394,6 +394,7 @@ impl OptolithData {
             geode_rituals,
             hair_colors,
             item_groups,
+            jester_tricks,
             karma_special_abilities,
             languages,
             liturgical_chants,
@@ -407,7 +408,6 @@ impl OptolithData {
             races,
             reaches,
             rituals,
-            rogue_spells,
             scripts,
             skills,
             skill_groups,
@@ -452,7 +452,7 @@ impl OptolithData {
         self.ancestor_glyphs.get(&id)
     }
 
-    pub fn get_animist_force(&self, id: u32) -> Option<&AnimistForce> {
+    pub fn get_animist_force(&self, id: u32) -> Option<&AnimistPower> {
         self.animist_forces.get(&id)
     }
 
@@ -565,6 +565,10 @@ impl OptolithData {
         self.item_groups.get(&id)
     }
 
+    pub fn get_jester_trick(&self, id: u32) -> Option<&JesterTrick> {
+        self.jester_tricks.get(&id)
+    }
+
     pub fn get_karma_special_ability(&self, id: u32)
             -> Option<&KarmaSpecialAbility> {
         self.karma_special_abilities.get(&id)
@@ -620,10 +624,6 @@ impl OptolithData {
 
     pub fn get_ritual(&self, id: u32) -> Option<&Ritual> {
         self.rituals.get(&id)
-    }
-
-    pub fn get_rogue_spell(&self, id: u32) -> Option<&RogueSpell> {
-        self.rogue_spells.get(&id)
     }
 
     pub fn get_script(&self, id: u32) -> Option<&Script> {

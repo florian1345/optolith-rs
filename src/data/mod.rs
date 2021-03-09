@@ -101,7 +101,7 @@ const ADVANCED_MAGICAL_SPECIAL_ABILITY_DIR: &'static str =
     "AdvancedMagicalSpecialAbilities";
 const ADVANTAGE_DIR: &'static str = "Advantages";
 const ANCESTOR_GLYPH_DIR: &'static str = "AncestorGlyphs";
-const ANIMIST_FORCE_DIR: &'static str = "AnimistForces";
+const ANIMIST_POWER_DIR: &'static str = "AnimistPowers";
 const ARCANE_BARD_TRADITION_DIR: &'static str = "ArcaneBardTraditions";
 const ARCANE_DANCER_TRADITION_DIR: &'static str = "ArcaneDancerTraditions";
 const ASPECT_DIR: &'static str = "Aspects";
@@ -168,7 +168,7 @@ pub struct OptolithData {
     advanced_magical_special_abilities: IdMap<AdvancedMagicalSpecialAbility>,
     advantages: IdMap<Advantage>,
     ancestor_glyphs: IdMap<AncestorGlyph>,
-    animist_forces: IdMap<AnimistPower>,
+    animist_powers: IdMap<AnimistPower>,
     arcane_bard_traditions: IdMap<ArcaneBardTradition>,
     arcane_dancer_traditions: IdMap<ArcaneDancerTradition>,
     aspects: IdMap<Aspect>,
@@ -272,7 +272,7 @@ impl OptolithData {
         let ancestor_glyphs =
             construct_u32_map(util::join(path, ANCESTOR_GLYPH_DIR))?;
         let animist_forces =
-            construct_u32_map(util::join(path, ANIMIST_FORCE_DIR))?;
+            construct_u32_map(util::join(path, ANIMIST_POWER_DIR))?;
         let arcane_bard_traditions =
             construct_u32_map(util::join(path, ARCANE_BARD_TRADITION_DIR))?;
         let arcane_dancer_traditions =
@@ -368,7 +368,7 @@ impl OptolithData {
             advanced_magical_special_abilities,
             advantages,
             ancestor_glyphs,
-            animist_forces,
+            animist_powers: animist_forces,
             arcane_bard_traditions,
             arcane_dancer_traditions,
             aspects,
@@ -453,7 +453,7 @@ impl OptolithData {
     }
 
     pub fn get_animist_force(&self, id: u32) -> Option<&AnimistPower> {
-        self.animist_forces.get(&id)
+        self.animist_powers.get(&id)
     }
 
     pub fn get_arcane_bard_tradition(&self, id: u32)

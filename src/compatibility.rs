@@ -81,7 +81,6 @@ const RANGED_COMBAT_TECHNIQUES_FILE: &'static str =
     "RangedCombatTechniquesIdMap.yml";
 const RING_ENCHANTMENTS_FILE: &'static str = "RingEnchantmentsIdMap.yml";
 const RITUALS_FILE: &'static str = "RitualsIdMap.yml";
-const ROGUE_SPELLS_FILE: &'static str = "RogueSpellsIdMap.yml";
 const BOWL_ENCHANTMENTS_FILE: &'static str = "BowlEnchantmentsIdMap.yml";
 const SERMONS_FILE: &'static str = "SermonsIdMap.yml";
 const FATE_POINT_SEX_SPECIAL_ABILITIES_FILE: &'static str =
@@ -271,7 +270,6 @@ impl Compatibility {
         res.load_str_id_map(RING_ENCHANTMENTS_FILE,
             Category::RingEnchantments)?;
         res.load_str_id_map(RITUALS_FILE, Category::Rituals)?;
-        res.load_str_id_map(ROGUE_SPELLS_FILE, Category::RogueSpells)?;
         res.load_str_id_map(BOWL_ENCHANTMENTS_FILE,
             Category::BowlEnchantments)?;
         res.load_str_id_map(SERMONS_FILE, Category::Sermons)?;

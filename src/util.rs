@@ -3,7 +3,7 @@ use crate::error::{self, OptolithDataResult};
 use serde::{Deserialize, Serialize};
 
 use std::ffi::OsString;
-use std::fs::{self, File};
+use std::fs::{self, File, ReadDir};
 use std::io::{Read, Write};
 use std::path::PathBuf;
 
@@ -26,6 +26,16 @@ where
 {
     let mut res = deserialize_yaml_file_do(file);
     error::set_file(&mut res, OsString::from(file.file_name().unwrap()));
+    res
+}
+
+fn read_dir_do(path: &PathBuf) -> OptolithDataResult<ReadDir> {
+    Ok(fs::read_dir(path)?)
+}
+
+pub fn read_dir(path: &PathBuf) -> OptolithDataResult<ReadDir> {
+    let mut res = read_dir_do(path);
+    error::set_file(&mut res, OsString::from(path.file_name().unwrap()));
     res
 }
 

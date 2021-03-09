@@ -73,7 +73,7 @@ use crate::util;
 use serde::{Deserialize, Serialize};
 
 use std::collections::HashMap;
-use std::fs::{self, DirEntry};
+use std::fs::DirEntry;
 use std::hash::Hash;
 use std::path::PathBuf;
 
@@ -137,8 +137,8 @@ const LITURGICAL_STYLE_SPECIAL_ABILITY_DIR: &'static str =
     "LiturgicalStyleSpecialAbilities";
 const MAGICAL_DANCE_DIR: &'static str = "MagicalDances";
 const MAGICAL_MELODY_DIR: &'static str = "MagicalMelodies";
-const MAGICAL_TRADITION_DIR: &'static str = "MagicalTraditions";
 const MAGICAL_SPECIAL_ABILITY_DIR: &'static str = "MagicalSpecialAbilities";
+const MAGICAL_TRADITION_DIR: &'static str = "MagicalTraditions";
 const MAGIC_STYLE_SPECIAL_ABILITY_DIR: &'static str =
     "MagicStyleSpecialAbilities";
 const RACE_DIR: &'static str = "Races";
@@ -228,7 +228,7 @@ where
 {
     let mut map: HashMap<K, V> = HashMap::new();
 
-    for file in fs::read_dir(dir)? {
+    for file in util::read_dir(&dir)? {
         let file = file?;
         let object: V = util::deserialize_yaml_file(&file.path())?;
         let id = key_builder(&object, &file);

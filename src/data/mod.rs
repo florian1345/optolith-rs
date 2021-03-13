@@ -220,6 +220,18 @@ pub struct OptolithData {
     uis: HashMap<String, UI>
 }
 
+fn is_placeholder(path: &str) -> bool {
+    if let Some(underscore) = path.find('_') {
+        match path[0..underscore].parse::<u32>() {
+            Ok(n) => n > 1000,
+            Err(_) => true
+        }
+    }
+    else {
+        true
+    }
+}
+
 fn construct_map<K, V>(dir: PathBuf, key_builder: impl Fn(&V, &DirEntry) -> K)
     -> OptolithDataResult<HashMap<K, V>>
 where
@@ -230,6 +242,14 @@ where
 
     for file in util::read_dir(&dir)? {
         let file = file?;
+
+        // TODO remove once a more permanent solution for placeholders has been
+        // found
+
+        if is_placeholder(file.file_name().to_str().unwrap()) {
+            continue;
+        }
+
         let object: V = util::deserialize_yaml_file(&file.path())?;
         let id = key_builder(&object, &file);
         map.insert(id, object);

@@ -223,7 +223,7 @@ pub struct OptolithData {
 fn is_placeholder(path: &str) -> bool {
     if let Some(underscore) = path.find('_') {
         match path[0..underscore].parse::<u32>() {
-            Ok(n) => n > 1000,
+            Ok(n) => n >= 1000,
             Err(_) => true
         }
     }

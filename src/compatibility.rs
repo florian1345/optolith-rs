@@ -23,7 +23,7 @@ const BRAWLING_SPECIAL_ABILTIES_FILE: &'static str =
 const CEREMONIAL_ITEM_SPECIAL_ABILITIES_FILE: &'static str =
     "CeremonialItemSpecialAbilitiesIdMap.yml";
 const CEREMONIES_FILE: &'static str = "CeremoniesIdMap.yml";
-const CHRONICLE_ENCHANTMENTS_FILE: &'static str = "ChronikzauberIdMap.yml";
+const CHRONICLE_ENCHANTMENTS_FILE: &'static str = "ChronicleEnchantmentsIdMap.yml";
 const COMBAT_SPECIAL_ABILITIES_FILE: &'static str =
     "CombatSpecialAbilitiesIdMap.yml";
 const COMBAT_STYLE_SPECIAL_ABILITIES_FILE: &'static str =
@@ -61,8 +61,8 @@ const ARCANE_ORB_ENCHANTMENTS_FILE: &'static str =
 const LITURGICAL_CHANTS_FILE: &'static str = "LiturgicalChantsIdMap.yml";
 const LITURGICAL_STYLE_SPECIAL_ABILITIES_FILE: &'static str =
     "LiturgicalStyleSpecialAbilitiesIdMap.yml";
-const LYCANTHROPIC_GIFTS_FILE: &'static str =
-    "LykanthropicGiftsIdMap.yml";
+const LYCANTROPIC_GIFTS_FILE: &'static str =
+    "LycantropicGiftsIdMap.yml";
 const MAGICAL_DANCES_FILE: &'static str = "MagicalDancesIdMap.yml";
 const MAGICAL_MELODIES_FILE: &'static str = "MagicalMelodiesIdMap.yml";
 const MAGICAL_SPECIAL_ABILITIES_FILE: &'static str =
@@ -87,17 +87,17 @@ const FATE_POINT_SEX_SPECIAL_ABILITIES_FILE: &'static str =
     "FatePointSexSpecialAbilitiesIdMap.yml";
 const SEX_SPECIAL_ABILITIES_FILE: &'static str =
     "SexSpecialAbilitiesIdMap.yml";
-const SICKLE_RITUALS_FILE: &'static str = "SickeRitualsIdMap.yml";
+const SICKLE_RITUALS_FILE: &'static str = "SickleRitualsIdMap.yml";
 const SIKARYAN_DRAIN_SPECIAL_ABILITIES_FILE: &'static str =
     "SikaryanDrainSpecialAbilitiesIdMap.yml";
+const SKILL_STYLE_SPECIAL_ABILITIES_FILE: &'static str =
+    "SkillStyleSpecialAbilititesIdMap.yml";
 const SPELLS_FILE: &'static str = "SpellsIdMap.yml";
 const SPELL_SWORD_ENCHANTMENTS_FILE: &'static str =
     "SpellSwordEnchantmentsIdMap.yml";
 const TOY_ENCHANTMENTS_FILE: &'static str = "ToyEnchantmentsIdMap.yml";
 const STAFF_ENCHANTMENTS_FILE: &'static str = "StaffEnchantmentsIdMap.yml";
 const STATES_FILE: &'static str = "StatesIdMap.yml";
-const TALENTSTILSONDERFERTIGKEITEN_FILE: &'static str =
-    "TalentstilsonderfertigkeitenIdMap.yml";
 const VAMPIRIC_GIFTS_FILE: &'static str = "VampiricGiftsIdMap.yml";
 const WEAPON_ENCHANTMENTS_FILE: &'static str = "WeaponEnchantmentsIdMap.yml";
 const WAND_ENCHANTMENTS_FILE: &'static str = "WandEnchantmentsIdMap.yml";
@@ -251,7 +251,7 @@ impl Compatibility {
             Category::LiturgicalChants)?;
         res.load_str_id_map(LITURGICAL_STYLE_SPECIAL_ABILITIES_FILE,
             Category::LiturgicalStyleSpecialAbilities)?;
-        res.load_str_id_map(LYCANTHROPIC_GIFTS_FILE,
+        res.load_str_id_map(LYCANTROPIC_GIFTS_FILE,
             Category::LycantropicGifts)?;
         res.load_str_id_map(MAGICAL_DANCES_FILE, Category::MagicalDances)?;
         res.load_str_id_map(MAGICAL_MELODIES_FILE, Category::MagicalMelodies)?;
@@ -280,6 +280,8 @@ impl Compatibility {
         res.load_str_id_map(SICKLE_RITUALS_FILE, Category::SickleRituals)?;
         res.load_str_id_map(SIKARYAN_DRAIN_SPECIAL_ABILITIES_FILE,
             Category::SikaryanDrainSpecialAbilities)?;
+        res.load_str_id_map(SKILL_STYLE_SPECIAL_ABILITIES_FILE,
+            Category::SkillStyleSpecialAbilities)?;
         res.load_str_id_map(SPELLS_FILE, Category::Spells)?;
         res.load_str_id_map(SPELL_SWORD_ENCHANTMENTS_FILE,
             Category::SpellSwordEnchantments)?;
@@ -287,8 +289,6 @@ impl Compatibility {
         res.load_str_id_map(STAFF_ENCHANTMENTS_FILE,
             Category::StaffEnchantments)?;
         res.load_str_id_map(STATES_FILE, Category::States)?;
-        res.load_str_id_map(TALENTSTILSONDERFERTIGKEITEN_FILE,
-            Category::Talentstilsonderfertigkeiten)?;
         res.load_str_id_map(VAMPIRIC_GIFTS_FILE, Category::VampiricGifts)?;
         res.load_str_id_map(WEAPON_ENCHANTMENTS_FILE,
             Category::WeaponEnchantments)?;

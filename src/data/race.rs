@@ -68,16 +68,21 @@ pub struct Phenotype {
 }
 
 #[derive(Deserialize, Serialize)]
+pub struct SuggestedUnsuitable {
+    pub id: u32
+}
+
+#[derive(Deserialize, Serialize)]
 pub struct RaceVariant {
     pub id: u32,
     #[serde(rename = "commonAdvantages")]
-    pub common_advantages: Option<Vec<u32>>,
+    pub common_advantages: Option<Vec<SuggestedUnsuitable>>,
     #[serde(rename = "commonDisadvantages")]
-    pub common_disadvantages: Option<Vec<u32>>,
+    pub common_disadvantages: Option<Vec<SuggestedUnsuitable>>,
     #[serde(rename = "uncommonAdvantages")]
-    pub uncommon_advantages: Option<Vec<u32>>,
+    pub uncommon_advantages: Option<Vec<SuggestedUnsuitable>>,
     #[serde(rename = "uncommonDisadvantages")]
-    pub uncommon_disadvantages: Option<Vec<u32>>,
+    pub uncommon_disadvantages: Option<Vec<SuggestedUnsuitable>>,
     pub translations: Translations<RaceVariantLocalization>,
     #[serde(flatten)]
     pub phenotype: Phenotype
@@ -138,17 +143,17 @@ pub struct Race {
     #[serde(rename = "automaticAdvantages")]
     pub automatic_advantages: Option<Vec<u32>>,
     #[serde(rename = "stronglyRecommendedAdvantages")]
-    pub strongly_recommended_advantages: Option<Vec<u32>>,
+    pub strongly_recommended_advantages: Option<Vec<SuggestedUnsuitable>>,
     #[serde(rename = "stronglyRecommendedDisadvantages")]
-    pub strongly_recommended_disadvantages: Option<Vec<u32>>,
+    pub strongly_recommended_disadvantages: Option<Vec<SuggestedUnsuitable>>,
     #[serde(rename = "commonAdvantages")]
-    pub common_advantages: Option<Vec<u32>>,
+    pub common_advantages: Option<Vec<SuggestedUnsuitable>>,
     #[serde(rename = "commonDisadvantages")]
-    pub common_disadvantages: Option<Vec<u32>>,
+    pub common_disadvantages: Option<Vec<SuggestedUnsuitable>>,
     #[serde(rename = "uncommonAdvantages")]
-    pub uncommon_advantages: Option<Vec<u32>>,
+    pub uncommon_advantages: Option<Vec<SuggestedUnsuitable>>,
     #[serde(rename = "uncommonDisadvantages")]
-    pub uncommon_disadvantages: Option<Vec<u32>>,
+    pub uncommon_disadvantages: Option<Vec<SuggestedUnsuitable>>,
     #[serde(rename = "weightBase")]
     pub weight_base: u32,
     #[serde(rename = "weightRandom")]

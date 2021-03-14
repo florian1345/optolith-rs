@@ -318,3 +318,28 @@ pub enum EnhancementPrerequisite {
 }
 
 pub type EnhancementListPrerequisite = Vec<EnhancementPrerequisite>;
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum InfluencePrerequisiteNoDisplay {
+    MagicalTradition {
+        id: u32
+    },
+    BlessedTradition {
+        id: u32
+    },
+    Influence {
+        id: u32,
+        active: bool
+    },
+    Special
+}
+
+pub type InfluencePrerequisite =
+    DisplayPrerequisite<InfluencePrerequisiteNoDisplay>;
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum InfluenceListPrerequisite {
+    Plain(Vec<InfluencePrerequisite>)
+}

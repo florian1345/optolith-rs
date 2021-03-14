@@ -1,3 +1,4 @@
+use crate::data::academy::{Curriculum, Guideline, Influence};
 use crate::data::activatable::character_trait::{
     Advantage,
     Disadvantage
@@ -106,6 +107,7 @@ use std::collections::HashMap;
 use std::fs::DirEntry;
 use std::hash::Hash;
 
+pub mod academy;
 pub mod activatable;
 pub mod aspect;
 pub mod attribute;
@@ -159,6 +161,7 @@ const COMBAT_TECHNIQUE_GROUP_DIR: &str = "CombatTechniqueGroups";
 const COMMAND_SPECIAL_ABILITY_DIR: &str = "CommandSpecialAbilities";
 const CONDITION_DIR: &str = "Conditions";
 const CULTURE_DIR: &str = "Cultures";
+// const CURRICULUM_DIR: &str = "Curricula";
 const CURSE_DIR: &str = "Curses";
 const DAGGER_RITUAL_DIR: &str = "DaggerRituals";
 const DERIVED_CHARACTERISTIC_DIR: &str = "DerivedCharacteristics";
@@ -171,7 +174,9 @@ const EYE_COLOR_DIR: &str = "EyeColors";
 const FOOLS_HAT_ENCHANTMENT_DIR: &str = "FoolsHatEnchantments";
 const GENERAL_SPECIAL_ABILITY_DIR: &str = "GeneralSpecialAbilities";
 const GEODE_RITUAL_DIR: &str = "GeodeRituals";
+const GUIDELINE_DIR: &str = "Guidelines";
 const HAIR_COLOR_DIR: &str = "HairColors";
+const INFLUENCE_DIR: &str = "Influences";
 const INSTRUMENT_ENCHANTMENT_DIR: &str = "InstrumentEnchantments";
 const ITEM_GROUP_DIR: &str = "ItemGroups";
 const JESTER_TRICK_DIR: &str = "JesterTricks";
@@ -250,6 +255,7 @@ pub struct OptolithData {
     command_special_abilities: IdMap<CommandSpecialAbility>,
     conditions: IdMap<Condition>,
     cultures: IdMap<Culture>,
+    curricula: IdMap<Curriculum>,
     curses: IdMap<Curse>,
     dagger_rituals: IdMap<DaggerRitual>,
     derived_characteristics: IdMap<DerivedCharacteristic>,
@@ -262,7 +268,9 @@ pub struct OptolithData {
     fools_hat_enchantments: IdMap<FoolsHatEnchantment>,
     general_special_abilities: IdMap<GeneralSpecialAbility>,
     geode_rituals: IdMap<GeodeRitual>,
+    guidelines: IdMap<Guideline>,
     hair_colors: IdMap<HairColor>,
+    influences: IdMap<Influence>,
     instrument_enchantments: IdMap<InstrumentEnchantment>,
     item_groups: IdMap<ItemGroup>,
     jester_tricks: IdMap<JesterTrick>,
@@ -406,6 +414,8 @@ impl OptolithData {
             builder.map_u32(COMMAND_SPECIAL_ABILITY_DIR)?;
         let conditions = builder.map_u32(CONDITION_DIR)?;
         let cultures = builder.map_u32(CULTURE_DIR)?;
+        // TODO reactivate once errors are gone
+        let curricula = HashMap::new(); //builder.map_u32(CURRICULUM_DIR)?;
         let curses = builder.map_u32(CURSE_DIR)?;
         let dagger_rituals = builder.map_u32(DAGGER_RITUAL_DIR)?;
         let derived_characteristics =
@@ -421,7 +431,9 @@ impl OptolithData {
         let general_special_abilities =
             builder.map_u32(GENERAL_SPECIAL_ABILITY_DIR)?;
         let geode_rituals = builder.map_u32(GEODE_RITUAL_DIR)?;
+        let guidelines = builder.map_u32(GUIDELINE_DIR)?;
         let hair_colors = builder.map_u32(HAIR_COLOR_DIR)?;
+        let influences = builder.map_u32(INFLUENCE_DIR)?;
         let instrument_enchantments =
             builder.map_u32(INSTRUMENT_ENCHANTMENT_DIR)?;
         let item_groups = builder.map_u32(ITEM_GROUP_DIR)?;
@@ -507,6 +519,7 @@ impl OptolithData {
             command_special_abilities,
             conditions,
             cultures,
+            curricula,
             curses,
             dagger_rituals,
             derived_characteristics,
@@ -519,7 +532,9 @@ impl OptolithData {
             fools_hat_enchantments,
             general_special_abilities,
             geode_rituals,
+            guidelines,
             hair_colors,
+            influences,
             instrument_enchantments,
             item_groups,
             jester_tricks,
@@ -709,6 +724,10 @@ impl OptolithData {
         self.cultures.get(&id)
     }
 
+    pub fn get_curriculum(&self, id: u32) -> Option<&Curriculum> {
+        self.curricula.get(&id)
+    }
+
     pub fn get_curse(&self, id: u32) -> Option<&Curse> {
         self.curses.get(&id)
     }
@@ -761,8 +780,16 @@ impl OptolithData {
         self.geode_rituals.get(&id)
     }
 
+    pub fn get_guideline(&self, id: u32) -> Option<&Guideline> {
+        self.guidelines.get(&id)
+    }
+
     pub fn get_hair_color(&self, id: u32) -> Option<&HairColor> {
         self.hair_colors.get(&id)
+    }
+
+    pub fn get_influence(&self, id: u32) -> Option<&Influence> {
+        self.influences.get(&id)
     }
 
     pub fn get_instrument_enchantment(&self, id: u32)
@@ -991,6 +1018,8 @@ impl OptolithData {
                 to_dyn(self.get_condition(int_id)),
             Category::Cultures =>
                 to_dyn(self.get_culture(int_id)),
+            Category::Curricula =>
+                to_dyn(self.get_curriculum(int_id)),
             Category::Curses =>
                 to_dyn(self.get_curse(int_id)),
             Category::DaggerRituals =>
@@ -1015,8 +1044,12 @@ impl OptolithData {
                 to_dyn(self.get_general_special_ability(int_id)),
             Category::GeodeRituals =>
                 to_dyn(self.get_geode_ritual(int_id)),
+            Category::Guidelines =>
+                to_dyn(self.get_guideline(int_id)),
             Category::HairColors =>
                 to_dyn(self.get_hair_color(int_id)),
+            Category::Influences =>
+                to_dyn(self.get_influence(int_id)),
             Category::InstrumentEnchantments =>
                 to_dyn(self.get_instrument_enchantment(int_id)),
             Category::ItemGroups =>

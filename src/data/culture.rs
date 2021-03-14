@@ -101,10 +101,10 @@ pub struct Culture {
     #[serde(rename = "commonMundaneProfessionsAll")]
     pub common_mundane_professions_all: bool,
 
-    /// If `commonMundaneProfessionsAll` is `true`, listed professions (string
+    /// If `commonMundaneProfessionsAll` is `true`, listed professions (integer
     /// id) or profession groups are excluded from common professions list. If
     /// `commonMundaneProfessionsAll` is `false` (or empty), listed professions
-    /// (string id) or profession groups are the only common mundane
+    /// (integer id) or profession groups are the only common mundane
     /// professions.
     #[serde(rename = "commonMundaneProfessionsExceptions")]
     pub common_mundane_professions_exceptions: Option<ProfessionsExceptions>,
@@ -114,10 +114,10 @@ pub struct Culture {
     #[serde(rename = "commonMagicalProfessionsAll")]
     pub common_magical_professions_all: bool,
 
-    /// If `commonMagicalProfessionsAll` is `true`, listed professions (string
+    /// If `commonMagicalProfessionsAll` is `true`, listed professions (integer
     /// id) or profession groups are excluded from common professions list. If
     /// `commonMagicalProfessionsAll` is `false` (or empty), listed professions
-    /// (string id) or profession groups are the only common magical
+    /// (integer id) or profession groups are the only common magical
     /// professions.
     #[serde(rename = "commonMagicalProfessionsExceptions")]
     pub common_magical_professions_exceptions: Option<ProfessionsExceptions>,
@@ -127,10 +127,10 @@ pub struct Culture {
     #[serde(rename = "commonBlessedProfessionsAll")]
     pub common_blessed_professions_all: bool,
 
-    /// If `commonBlessedProfessionsAll` is `true`, listed professions (string
+    /// If `commonBlessedProfessionsAll` is `true`, listed professions (integer
     /// id) or profession groups are excluded from common professions list. If
     /// `commonBlessedProfessionsAll` is `false` (or empty), listed professions
-    /// (string id) or profession groups are the only common blessed
+    /// (integer id) or profession groups are the only common blessed
     /// professions.
     #[serde(rename = "commonBlessedProfessionsExceptions")]
     pub common_blessed_professions_exceptions: Option<ProfessionsExceptions>,

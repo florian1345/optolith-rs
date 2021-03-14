@@ -1,7 +1,12 @@
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{
+    Localization,
+    SuggestedUnsuitable,
+    Translatable,
+    Translations
+};
 use crate::data::errata::Errata;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
@@ -65,11 +70,6 @@ pub struct Phenotype {
     pub size_base: u32,
     #[serde(rename = "sizeRandom")]
     pub size_random: Vec<Die>
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct SuggestedUnsuitable {
-    pub id: u32
 }
 
 #[derive(Deserialize, Serialize)]

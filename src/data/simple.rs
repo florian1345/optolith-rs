@@ -32,6 +32,14 @@ where
     }
 }
 
+pub struct ArmorTypeCategory;
+
+impl CategoryProvider for ArmorTypeCategory {
+    const CATEGORY: Category = Category::ArmorTypes;
+}
+
+pub type ArmorType = SimpleEntity<ArmorTypeCategory>;
+
 pub struct BrewCategory;
 
 impl CategoryProvider for BrewCategory {
@@ -39,6 +47,23 @@ impl CategoryProvider for BrewCategory {
 }
 
 pub type Brew = SimpleEntity<BrewCategory>;
+
+pub struct CombatSpecialAbilityGroupCategory;
+
+impl CategoryProvider for CombatSpecialAbilityGroupCategory {
+    const CATEGORY: Category = Category::CombatSpecialAbilityGroups;
+}
+
+pub type CombatSpecialAbilityGroup =
+    SimpleEntity<CombatSpecialAbilityGroupCategory>;
+
+pub struct CombatTechniqueGroupCategory;
+
+impl CategoryProvider for CombatTechniqueGroupCategory {
+    const CATEGORY: Category = Category::CombatTechniqueGroups;
+}
+
+pub type CombatTechniqueGroup = SimpleEntity<CombatTechniqueGroupCategory>;
 
 pub struct ElementCategory;
 

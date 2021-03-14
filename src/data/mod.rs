@@ -4,6 +4,7 @@ use crate::data::activatable::character_trait::{
 };
 use crate::data::activatable::special_ability::{
     GeneralSpecialAbility,
+    ceremonial_item::CeremonialItemSpecialAbility,
     combat::{
         AdvancedCombatSpecialAbility,
         BrawlingSpecialAbility,
@@ -54,6 +55,7 @@ use crate::data::activatable::special_ability::{
 use crate::data::aspect::Aspect;
 use crate::data::attribute::Attribute;
 use crate::data::condition::Condition;
+use crate::data::culture::Culture;
 use crate::data::derived_characteristic::DerivedCharacteristic;
 use crate::data::experience_level::ExperienceLevel;
 use crate::data::language::{Language, Script};
@@ -64,6 +66,7 @@ use crate::data::non_profane_skill::karmal::{
 };
 use crate::data::non_profane_skill::magical::{
     AnimistPower,
+    Cantrip,
     Curse,
     DominationRitual,
     ElvenMagicalSong,
@@ -77,7 +80,10 @@ use crate::data::non_profane_skill::magical::{
 };
 use crate::data::race::Race;
 use crate::data::simple::{
+    ArmorType,
     Brew,
+    CombatSpecialAbilityGroup,
+    CombatTechniqueGroup,
     Element,
     EyeColor,
     HairColor,
@@ -105,6 +111,7 @@ pub mod aspect;
 pub mod attribute;
 pub mod combat_technique;
 pub mod condition;
+pub mod culture;
 pub mod derived_characteristic;
 pub mod errata;
 pub mod experience_level;
@@ -130,6 +137,7 @@ const ANIMIST_POWER_DIR: &str = "AnimistPowers";
 const ARCANE_BARD_TRADITION_DIR: &str = "ArcaneBardTraditions";
 const ARCANE_DANCER_TRADITION_DIR: &str = "ArcaneDancerTraditions";
 const ARCANE_ORB_ENCHANTMENT_DIR: &str = "ArcaneOrbEnchantments";
+const ARMOR_TYPE_DIR: &str = "ArmorTypes";
 const ASPECT_DIR: &str = "Aspects";
 const ATTIRE_ENCHANTMENT_DIR: &str = "AttireEnchantments";
 const ATTRIBUTE_DIR: &str = "Attributes";
@@ -138,13 +146,19 @@ const BLESSING_DIR: &str = "Blessings";
 const BOWL_ENCHANTMENT_DIR: &str = "BowlEnchantments";
 const BRAWLING_SPECIAL_ABILITY_DIR: &str = "BrawlingSpecialAbilities";
 const BREW_DIR: &str = "Brews";
+const CANTRIP_DIR: &str = "Cantrips";
 const CAULDRON_ENCHANTMENT_DIR: &str = "CauldronEnchantments";
+const CEREMONIAL_ITEM_SPECIAL_ABILITY_DIR: &str =
+    "CeremonialItemSpecialAbilities";
 const CEREMONY_DIR: &str = "Ceremonies";
 const CHRONICLE_ENCHANTMENT_DIR: &str = "ChronicleEnchantments";
 const COMBAT_SPECIAL_ABILITY_DIR: &str = "CombatSpecialAbilities";
+const COMBAT_SPECIAL_ABILITY_GROUP_DIR: &str = "CombatSpecialAbilityGroups";
 const COMBAT_STYLE_SPECIAL_ABILITY_DIR: &str = "CombatStyleSpecialAbilities";
+const COMBAT_TECHNIQUE_GROUP_DIR: &str = "CombatTechniqueGroups";
 const COMMAND_SPECIAL_ABILITY_DIR: &str = "CommandSpecialAbilities";
 const CONDITION_DIR: &str = "Conditions";
+const CULTURE_DIR: &str = "Cultures";
 const CURSE_DIR: &str = "Curses";
 const DAGGER_RITUAL_DIR: &str = "DaggerRituals";
 const DERIVED_CHARACTERISTIC_DIR: &str = "DerivedCharacteristics";
@@ -215,6 +229,7 @@ pub struct OptolithData {
     arcane_bard_traditions: IdMap<ArcaneBardTradition>,
     arcane_dancer_traditions: IdMap<ArcaneDancerTradition>,
     arcane_orb_enchantments: IdMap<ArcaneOrbEnchantment>,
+    armor_types: IdMap<ArmorType>,
     aspects: IdMap<Aspect>,
     attire_enchantments: IdMap<AttireEnchantment>,
     attributes: IdMap<Attribute>,
@@ -223,13 +238,18 @@ pub struct OptolithData {
     bowl_enchantments: IdMap<BowlEnchantment>,
     brawling_special_abilities: IdMap<BrawlingSpecialAbility>,
     brews: IdMap<Brew>,
+    cantrips: IdMap<Cantrip>,
     cauldron_enchantments: IdMap<CauldronEnchantment>,
+    ceremonial_item_special_abilities: IdMap<CeremonialItemSpecialAbility>,
     ceremonies: IdMap<Ceremony>,
     chronicle_enchantments: IdMap<ChronicleEnchantment>,
     combat_special_abilities: IdMap<CombatSpecialAbility>,
+    combat_special_ability_groups: IdMap<CombatSpecialAbilityGroup>,
     combat_style_special_abilities: IdMap<CombatStyleSpecialAbility>,
+    combat_technique_groups: IdMap<CombatTechniqueGroup>,
     command_special_abilities: IdMap<CommandSpecialAbility>,
     conditions: IdMap<Condition>,
+    cultures: IdMap<Culture>,
     curses: IdMap<Curse>,
     dagger_rituals: IdMap<DaggerRitual>,
     derived_characteristics: IdMap<DerivedCharacteristic>,
@@ -357,6 +377,7 @@ impl OptolithData {
             builder.map_u32(ARCANE_DANCER_TRADITION_DIR)?;
         let arcane_orb_enchantments =
             builder.map_u32(ARCANE_ORB_ENCHANTMENT_DIR)?;
+        let armor_types = builder.map_u32(ARMOR_TYPE_DIR)?;
         let aspects = builder.map_u32(ASPECT_DIR)?;
         let attire_enchantments = builder.map_u32(ATTIRE_ENCHANTMENT_DIR)?;
         let attributes = builder.map_u32(ATTRIBUTE_DIR)?;
@@ -366,17 +387,25 @@ impl OptolithData {
             builder.map_u32(BRAWLING_SPECIAL_ABILITY_DIR)?;
         let bowl_enchantments = builder.map_u32(BOWL_ENCHANTMENT_DIR)?;
         let brews = builder.map_u32(BREW_DIR)?;
+        let cantrips = builder.map_u32(CANTRIP_DIR)?;
         let cauldron_enchantments = builder.map_u32(CAULDRON_ENCHANTMENT_DIR)?;
+        let ceremonial_item_special_abilities =
+            builder.map_u32(CEREMONIAL_ITEM_SPECIAL_ABILITY_DIR)?;
         let ceremonies = builder.map_u32(CEREMONY_DIR)?;
         let chronicle_enchantments =
             builder.map_u32(CHRONICLE_ENCHANTMENT_DIR)?;
         let combat_special_abilities =
             builder.map_u32(COMBAT_SPECIAL_ABILITY_DIR)?;
+        let combat_special_ability_groups =
+            builder.map_u32(COMBAT_SPECIAL_ABILITY_GROUP_DIR)?;
         let combat_style_special_abilities =
             builder.map_u32(COMBAT_STYLE_SPECIAL_ABILITY_DIR)?;
+        let combat_technique_groups =
+            builder.map_u32(COMBAT_TECHNIQUE_GROUP_DIR)?;
         let command_special_abilities =
             builder.map_u32(COMMAND_SPECIAL_ABILITY_DIR)?;
         let conditions = builder.map_u32(CONDITION_DIR)?;
+        let cultures = builder.map_u32(CULTURE_DIR)?;
         let curses = builder.map_u32(CURSE_DIR)?;
         let dagger_rituals = builder.map_u32(DAGGER_RITUAL_DIR)?;
         let derived_characteristics =
@@ -457,6 +486,7 @@ impl OptolithData {
             arcane_bard_traditions,
             arcane_dancer_traditions,
             arcane_orb_enchantments,
+            armor_types,
             aspects,
             attire_enchantments,
             attributes,
@@ -465,13 +495,18 @@ impl OptolithData {
             bowl_enchantments,
             brawling_special_abilities,
             brews,
+            cantrips,
             cauldron_enchantments,
+            ceremonial_item_special_abilities,
             ceremonies,
             chronicle_enchantments,
             combat_special_abilities,
+            combat_special_ability_groups,
             combat_style_special_abilities,
+            combat_technique_groups,
             command_special_abilities,
             conditions,
+            cultures,
             curses,
             dagger_rituals,
             derived_characteristics,
@@ -580,6 +615,10 @@ impl OptolithData {
         self.arcane_orb_enchantments.get(&id)
     }
 
+    pub fn get_armor_type(&self, id: u32) -> Option<&ArmorType> {
+        self.armor_types.get(&id)
+    }
+
     pub fn get_aspect(&self, id: u32) -> Option<&Aspect> {
         self.aspects.get(&id)
     }
@@ -614,9 +653,18 @@ impl OptolithData {
         self.brews.get(&id)
     }
 
+    pub fn get_cantrip(&self, id: u32) -> Option<&Cantrip> {
+        self.cantrips.get(&id)
+    }
+
     pub fn get_cauldron_enchantment(&self, id: u32)
             -> Option<&CauldronEnchantment> {
         self.cauldron_enchantments.get(&id)
+    }
+
+    pub fn get_ceremonial_item_special_ability(&self, id: u32)
+            -> Option<&CeremonialItemSpecialAbility> {
+        self.ceremonial_item_special_abilities.get(&id)
     }
 
     pub fn get_ceremony(&self, id: u32) -> Option<&Ceremony> {
@@ -633,9 +681,19 @@ impl OptolithData {
         self.combat_special_abilities.get(&id)
     }
 
+    pub fn get_combat_special_ability_group(&self, id: u32)
+            -> Option<&CombatSpecialAbilityGroup> {
+        self.combat_special_ability_groups.get(&id)
+    }
+
     pub fn get_combat_style_special_ability(&self, id: u32)
             -> Option<&CombatStyleSpecialAbility> {
         self.combat_style_special_abilities.get(&id)
+    }
+
+    pub fn get_combat_technique_group(&self, id: u32)
+            -> Option<&CombatTechniqueGroup> {
+        self.combat_technique_groups.get(&id)
     }
 
     pub fn get_command_special_ability(&self, id: u32)
@@ -645,6 +703,10 @@ impl OptolithData {
 
     pub fn get_condition(&self, id: u32) -> Option<&Condition> {
         self.conditions.get(&id)
+    }
+
+    pub fn get_culture(&self, id: u32) -> Option<&Culture> {
+        self.cultures.get(&id)
     }
 
     pub fn get_curse(&self, id: u32) -> Option<&Curse> {
@@ -887,6 +949,8 @@ impl OptolithData {
                 to_dyn(self.get_arcane_dancer_tradition(int_id)),
             Category::ArcaneOrbEnchantments =>
                 to_dyn(self.get_arcane_orb_enchantment(int_id)),
+            Category::ArmorTypes =>
+                to_dyn(self.get_armor_type(int_id)),
             Category::Aspects =>
                 to_dyn(self.get_aspect(int_id)),
             Category::AttireEnchantments =>
@@ -903,20 +967,30 @@ impl OptolithData {
                 to_dyn(self.get_brawling_special_ability(int_id)),
             Category::Brews =>
                 to_dyn(self.get_brew(int_id)),
+            Category::Cantrips =>
+                to_dyn(self.get_cantrip(int_id)),
             Category::CauldronEnchantments =>
                 to_dyn(self.get_cauldron_enchantment(int_id)),
+            Category::CeremonialItemSpecialAbilities =>
+                to_dyn(self.get_ceremonial_item_special_ability(int_id)),
             Category::Ceremonies =>
                 to_dyn(self.get_ceremony(int_id)),
             Category::ChronicleEnchantments =>
                 to_dyn(self.get_chronicle_enchantment(int_id)),
             Category::CombatSpecialAbilities =>
                 to_dyn(self.get_combat_special_ability(int_id)),
+            Category::CombatSpecialAbilityGroups =>
+                to_dyn(self.get_combat_special_ability_group(int_id)),
             Category::CombatStyleSpecialAbilities =>
                 to_dyn(self.get_combat_style_special_ability(int_id)),
+            Category::CombatTechniqueGroups =>
+                to_dyn(self.get_combat_technique_group(int_id)),
             Category::CommandSpecialAbilities =>
                 to_dyn(self.get_command_special_ability(int_id)),
             Category::Conditions =>
                 to_dyn(self.get_condition(int_id)),
+            Category::Cultures =>
+                to_dyn(self.get_culture(int_id)),
             Category::Curses =>
                 to_dyn(self.get_curse(int_id)),
             Category::DaggerRituals =>
@@ -1092,4 +1166,9 @@ impl<T: Translatable> DynTranslatable for T {
 pub enum Ids {
     Single(u32),
     List(Vec<u32>)
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct SuggestedUnsuitable {
+    pub id: u32
 }

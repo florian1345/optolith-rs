@@ -111,7 +111,7 @@ pub struct Cantrip {
     pub property: u32,
 
     /// A list of Activatable prerequisites that have to be met.
-    pub prerequisites: ActivatableListPrerequisite,
+    pub prerequisites: Option<ActivatableListPrerequisite>,
     pub src: SourceRefs,
     pub translations: Translations<SmallNonProfaneSkillLocalization>
 }

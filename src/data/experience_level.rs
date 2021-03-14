@@ -42,7 +42,9 @@ impl Identifiable for ExperienceLevel {
     }
 }
 
-impl Translatable<SimpleLocalization> for ExperienceLevel {
+impl Translatable for ExperienceLevel {
+    type Localization = SimpleLocalization;
+
     fn translations(&self) -> &SimpleTranslations {
         &self.translations
     }

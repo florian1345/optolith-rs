@@ -34,7 +34,9 @@ impl Identifiable for Condition {
     }
 }
 
-impl Translatable<ConditionLocalization> for Condition {
+impl Translatable for Condition {
+    type Localization = ConditionLocalization;
+
     fn translations(&self) -> &Translations<ConditionLocalization> {
         &self.translations
     }

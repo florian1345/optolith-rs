@@ -34,8 +34,9 @@ impl Identifiable for DerivedCharacteristic {
     }
 }
 
-impl Translatable<DerivedCharacteristicLocalization>
-for DerivedCharacteristic {
+impl Translatable for DerivedCharacteristic {
+    type Localization = DerivedCharacteristicLocalization;
+
     fn translations(&self)
             -> &Translations<DerivedCharacteristicLocalization> {
         &self.translations

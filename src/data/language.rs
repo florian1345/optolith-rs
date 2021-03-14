@@ -50,7 +50,9 @@ pub struct Language {
     pub translations: Translations<LanguageLocalization>
 }
 
-impl Translatable<LanguageLocalization> for Language {
+impl Translatable for Language {
+    type Localization = LanguageLocalization;
+
     fn translations(&self) -> &Translations<LanguageLocalization> {
         &self.translations
     }
@@ -102,7 +104,9 @@ impl Identifiable for Script {
     }
 }
 
-impl Translatable<ScriptLocalization> for Script {
+impl Translatable for Script {
+    type Localization = ScriptLocalization;
+
     fn translations(&self) -> &Translations<ScriptLocalization> {
         &self.translations
     }

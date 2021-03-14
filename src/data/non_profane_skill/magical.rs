@@ -72,10 +72,12 @@ impl<C: CategoryProvider> Identifiable for MagicalSkill<C> {
     }
 }
 
-impl<C> Translatable<NonProfaneSkillLocalization> for MagicalSkill<C>
+impl<C> Translatable for MagicalSkill<C>
 where
     C: CategoryProvider
 {
+    type Localization = NonProfaneSkillLocalization;
+
     fn translations(&self) -> &Translations<NonProfaneSkillLocalization> {
         &self.translations
     }
@@ -120,7 +122,9 @@ impl Identifiable for Cantrip {
     }
 }
 
-impl Translatable<SmallNonProfaneSkillLocalization> for Cantrip {
+impl Translatable for Cantrip {
+    type Localization = SmallNonProfaneSkillLocalization;
+
     fn translations(&self) -> &Translations<SmallNonProfaneSkillLocalization> {
         &self.translations
     }
@@ -195,7 +199,9 @@ impl Identifiable for MagicalDance {
     }
 }
 
-impl Translatable<MusicalMagicLocalization> for MagicalDance {
+impl Translatable for MagicalDance {
+    type Localization = MusicalMagicLocalization;
+
     fn translations(&self) -> &Translations<MusicalMagicLocalization> {
         &self.translations
     }
@@ -227,7 +233,9 @@ impl Identifiable for MagicalMelody {
     }
 }
 
-impl Translatable<MusicalMagicLocalization> for MagicalMelody {
+impl Translatable for MagicalMelody {
+    type Localization = MusicalMagicLocalization;
+
     fn translations(&self) -> &Translations<MusicalMagicLocalization> {
         &self.translations
     }
@@ -280,7 +288,9 @@ impl Identifiable for ElvenMagicalSong {
     }
 }
 
-impl Translatable<ElvenMagicalSongLocalization> for ElvenMagicalSong {
+impl Translatable for ElvenMagicalSong {
+    type Localization = ElvenMagicalSongLocalization;
+
     fn translations(&self) -> &Translations<ElvenMagicalSongLocalization> {
         &self.translations
     }
@@ -337,11 +347,13 @@ where
     }
 }
 
-impl<C, L> Translatable<L> for SimpleMagicalSkill<C, L>
+impl<C, L> Translatable for SimpleMagicalSkill<C, L>
 where
     C: CategoryProvider,
     L: Localization
 {
+    type Localization = L;
+
     fn translations(&self) -> &Translations<L> {
         &self.translations
     }
@@ -413,7 +425,9 @@ impl Identifiable for ZibiljaRitual {
     }
 }
 
-impl Translatable<NonProfaneSkillLocalization> for ZibiljaRitual {
+impl Translatable for ZibiljaRitual {
+    type Localization = NonProfaneSkillLocalization;
+
     fn translations(&self) -> &Translations<NonProfaneSkillLocalization> {
         &self.translations
     }
@@ -441,7 +455,9 @@ impl Identifiable for AnimistPower {
     }
 }
 
-impl Translatable<NoRangeTimeLocalization> for AnimistPower {
+impl Translatable for AnimistPower {
+    type Localization = NoRangeTimeLocalization;
+
     fn translations(&self) -> &Translations<NoRangeTimeLocalization> {
         &self.translations
     }
@@ -472,7 +488,9 @@ impl Identifiable for JesterTrick {
     }
 }
 
-impl Translatable<NonProfaneSkillLocalization> for JesterTrick {
+impl Translatable for JesterTrick {
+    type Localization = NonProfaneSkillLocalization;
+
     fn translations(&self) -> &Translations<NonProfaneSkillLocalization> {
         &self.translations
     }

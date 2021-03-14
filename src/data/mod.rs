@@ -20,6 +20,10 @@ use crate::data::activatable::special_ability::{
         MagicalSpecialAbility,
         MagicStyleSpecialAbility
     },
+    skill::{
+        AdvancedSkillSpecialAbility,
+        SkillStyleSpecialAbility
+    },
     tradition::{
         ArcaneBardTradition,
         ArcaneDancerTradition,
@@ -99,6 +103,8 @@ const ADVANCED_KARMA_SPECIAL_ABILITY_DIR: &'static str =
     "AdvancedKarmaSpecialAbilities";
 const ADVANCED_MAGICAL_SPECIAL_ABILITY_DIR: &'static str =
     "AdvancedMagicalSpecialAbilities";
+const ADVANCED_SKILL_SPECIAL_ABILITY_DIR: &'static str =
+    "AdvancedSkillSpecialAbilities";
 const ADVANTAGE_DIR: &'static str = "Advantages";
 const ANCESTOR_GLYPH_DIR: &'static str = "AncestorGlyphs";
 const ANIMIST_POWER_DIR: &'static str = "AnimistPowers";
@@ -147,6 +153,8 @@ const RITUAL_DIR: &'static str = "Rituals";
 const SCRIPT_DIR: &'static str = "Scripts";
 const SKILL_DIR: &'static str = "Skills";
 const SKILL_GROUP_DIR: &'static str = "SkillGroups";
+const SKILL_STYLE_SPECIAL_ABILITY_DIR: &'static str =
+    "SkillStyleSpecialAbilities";
 const SOCIAL_STATUS_DIR: &'static str = "SocialStatuses";
 const SPELL_DIR: &'static str = "Spells";
 const SPELL_GROUP_DIR: &'static str = "SpellGroups";
@@ -166,6 +174,7 @@ pub struct OptolithData {
     advanced_combat_special_abilities: IdMap<AdvancedCombatSpecialAbility>,
     advanced_karma_special_abilities: IdMap<AdvancedKarmaSpecialAbility>,
     advanced_magical_special_abilities: IdMap<AdvancedMagicalSpecialAbility>,
+    advanced_skill_special_abilities: IdMap<AdvancedSkillSpecialAbility>,
     advantages: IdMap<Advantage>,
     ancestor_glyphs: IdMap<AncestorGlyph>,
     animist_powers: IdMap<AnimistPower>,
@@ -211,6 +220,7 @@ pub struct OptolithData {
     scripts: IdMap<Script>,
     skills: IdMap<Skill>,
     skill_groups: IdMap<SkillGroup>,
+    skill_style_special_abilities: IdMap<SkillStyleSpecialAbility>,
     social_statuses: IdMap<SocialStatus>,
     spells: IdMap<Spell>,
     spell_groups: IdMap<SpellGroup>,
@@ -265,18 +275,6 @@ where
     construct_map(dir, |v: &V, _| v.id().internal_id())
 }
 
-fn get_name<'a, L, T>(map: &'a IdMap<T>, id: u32, locale: &str)
-    -> Option<&'a str>
-where
-    L: Localization + 'static,
-    T: Translatable<L>
-{
-    map.get(&id)
-        .map(|t| t.translations().get(locale))
-        .flatten()
-        .map(|l| l.name())
-}
-
 impl OptolithData {
     pub fn from_directory(path: &str) -> OptolithDataResult<OptolithData> {
         let advanced_combat_special_abilities =
@@ -288,6 +286,9 @@ impl OptolithData {
         let advanced_magical_special_abilities =
             construct_u32_map(
                 util::join(path, ADVANCED_MAGICAL_SPECIAL_ABILITY_DIR))?;
+        let advanced_skill_special_abilities =
+            construct_u32_map(
+                util::join(path, ADVANCED_SKILL_SPECIAL_ABILITY_DIR))?;
         let advantages = construct_u32_map(util::join(path, ADVANTAGE_DIR))?;
         let ancestor_glyphs =
             construct_u32_map(util::join(path, ANCESTOR_GLYPH_DIR))?;
@@ -363,6 +364,9 @@ impl OptolithData {
         let skills = construct_u32_map(util::join(path, SKILL_DIR))?;
         let skill_groups =
             construct_u32_map(util::join(path, SKILL_GROUP_DIR))?;
+        let skill_style_special_abilities =
+            construct_u32_map(
+                util::join(path, SKILL_STYLE_SPECIAL_ABILITY_DIR))?;
         let social_statuses =
             construct_u32_map(util::join(path, SOCIAL_STATUS_DIR))?;
         let spell_groups =
@@ -386,6 +390,7 @@ impl OptolithData {
             advanced_combat_special_abilities,
             advanced_karma_special_abilities,
             advanced_magical_special_abilities,
+            advanced_skill_special_abilities,
             advantages,
             ancestor_glyphs,
             animist_powers: animist_forces,
@@ -431,6 +436,7 @@ impl OptolithData {
             scripts,
             skills,
             skill_groups,
+            skill_style_special_abilities,
             social_statuses,
             spell_groups,
             spells,
@@ -464,6 +470,11 @@ impl OptolithData {
         self.advanced_magical_special_abilities.get(&id)
     }
 
+    pub fn get_advanced_skill_special_ability(&self, id: u32)
+            -> Option<&AdvancedSkillSpecialAbility> {
+        self.advanced_skill_special_abilities.get(&id)
+    }
+
     pub fn get_advantage(&self, id: u32) -> Option<&Advantage> {
         self.advantages.get(&id)
     }
@@ -472,7 +483,7 @@ impl OptolithData {
         self.ancestor_glyphs.get(&id)
     }
 
-    pub fn get_animist_force(&self, id: u32) -> Option<&AnimistPower> {
+    pub fn get_animist_power(&self, id: u32) -> Option<&AnimistPower> {
         self.animist_powers.get(&id)
     }
 
@@ -658,6 +669,11 @@ impl OptolithData {
         self.skill_groups.get(&id)
     }
 
+    pub fn get_skill_style_special_ability(&self, id: u32)
+            -> Option<&SkillStyleSpecialAbility> {
+        self.skill_style_special_abilities.get(&id)
+    }
+
     pub fn get_social_status(&self, id: u32) -> Option<&SocialStatus> {
         self.social_statuses.get(&id)
     }
@@ -688,35 +704,133 @@ impl OptolithData {
             .flatten()
     }
 
-    pub fn get_name(&self, id: Id, locale: &str) -> Option<&str> {
+    pub fn get_as_translatable(&self, id: Id) -> Option<&dyn DynTranslatable> {
         let int_id = id.internal_id();
 
-        // TODO replace with a more dynamic approach
-
         match id.category() {
-            Category::Advantages => get_name(&self.advantages, int_id, locale),
-            Category::Attributes => get_name(&self.attributes, int_id, locale),
+            Category::AdvancedCombatSpecialAbilities =>
+                to_dyn(self.get_advanced_combat_special_ability(int_id)),
+            Category::AdvancedKarmaSpecialAbilities =>
+                to_dyn(self.get_advanced_karma_special_ability(int_id)),
+            Category::AdvancedMagicalSpecialAbilities =>
+                to_dyn(self.get_advanced_magical_special_ability(int_id)),
+            Category::AdvancedSkillSpecialAbilities =>
+                to_dyn(self.get_advanced_skill_special_ability(int_id)),
+            Category::Advantages =>
+                to_dyn(self.get_advantage(int_id)),
+            Category::AncestorGlyphs =>
+                to_dyn(self.get_ancestor_glyph(int_id)),
+            Category::AnimistPowers =>
+                to_dyn(self.get_animist_power(int_id)),
+            Category::ArcaneBardTraditions =>
+                to_dyn(self.get_arcane_bard_tradition(int_id)),
+            Category::ArcaneDancerTraditions =>
+                to_dyn(self.get_arcane_dancer_tradition(int_id)),
+            Category::Aspects =>
+                to_dyn(self.get_aspect(int_id)),
+            Category::Attributes =>
+                to_dyn(self.get_attribute(int_id)),
             Category::BlessedTraditions =>
-                get_name(&self.blessed_traditions, int_id, locale),
+                to_dyn(self.get_blessed_tradition(int_id)),
+            Category::Blessings =>
+                to_dyn(self.get_blessing(int_id)),
+            Category::BrawlingSpecialAbilities =>
+                to_dyn(self.get_brawling_special_ability(int_id)),
+            Category::Brews =>
+                to_dyn(self.get_brew(int_id)),
+            Category::Ceremonies =>
+                to_dyn(self.get_ceremony(int_id)),
             Category::CombatSpecialAbilities =>
-                get_name(&self.combat_special_abilities, int_id, locale),
-            Category::Conditions => get_name(&self.conditions, int_id, locale),
+                to_dyn(self.get_combat_special_ability(int_id)),
+            Category::CombatStyleSpecialAbilities =>
+                to_dyn(self.get_combat_style_special_ability(int_id)),
+            Category::CommandSpecialAbilities =>
+                to_dyn(self.get_command_special_ability(int_id)),
+            Category::Conditions =>
+                to_dyn(self.get_condition(int_id)),
+            Category::Curses =>
+                to_dyn(self.get_curse(int_id)),
             Category::DerivedCharacteristics =>
-                get_name(&self.derived_characteristics, int_id, locale),
+                to_dyn(self.get_derived_characteristic(int_id)),
             Category::Disadvantages =>
-                get_name(&self.disadvantages, int_id, locale),
+                to_dyn(self.get_disadvantage(int_id)),
+            Category::DominationRituals =>
+                to_dyn(self.get_domination_ritual(int_id)),
+            Category::Elements =>
+                to_dyn(self.get_element(int_id)),
+            Category::ElvenMagicalSongs =>
+                to_dyn(self.get_elven_magical_song(int_id)),
+            Category::ExperienceLevels =>
+                to_dyn(self.get_experience_level(int_id)),
+            Category::EyeColors =>
+                to_dyn(self.get_eye_color(int_id)),
             Category::GeneralSpecialAbilities =>
-                get_name(&self.general_special_abilities, int_id, locale),
-            Category::Languages => get_name(&self.languages, int_id, locale),
+                to_dyn(self.get_general_special_ability(int_id)),
+            Category::GeodeRituals =>
+                to_dyn(self.get_geode_ritual(int_id)),
+            Category::HairColors =>
+                to_dyn(self.get_hair_color(int_id)),
+            Category::ItemGroups =>
+                to_dyn(self.get_item_group(int_id)),
+            Category::JesterTricks =>
+                to_dyn(self.get_jester_trick(int_id)),
+            Category::KarmaSpecialAbilities =>
+                to_dyn(self.get_karma_special_ability(int_id)),
+            Category::Languages =>
+                to_dyn(self.get_language(int_id)),
+            Category::LiturgicalChants =>
+                to_dyn(self.get_liturgical_chant(int_id)),
+            Category::LiturgicalChantGroups =>
+                to_dyn(self.get_liturgical_chant_group(int_id)),
+            Category::LiturgicalStyleSpecialAbilities =>
+                to_dyn(self.get_liturgical_style_special_ability(int_id)),
+            Category::MagicalDances =>
+                to_dyn(self.get_magical_dance(int_id)),
+            Category::MagicalMelodies =>
+                to_dyn(self.get_magical_melody(int_id)),
             Category::MagicalTraditions =>
-                get_name(&self.magical_traditions, int_id, locale),
-            Category::Races => get_name(&self.skills, int_id, locale),
-            Category::Scripts => get_name(&self.scripts, int_id, locale),
-            Category::Skills => get_name(&self.skills, int_id, locale),
+                to_dyn(self.get_magical_tradition(int_id)),
+            Category::MagicalSpecialAbilities =>
+                to_dyn(self.get_magical_special_ability(int_id)),
+            Category::MagicStyleSpecialAbilities =>
+                to_dyn(self.get_magic_style_special_ability(int_id)),
+            Category::Races =>
+                to_dyn(self.get_race(int_id)),
+            Category::Reaches =>
+                to_dyn(self.get_reach(int_id)),
+            Category::Rituals =>
+                to_dyn(self.get_ritual(int_id)),
+            Category::Scripts =>
+                to_dyn(self.get_script(int_id)),
+            Category::Skills =>
+                to_dyn(self.get_skill(int_id)),
             Category::SkillGroups =>
-                get_name(&self.skill_groups, int_id, locale),
+                to_dyn(self.get_skill_group(int_id)),
+            Category::SkillStyleSpecialAbilities =>
+                to_dyn(self.get_skill_style_special_ability(int_id)),
+            Category::SocialStatuses =>
+                to_dyn(self.get_social_status(int_id)),
+            Category::Spells =>
+                to_dyn(self.get_spell(int_id)),
+            Category::SpellGroups =>
+                to_dyn(self.get_spell_group(int_id)),
+            Category::Subjects =>
+                to_dyn(self.get_subject(int_id)),
+            Category::Tribes =>
+                to_dyn(self.get_tribe(int_id)),
+            Category::ZibiljaRituals =>
+                to_dyn(self.get_zibilja_ritual(int_id)),
             _ => None // TODO update until all are implemented
         }
+    }
+}
+
+// TODO why is this ridiculous thing needed?
+
+fn to_dyn<T: Translatable>(t: Option<&T>) -> Option<&dyn DynTranslatable> {
+    match t {
+        Some(t) => Some(t),
+        None => None
     }
 }
 
@@ -755,8 +869,27 @@ pub type SimpleTranslations = Translations<SimpleLocalization>;
 
 /// A trait for entities which are translatable, i.e. for which [Translation]s
 /// of some [Localization] type `L` exist.
-pub trait Translatable<L: Localization> {
-    fn translations(&self) -> &Translations<L>;
+pub trait Translatable {
+    type Localization: Localization;
+
+    fn translations(&self) -> &Translations<Self::Localization>;
+
+    fn translation(&self, locale: &str) -> Option<&Self::Localization> {
+        self.translations().get(locale)
+    }
+}
+
+pub trait DynTranslatable {
+    fn translation(&self, locale: &str) -> Option<&dyn Localization>;
+}
+
+impl<T: Translatable> DynTranslatable for T {
+    fn translation(&self, locale: &str) -> Option<&dyn Localization> {
+        match Translatable::translation(self, locale) {
+            Some(t) => Some(t),
+            None => None
+        }
+    }
 }
 
 #[derive(Deserialize, Serialize)]

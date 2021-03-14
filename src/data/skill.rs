@@ -72,7 +72,9 @@ impl Identifiable for Skill {
     }
 }
 
-impl Translatable<SkillLocalization> for Skill {
+impl Translatable for Skill {
+    type Localization = SkillLocalization;
+
     fn translations(&self) -> &Translations<SkillLocalization> {
         &self.translations
     }
@@ -104,7 +106,9 @@ impl Identifiable for SkillGroup {
     }
 }
 
-impl Translatable<SkillGroupLocalization> for SkillGroup {
+impl Translatable for SkillGroup {
+    type Localization = SkillGroupLocalization;
+
     fn translations(&self) -> &Translations<SkillGroupLocalization> {
         &self.translations
     }

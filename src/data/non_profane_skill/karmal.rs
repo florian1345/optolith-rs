@@ -61,10 +61,12 @@ impl<C: CategoryProvider> Identifiable for ImprovableKarmalSkill<C> {
     }
 }
 
-impl<C> Translatable<NonProfaneSkillLocalization> for ImprovableKarmalSkill<C>
+impl<C> Translatable for ImprovableKarmalSkill<C>
 where
     C: CategoryProvider
 {
+    type Localization = NonProfaneSkillLocalization;
+
     fn translations(&self) -> &Translations<NonProfaneSkillLocalization> {
         &self.translations
     }
@@ -99,7 +101,9 @@ impl Identifiable for Blessing {
     }
 }
 
-impl Translatable<SmallNonProfaneSkillLocalization> for Blessing {
+impl Translatable for Blessing {
+    type Localization = SmallNonProfaneSkillLocalization;
+
     fn translations(&self) -> &Translations<SmallNonProfaneSkillLocalization> {
         &self.translations
     }

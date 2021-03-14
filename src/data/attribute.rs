@@ -28,7 +28,9 @@ impl Identifiable for Attribute {
     }
 }
 
-impl Translatable<AttributeLocalization> for Attribute {
+impl Translatable for Attribute {
+    type Localization = AttributeLocalization;
+
     fn translations(&self) -> &Translations<AttributeLocalization> {
         &self.translations
     }

@@ -67,7 +67,9 @@ pub struct Enhancement {
     pub translations: Translations<EnhancementLocalization>
 }
 
-impl Translatable<EnhancementLocalization> for Enhancement {
+impl Translatable for Enhancement {
+    type Localization = EnhancementLocalization;
+
     fn translations(&self) -> &Translations<EnhancementLocalization> {
         &self.translations
     }

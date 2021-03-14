@@ -143,7 +143,9 @@ impl Identifiable for BlessedTradition {
     }
 }
 
-impl Translatable<BlessedTraditionLocalization> for BlessedTradition {
+impl Translatable for BlessedTradition {
+    type Localization = BlessedTraditionLocalization;
+
     fn translations(&self) -> &Translations<BlessedTraditionLocalization> {
         &self.translations
     }
@@ -274,7 +276,9 @@ impl Identifiable for MagicalTradition {
     }
 }
 
-impl Translatable<MagicalTraditionLocalization> for MagicalTradition {
+impl Translatable for MagicalTradition {
+    type Localization = MagicalTraditionLocalization;
+
     fn translations(&self) -> &Translations<MagicalTraditionLocalization> {
         &self.translations
     }
@@ -296,10 +300,12 @@ impl<C: CategoryProvider> Identifiable for ArcaneProfessionTradition<C> {
     }
 }
 
-impl<C> Translatable<SimpleLocalization> for ArcaneProfessionTradition<C>
+impl<C> Translatable for ArcaneProfessionTradition<C>
 where
     C: CategoryProvider
 {
+    type Localization = SimpleLocalization;
+
     fn translations(&self) -> &Translations<SimpleLocalization> {
         &self.translations
     }

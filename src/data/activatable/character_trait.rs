@@ -110,7 +110,9 @@ impl Identifiable for Advantage {
     }
 }
 
-impl Translatable<TraitLocalization> for Advantage {
+impl Translatable for Advantage {
+    type Localization = TraitLocalization;
+
     fn translations(&self) -> &Translations<TraitLocalization> {
         &self.data.translations
     }
@@ -128,7 +130,9 @@ impl Identifiable for Disadvantage {
     }
 }
 
-impl Translatable<TraitLocalization> for Disadvantage {
+impl Translatable for Disadvantage {
+    type Localization = TraitLocalization;
+
     fn translations(&self) -> &Translations<TraitLocalization> {
         &self.data.translations
     }

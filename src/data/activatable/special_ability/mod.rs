@@ -11,6 +11,7 @@ use std::marker::PhantomData;
 
 pub mod combat;
 pub mod non_profane;
+pub mod skill;
 pub mod tradition;
 
 #[derive(Deserialize, Serialize)]
@@ -113,11 +114,13 @@ pub struct SimpleSpecialAbility<C: CategoryProvider, L: Localization> {
     category: PhantomData<C>
 }
 
-impl<C, L> Translatable<L> for SimpleSpecialAbility<C, L>
+impl<C, L> Translatable for SimpleSpecialAbility<C, L>
 where
     C: CategoryProvider,
     L: Localization
 {
+    type Localization = L;
+
     fn translations(&self) -> &Translations<L> {
         &self.translations
     }

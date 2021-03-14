@@ -127,8 +127,9 @@ impl<C: CategoryProvider> Identifiable for NonProfaneStyleSpecialAbility<C> {
     }
 }
 
-impl<C: CategoryProvider> Translatable<SpecialAbilityLocalization>
-for NonProfaneStyleSpecialAbility<C> {
+impl<C: CategoryProvider> Translatable for NonProfaneStyleSpecialAbility<C> {
+    type Localization = SpecialAbilityLocalization;
+
     fn translations(&self) -> &Translations<SpecialAbilityLocalization> {
         self.data.translations()
     }

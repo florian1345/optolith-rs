@@ -21,10 +21,12 @@ impl<C: CategoryProvider> Identifiable for SimpleEntity<C> {
     }
 }
 
-impl<C> Translatable<SimpleLocalization> for SimpleEntity<C>
+impl<C> Translatable for SimpleEntity<C>
 where
     C: CategoryProvider
 {
+    type Localization = SimpleLocalization;
+
     fn translations(&self) -> &SimpleTranslations {
         &self.translations
     }

@@ -113,10 +113,12 @@ impl<C: CategoryProvider> Identifiable for CombatSpecialAbilitySuper<C> {
     }
 }
 
-impl<C> Translatable<SpecialAbilityLocalization> for CombatSpecialAbilitySuper<C>
+impl<C> Translatable for CombatSpecialAbilitySuper<C>
 where
     C: CategoryProvider
 {
+    type Localization = SpecialAbilityLocalization;
+
     fn translations(&self) -> &Translations<SpecialAbilityLocalization> {
         &self.translations
     }
@@ -187,7 +189,9 @@ impl Identifiable for CombatStyleSpecialAbility {
     }
 }
 
-impl Translatable<SpecialAbilityLocalization> for CombatStyleSpecialAbility {
+impl Translatable for CombatStyleSpecialAbility {
+    type Localization = SpecialAbilityLocalization;
+
     fn translations(&self) -> &Translations<SpecialAbilityLocalization> {
         &self.translations
     }

@@ -31,7 +31,9 @@ impl Identifiable for Aspect {
     }
 }
 
-impl Translatable<AspectLocalization> for Aspect {
+impl Translatable for Aspect {
+    type Localization = AspectLocalization;
+
     fn translations(&self) -> &Translations<AspectLocalization> {
         &self.translations
     }

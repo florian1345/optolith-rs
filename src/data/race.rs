@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-use crate::data::{Localization, Translations};
+use crate::data::{Localization, Translatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
@@ -169,5 +169,13 @@ pub struct Race {
 impl Identifiable for Race {
     fn id(&self) -> Id {
         Id::new(Category::Races, self.id)
+    }
+}
+
+impl Translatable for Race {
+    type Localization = RaceLocalization;
+
+    fn translations(&self) -> &Translations<RaceLocalization> {
+        &self.translations
     }
 }

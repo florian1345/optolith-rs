@@ -11,6 +11,26 @@ use crate::data::activatable::special_ability::{
         CombatStyleSpecialAbility,
         CommandSpecialAbility
     },
+    enchantment::{
+        ArcaneOrbEnchantment,
+        AttireEnchantment,
+        BowlEnchantment,
+        CauldronEnchantment,
+        ChronicleEnchantment,
+        DaggerRitual,
+        FoolsHatEnchantment,
+        InstrumentEnchantment,
+        Krallenkettenzauber,
+        OrbEnchantment,
+        RingEnchantment,
+        SickleRitual,
+        SpellSwordEnchantment,
+        StaffEnchantment,
+        ToyEnchantment,
+        Trinkhornzauber,
+        WandEnchantment,
+        WeaponEnchantment
+    },
     non_profane::{
         AdvancedKarmaSpecialAbility,
         AdvancedMagicalSpecialAbility,
@@ -79,7 +99,6 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs::DirEntry;
 use std::hash::Hash;
-use std::path::PathBuf;
 
 pub mod activatable;
 pub mod aspect;
@@ -97,71 +116,86 @@ pub mod simple;
 pub mod skill;
 pub mod src;
 
-const ADVANCED_COMBAT_SPECIAL_ABILITY_DIR: &'static str =
+const ADVANCED_COMBAT_SPECIAL_ABILITY_DIR: &str =
     "AdvancedCombatSpecialAbilities";
-const ADVANCED_KARMA_SPECIAL_ABILITY_DIR: &'static str =
+const ADVANCED_KARMA_SPECIAL_ABILITY_DIR: &str =
     "AdvancedKarmaSpecialAbilities";
-const ADVANCED_MAGICAL_SPECIAL_ABILITY_DIR: &'static str =
+const ADVANCED_MAGICAL_SPECIAL_ABILITY_DIR: &str =
     "AdvancedMagicalSpecialAbilities";
-const ADVANCED_SKILL_SPECIAL_ABILITY_DIR: &'static str =
+const ADVANCED_SKILL_SPECIAL_ABILITY_DIR: &str =
     "AdvancedSkillSpecialAbilities";
-const ADVANTAGE_DIR: &'static str = "Advantages";
-const ANCESTOR_GLYPH_DIR: &'static str = "AncestorGlyphs";
-const ANIMIST_POWER_DIR: &'static str = "AnimistPowers";
-const ARCANE_BARD_TRADITION_DIR: &'static str = "ArcaneBardTraditions";
-const ARCANE_DANCER_TRADITION_DIR: &'static str = "ArcaneDancerTraditions";
-const ASPECT_DIR: &'static str = "Aspects";
-const ATTRIBUTE_DIR: &'static str = "Attributes";
-const BLESSED_TRADITION_DIR: &'static str = "BlessedTraditions";
-const BLESSING_DIR: &'static str = "Blessings";
-const BRAWLING_SPECIAL_ABILITY_DIR: &'static str = "BrawlingSpecialAbilities";
-const BREW_DIR: &'static str = "Brews";
-const CEREMONY_DIR: &'static str = "Ceremonies";
-const COMBAT_SPECIAL_ABILITY_DIR: &'static str = "CombatSpecialAbilities";
-const COMBAT_STYLE_SPECIAL_ABILITY_DIR: &'static str =
-    "CombatStyleSpecialAbilities";
-const COMMAND_SPECIAL_ABILITY_DIR: &'static str = "CommandSpecialAbilities";
-const CONDITION_DIR: &'static str = "Conditions";
-const CURSE_DIR: &'static str = "Curses";
-const DERIVED_CHARACTERISTIC_DIR: &'static str = "DerivedCharacteristics";
-const DISADVANTAGE_DIR: &'static str = "Disadvantages";
-const DOMINATION_RITUAL_DIR: &'static str = "DominationRituals";
-const ELEMENT_DIR: &'static str = "Elements";
-const ELVEN_MAGICAL_SONG_DIR: &'static str = "ElvenMagicalSongs";
-const EXPERIENCE_LEVEL_DIR: &'static str = "ExperienceLevels";
-const EYE_COLOR_DIR: &'static str = "EyeColors";
-const GENERAL_SPECIAL_ABILITY_DIR: &'static str = "GeneralSpecialAbilities";
-const GEODE_RITUAL_DIR: &'static str = "GeodeRituals";
-const HAIR_COLOR_DIR: &'static str = "HairColors";
-const ITEM_GROUP_DIR: &'static str = "ItemGroups";
-const JESTER_TRICK_DIR: &'static str = "JesterTricks";
-const KARMA_SPECIAL_ABILITY_DIR: &'static str = "KarmaSpecialAbilities";
-const LANGUAGE_DIR: &'static str = "Languages";
-const LITURGICAL_CHANT_DIR: &'static str = "LiturgicalChants";
-const LITURGICAL_CHANT_GROUP_DIR: &'static str = "LiturgicalChantGroups";
-const LITURGICAL_STYLE_SPECIAL_ABILITY_DIR: &'static str =
+const ADVANTAGE_DIR: &str = "Advantages";
+const ANCESTOR_GLYPH_DIR: &str = "AncestorGlyphs";
+const ANIMIST_POWER_DIR: &str = "AnimistPowers";
+const ARCANE_BARD_TRADITION_DIR: &str = "ArcaneBardTraditions";
+const ARCANE_DANCER_TRADITION_DIR: &str = "ArcaneDancerTraditions";
+const ARCANE_ORB_ENCHANTMENT_DIR: &str = "ArcaneOrbEnchantments";
+const ASPECT_DIR: &str = "Aspects";
+const ATTIRE_ENCHANTMENT_DIR: &str = "AttireEnchantments";
+const ATTRIBUTE_DIR: &str = "Attributes";
+const BLESSED_TRADITION_DIR: &str = "BlessedTraditions";
+const BLESSING_DIR: &str = "Blessings";
+const BOWL_ENCHANTMENT_DIR: &str = "BowlEnchantments";
+const BRAWLING_SPECIAL_ABILITY_DIR: &str = "BrawlingSpecialAbilities";
+const BREW_DIR: &str = "Brews";
+const CAULDRON_ENCHANTMENT_DIR: &str = "CauldronEnchantments";
+const CEREMONY_DIR: &str = "Ceremonies";
+const CHRONICLE_ENCHANTMENT_DIR: &str = "ChronicleEnchantments";
+const COMBAT_SPECIAL_ABILITY_DIR: &str = "CombatSpecialAbilities";
+const COMBAT_STYLE_SPECIAL_ABILITY_DIR: &str = "CombatStyleSpecialAbilities";
+const COMMAND_SPECIAL_ABILITY_DIR: &str = "CommandSpecialAbilities";
+const CONDITION_DIR: &str = "Conditions";
+const CURSE_DIR: &str = "Curses";
+const DAGGER_RITUAL_DIR: &str = "DaggerRituals";
+const DERIVED_CHARACTERISTIC_DIR: &str = "DerivedCharacteristics";
+const DISADVANTAGE_DIR: &str = "Disadvantages";
+const DOMINATION_RITUAL_DIR: &str = "DominationRituals";
+const ELEMENT_DIR: &str = "Elements";
+const ELVEN_MAGICAL_SONG_DIR: &str = "ElvenMagicalSongs";
+const EXPERIENCE_LEVEL_DIR: &str = "ExperienceLevels";
+const EYE_COLOR_DIR: &str = "EyeColors";
+const FOOLS_HAT_ENCHANTMENT_DIR: &str = "FoolsHatEnchantments";
+const GENERAL_SPECIAL_ABILITY_DIR: &str = "GeneralSpecialAbilities";
+const GEODE_RITUAL_DIR: &str = "GeodeRituals";
+const HAIR_COLOR_DIR: &str = "HairColors";
+const INSTRUMENT_ENCHANTMENT_DIR: &str = "InstrumentEnchantments";
+const ITEM_GROUP_DIR: &str = "ItemGroups";
+const JESTER_TRICK_DIR: &str = "JesterTricks";
+const KARMA_SPECIAL_ABILITY_DIR: &str = "KarmaSpecialAbilities";
+const KRALLENKETTENZAUBER_DIR: &str = "Krallenkettenzauber";
+const LANGUAGE_DIR: &str = "Languages";
+const LITURGICAL_CHANT_DIR: &str = "LiturgicalChants";
+const LITURGICAL_CHANT_GROUP_DIR: &str = "LiturgicalChantGroups";
+const LITURGICAL_STYLE_SPECIAL_ABILITY_DIR: &str =
     "LiturgicalStyleSpecialAbilities";
-const MAGICAL_DANCE_DIR: &'static str = "MagicalDances";
-const MAGICAL_MELODY_DIR: &'static str = "MagicalMelodies";
-const MAGICAL_SPECIAL_ABILITY_DIR: &'static str = "MagicalSpecialAbilities";
-const MAGICAL_TRADITION_DIR: &'static str = "MagicalTraditions";
-const MAGIC_STYLE_SPECIAL_ABILITY_DIR: &'static str =
-    "MagicStyleSpecialAbilities";
-const RACE_DIR: &'static str = "Races";
-const REACH_DIR: &'static str = "Reaches";
-const RITUAL_DIR: &'static str = "Rituals";
-const SCRIPT_DIR: &'static str = "Scripts";
-const SKILL_DIR: &'static str = "Skills";
-const SKILL_GROUP_DIR: &'static str = "SkillGroups";
-const SKILL_STYLE_SPECIAL_ABILITY_DIR: &'static str =
-    "SkillStyleSpecialAbilities";
-const SOCIAL_STATUS_DIR: &'static str = "SocialStatuses";
-const SPELL_DIR: &'static str = "Spells";
-const SPELL_GROUP_DIR: &'static str = "SpellGroups";
-const SUBJECT_DIR: &'static str = "Subjects";
-const TRIBE_DIR: &'static str = "Tribes";
-const UI_DIR: &'static str = "UI";
-const ZIBILJA_RITUAL_DIR: &'static str = "ZibiljaRituals";
+const MAGICAL_DANCE_DIR: &str = "MagicalDances";
+const MAGICAL_MELODY_DIR: &str = "MagicalMelodies";
+const MAGICAL_SPECIAL_ABILITY_DIR: &str = "MagicalSpecialAbilities";
+const MAGICAL_TRADITION_DIR: &str = "MagicalTraditions";
+const MAGIC_STYLE_SPECIAL_ABILITY_DIR: &str = "MagicStyleSpecialAbilities";
+const ORB_ENCHANTMENT_DIR: &str = "OrbEnchantments";
+const RACE_DIR: &str = "Races";
+const REACH_DIR: &str = "Reaches";
+const RING_ENCHANTMENT_DIR: &str = "RingEnchantments";
+const RITUAL_DIR: &str = "Rituals";
+const SCRIPT_DIR: &str = "Scripts";
+const SICKLE_RITUAL_DIR: &str = "SickleRituals";
+const SKILL_DIR: &str = "Skills";
+const SKILL_GROUP_DIR: &str = "SkillGroups";
+const SKILL_STYLE_SPECIAL_ABILITY_DIR: &str = "SkillStyleSpecialAbilities";
+const SOCIAL_STATUS_DIR: &str = "SocialStatuses";
+const SPELL_DIR: &str = "Spells";
+const SPELL_GROUP_DIR: &str = "SpellGroups";
+const SPELL_SWORD_ENCHANTMENT_DIR: &str = "SpellSwordEnchantments";
+const STAFF_ENCHANTMENT_DIR: &str = "StaffEnchantments";
+const SUBJECT_DIR: &str = "Subjects";
+const TOY_ENCHANTMENT_DIR: &str = "ToyEnchantments";
+const TRIBE_DIR: &str = "Tribes";
+const TRINKHORNZAUBER_DIR: &str = "Trinkhornzauber";
+const UI_DIR: &str = "UI";
+const WAND_ENCHANTMENT_DIR: &str = "WandEnchantments";
+const WEAPON_ENCHANTMENT_DIR: &str = "WeaponEnchantments";
+const ZIBILJA_RITUAL_DIR: &str = "ZibiljaRituals";
 
 type UI = HashMap<String, String>;
 
@@ -180,18 +214,24 @@ pub struct OptolithData {
     animist_powers: IdMap<AnimistPower>,
     arcane_bard_traditions: IdMap<ArcaneBardTradition>,
     arcane_dancer_traditions: IdMap<ArcaneDancerTradition>,
+    arcane_orb_enchantments: IdMap<ArcaneOrbEnchantment>,
     aspects: IdMap<Aspect>,
+    attire_enchantments: IdMap<AttireEnchantment>,
     attributes: IdMap<Attribute>,
     blessed_traditions: IdMap<BlessedTradition>,
     blessings: IdMap<Blessing>,
+    bowl_enchantments: IdMap<BowlEnchantment>,
     brawling_special_abilities: IdMap<BrawlingSpecialAbility>,
     brews: IdMap<Brew>,
+    cauldron_enchantments: IdMap<CauldronEnchantment>,
     ceremonies: IdMap<Ceremony>,
+    chronicle_enchantments: IdMap<ChronicleEnchantment>,
     combat_special_abilities: IdMap<CombatSpecialAbility>,
     combat_style_special_abilities: IdMap<CombatStyleSpecialAbility>,
     command_special_abilities: IdMap<CommandSpecialAbility>,
     conditions: IdMap<Condition>,
     curses: IdMap<Curse>,
+    dagger_rituals: IdMap<DaggerRitual>,
     derived_characteristics: IdMap<DerivedCharacteristic>,
     disadvantages: IdMap<Disadvantage>,
     domination_rituals: IdMap<DominationRitual>,
@@ -199,12 +239,15 @@ pub struct OptolithData {
     elven_magical_songs: IdMap<ElvenMagicalSong>,
     experience_levels: IdMap<ExperienceLevel>,
     eye_colors: IdMap<EyeColor>,
+    fools_hat_enchantments: IdMap<FoolsHatEnchantment>,
     general_special_abilities: IdMap<GeneralSpecialAbility>,
     geode_rituals: IdMap<GeodeRitual>,
     hair_colors: IdMap<HairColor>,
+    instrument_enchantments: IdMap<InstrumentEnchantment>,
     item_groups: IdMap<ItemGroup>,
     jester_tricks: IdMap<JesterTrick>,
     karma_special_abilities: IdMap<KarmaSpecialAbility>,
+    krallenkettenzauber: IdMap<Krallenkettenzauber>,
     languages: IdMap<Language>,
     liturgical_chants: IdMap<LiturgicalChant>,
     liturgical_chant_groups: IdMap<LiturgicalChantGroup>,
@@ -214,18 +257,27 @@ pub struct OptolithData {
     magical_traditions: IdMap<MagicalTradition>,
     magical_special_abilities: IdMap<MagicalSpecialAbility>,
     magic_style_special_abilities: IdMap<MagicStyleSpecialAbility>,
+    orb_enchantments: IdMap<OrbEnchantment>,
     races: IdMap<Race>,
     reaches: IdMap<Reach>,
+    ring_enchantments: IdMap<RingEnchantment>,
     rituals: IdMap<Ritual>,
     scripts: IdMap<Script>,
+    sickle_rituals: IdMap<SickleRitual>,
     skills: IdMap<Skill>,
     skill_groups: IdMap<SkillGroup>,
     skill_style_special_abilities: IdMap<SkillStyleSpecialAbility>,
     social_statuses: IdMap<SocialStatus>,
     spells: IdMap<Spell>,
     spell_groups: IdMap<SpellGroup>,
+    spell_sword_enchantments: IdMap<SpellSwordEnchantment>,
+    staff_enchantments: IdMap<StaffEnchantment>,
     subjects: IdMap<Subject>,
+    toy_enchantments: IdMap<ToyEnchantment>,
     tribes: IdMap<Tribe>,
+    trinkhornzauber: IdMap<Trinkhornzauber>,
+    wand_enchantments: IdMap<WandEnchantment>,
+    weapon_enchantments: IdMap<WeaponEnchantment>,
     zibilja_rituals: IdMap<ZibiljaRitual>,
     uis: HashMap<String, UI>
 }
@@ -242,143 +294,151 @@ fn is_placeholder(path: &str) -> bool {
     }
 }
 
-fn construct_map<K, V>(dir: PathBuf, key_builder: impl Fn(&V, &DirEntry) -> K)
-    -> OptolithDataResult<HashMap<K, V>>
-where
-    for<'de> V : Deserialize<'de>,
-    K: Eq + Hash
-{
-    let mut map: HashMap<K, V> = HashMap::new();
-
-    for file in util::read_dir(&dir)? {
-        let file = file?;
-
-        // TODO remove once a more permanent solution for placeholders has been
-        // found
-
-        if is_placeholder(file.file_name().to_str().unwrap()) {
-            continue;
-        }
-
-        let object: V = util::deserialize_yaml_file(&file.path())?;
-        let id = key_builder(&object, &file);
-        map.insert(id, object);
-    }
-
-    Ok(map)
+struct IdMapBuilder<'a> {
+    path: &'a str
 }
 
-fn construct_u32_map<V>(dir: PathBuf) -> OptolithDataResult<IdMap<V>>
-where
-    for<'de> V : Deserialize<'de> + Identifiable
-{
-    construct_map(dir, |v: &V, _| v.id().internal_id())
+impl<'a> IdMapBuilder<'a> {
+    fn map<K, V>(&self, dir_name: &str, key_builder: impl Fn(&V, &DirEntry) -> K)
+        -> OptolithDataResult<HashMap<K, V>>
+    where
+        for<'de> V : Deserialize<'de>,
+        K: Eq + Hash
+    {
+        let mut map: HashMap<K, V> = HashMap::new();
+        let dir = util::join(self.path, dir_name);
+    
+        for file in util::read_dir(&dir)? {
+            let file = file?;
+    
+            // TODO remove once a more permanent solution for placeholders has been
+            // found
+    
+            if is_placeholder(file.file_name().to_str().unwrap()) {
+                continue;
+            }
+    
+            let object: V = util::deserialize_yaml_file(&file.path())?;
+            let id = key_builder(&object, &file);
+            map.insert(id, object);
+        }
+    
+        Ok(map)
+    }
+
+    fn map_u32<V>(&self, dir_name: &str) -> OptolithDataResult<IdMap<V>>
+    where
+        for<'de> V : Deserialize<'de> + Identifiable
+    {
+        self.map(dir_name, |v: &V, _| v.id().internal_id())
+    }
 }
 
 impl OptolithData {
     pub fn from_directory(path: &str) -> OptolithDataResult<OptolithData> {
+        let builder = IdMapBuilder {
+            path
+        };
+
         let advanced_combat_special_abilities =
-            construct_u32_map(
-                util::join(path, ADVANCED_COMBAT_SPECIAL_ABILITY_DIR))?;
+            builder.map_u32(ADVANCED_COMBAT_SPECIAL_ABILITY_DIR)?;
         let advanced_karma_special_abilities =
-            construct_u32_map(
-                util::join(path, ADVANCED_KARMA_SPECIAL_ABILITY_DIR))?;
+            builder.map_u32(ADVANCED_KARMA_SPECIAL_ABILITY_DIR)?;
         let advanced_magical_special_abilities =
-            construct_u32_map(
-                util::join(path, ADVANCED_MAGICAL_SPECIAL_ABILITY_DIR))?;
+            builder.map_u32(ADVANCED_MAGICAL_SPECIAL_ABILITY_DIR)?;
         let advanced_skill_special_abilities =
-            construct_u32_map(
-                util::join(path, ADVANCED_SKILL_SPECIAL_ABILITY_DIR))?;
-        let advantages = construct_u32_map(util::join(path, ADVANTAGE_DIR))?;
-        let ancestor_glyphs =
-            construct_u32_map(util::join(path, ANCESTOR_GLYPH_DIR))?;
-        let animist_forces =
-            construct_u32_map(util::join(path, ANIMIST_POWER_DIR))?;
+            builder.map_u32(ADVANCED_SKILL_SPECIAL_ABILITY_DIR)?;
+        let advantages = builder.map_u32(ADVANTAGE_DIR)?;
+        let ancestor_glyphs = builder.map_u32(ANCESTOR_GLYPH_DIR)?;
+        let animist_powers = builder.map_u32(ANIMIST_POWER_DIR)?;
         let arcane_bard_traditions =
-            construct_u32_map(util::join(path, ARCANE_BARD_TRADITION_DIR))?;
+            builder.map_u32(ARCANE_BARD_TRADITION_DIR)?;
         let arcane_dancer_traditions =
-            construct_u32_map(util::join(path, ARCANE_DANCER_TRADITION_DIR))?;
-        let aspects = construct_u32_map(util::join(path, ASPECT_DIR))?;
-        let attributes = construct_u32_map(util::join(path, ATTRIBUTE_DIR))?;
-        let blessed_traditions =
-            construct_u32_map(util::join(path, BLESSED_TRADITION_DIR))?;
-        let blessings = construct_u32_map(util::join(path, BLESSING_DIR))?;
+            builder.map_u32(ARCANE_DANCER_TRADITION_DIR)?;
+        let arcane_orb_enchantments =
+            builder.map_u32(ARCANE_ORB_ENCHANTMENT_DIR)?;
+        let aspects = builder.map_u32(ASPECT_DIR)?;
+        let attire_enchantments = builder.map_u32(ATTIRE_ENCHANTMENT_DIR)?;
+        let attributes = builder.map_u32(ATTRIBUTE_DIR)?;
+        let blessed_traditions = builder.map_u32(BLESSED_TRADITION_DIR)?;
+        let blessings = builder.map_u32(BLESSING_DIR)?;
         let brawling_special_abilities =
-            construct_u32_map(util::join(path, BRAWLING_SPECIAL_ABILITY_DIR))?;
-        let brews = construct_u32_map(util::join(path, BREW_DIR))?;
-        let ceremonies = construct_u32_map(util::join(path, CEREMONY_DIR))?;
+            builder.map_u32(BRAWLING_SPECIAL_ABILITY_DIR)?;
+        let bowl_enchantments = builder.map_u32(BOWL_ENCHANTMENT_DIR)?;
+        let brews = builder.map_u32(BREW_DIR)?;
+        let cauldron_enchantments = builder.map_u32(CAULDRON_ENCHANTMENT_DIR)?;
+        let ceremonies = builder.map_u32(CEREMONY_DIR)?;
+        let chronicle_enchantments =
+            builder.map_u32(CHRONICLE_ENCHANTMENT_DIR)?;
         let combat_special_abilities =
-            construct_u32_map(util::join(path, COMBAT_SPECIAL_ABILITY_DIR))?;
+            builder.map_u32(COMBAT_SPECIAL_ABILITY_DIR)?;
         let combat_style_special_abilities =
-            construct_u32_map(
-                util::join(path, COMBAT_STYLE_SPECIAL_ABILITY_DIR))?;
+            builder.map_u32(COMBAT_STYLE_SPECIAL_ABILITY_DIR)?;
         let command_special_abilities =
-            construct_u32_map(util::join(path, COMMAND_SPECIAL_ABILITY_DIR))?;
-        let conditions = construct_u32_map(util::join(path, CONDITION_DIR))?;
-        let curses = construct_u32_map(util::join(path, CURSE_DIR))?;
+            builder.map_u32(COMMAND_SPECIAL_ABILITY_DIR)?;
+        let conditions = builder.map_u32(CONDITION_DIR)?;
+        let curses = builder.map_u32(CURSE_DIR)?;
+        let dagger_rituals = builder.map_u32(DAGGER_RITUAL_DIR)?;
         let derived_characteristics =
-            construct_u32_map(util::join(path, DERIVED_CHARACTERISTIC_DIR))?;
-        let disadvantages =
-            construct_u32_map(util::join(path, DISADVANTAGE_DIR))?;
-        let domination_rituals =
-            construct_u32_map(util::join(path, DOMINATION_RITUAL_DIR))?;
-        let elements = construct_u32_map(util::join(path, ELEMENT_DIR))?;
-        let elven_magical_songs =
-            construct_u32_map(util::join(path, ELVEN_MAGICAL_SONG_DIR))?;
-        let experience_levels =
-            construct_u32_map(util::join(path, EXPERIENCE_LEVEL_DIR))?;
-        let eye_colors = construct_u32_map(util::join(path, EYE_COLOR_DIR))?;
+            builder.map_u32(DERIVED_CHARACTERISTIC_DIR)?;
+        let disadvantages = builder.map_u32(DISADVANTAGE_DIR)?;
+        let domination_rituals = builder.map_u32(DOMINATION_RITUAL_DIR)?;
+        let elements = builder.map_u32(ELEMENT_DIR)?;
+        let elven_magical_songs = builder.map_u32(ELVEN_MAGICAL_SONG_DIR)?;
+        let experience_levels = builder.map_u32(EXPERIENCE_LEVEL_DIR)?;
+        let eye_colors = builder.map_u32(EYE_COLOR_DIR)?;
+        let fools_hat_enchantments =
+            builder.map_u32(FOOLS_HAT_ENCHANTMENT_DIR)?;
         let general_special_abilities =
-            construct_u32_map(util::join(path, GENERAL_SPECIAL_ABILITY_DIR))?;
-        let geode_rituals =
-            construct_u32_map(util::join(path, GEODE_RITUAL_DIR))?;
-        let hair_colors = construct_u32_map(util::join(path, HAIR_COLOR_DIR))?;
-        let item_groups = construct_u32_map(util::join(path, ITEM_GROUP_DIR))?;
-        let jester_tricks =
-            construct_u32_map(util::join(path, JESTER_TRICK_DIR))?;
+            builder.map_u32(GENERAL_SPECIAL_ABILITY_DIR)?;
+        let geode_rituals = builder.map_u32(GEODE_RITUAL_DIR)?;
+        let hair_colors = builder.map_u32(HAIR_COLOR_DIR)?;
+        let instrument_enchantments =
+            builder.map_u32(INSTRUMENT_ENCHANTMENT_DIR)?;
+        let item_groups = builder.map_u32(ITEM_GROUP_DIR)?;
+        let jester_tricks = builder.map_u32(JESTER_TRICK_DIR)?;
         let karma_special_abilities =
-            construct_u32_map(util::join(path, KARMA_SPECIAL_ABILITY_DIR))?;
-        let languages = construct_u32_map(util::join(path, LANGUAGE_DIR))?;
-        let liturgical_chants =
-            construct_u32_map(util::join(path, LITURGICAL_CHANT_DIR))?;
+            builder.map_u32(KARMA_SPECIAL_ABILITY_DIR)?;
+        let krallenkettenzauber = builder.map_u32(KRALLENKETTENZAUBER_DIR)?;
+        let languages = builder.map_u32(LANGUAGE_DIR)?;
+        let liturgical_chants = builder.map_u32(LITURGICAL_CHANT_DIR)?;
         let liturgical_chant_groups =
-            construct_u32_map(util::join(path, LITURGICAL_CHANT_GROUP_DIR))?;
+            builder.map_u32(LITURGICAL_CHANT_GROUP_DIR)?;
         let liturgical_style_special_abilities =
-            construct_u32_map(
-                util::join(path, LITURGICAL_STYLE_SPECIAL_ABILITY_DIR))?;
-        let magical_dances =
-            construct_u32_map(util::join(path, MAGICAL_DANCE_DIR))?;
-        let magical_melodies =
-            construct_u32_map(util::join(path, MAGICAL_MELODY_DIR))?;
-        let magical_traditions =
-            construct_u32_map(util::join(path, MAGICAL_TRADITION_DIR))?;
+            builder.map_u32(LITURGICAL_STYLE_SPECIAL_ABILITY_DIR)?;
+        let magical_dances = builder.map_u32(MAGICAL_DANCE_DIR)?;
+        let magical_melodies = builder.map_u32(MAGICAL_MELODY_DIR)?;
+        let magical_traditions = builder.map_u32(MAGICAL_TRADITION_DIR)?;
         let magical_special_abilities =
-            construct_u32_map(util::join(path, MAGICAL_SPECIAL_ABILITY_DIR))?;
+            builder.map_u32(MAGICAL_SPECIAL_ABILITY_DIR)?;
         let magic_style_special_abilities =
-            construct_u32_map(
-                util::join(path, MAGIC_STYLE_SPECIAL_ABILITY_DIR))?;
-        let races = construct_u32_map(util::join(path, RACE_DIR))?;
-        let reaches = construct_u32_map(util::join(path, REACH_DIR))?;
-        let rituals = construct_u32_map(util::join(path, RITUAL_DIR))?;
-        let scripts = construct_u32_map(util::join(path, SCRIPT_DIR))?;
-        let skills = construct_u32_map(util::join(path, SKILL_DIR))?;
-        let skill_groups =
-            construct_u32_map(util::join(path, SKILL_GROUP_DIR))?;
+            builder.map_u32(MAGIC_STYLE_SPECIAL_ABILITY_DIR)?;
+        let orb_enchantments = builder.map_u32(ORB_ENCHANTMENT_DIR)?;
+        let races = builder.map_u32(RACE_DIR)?;
+        let reaches = builder.map_u32(REACH_DIR)?;
+        let ring_enchantments = builder.map_u32(RING_ENCHANTMENT_DIR)?;
+        let rituals = builder.map_u32(RITUAL_DIR)?;
+        let scripts = builder.map_u32(SCRIPT_DIR)?;
+        let sickle_rituals = builder.map_u32(SICKLE_RITUAL_DIR)?;
+        let skills = builder.map_u32(SKILL_DIR)?;
+        let skill_groups = builder.map_u32(SKILL_GROUP_DIR)?;
         let skill_style_special_abilities =
-            construct_u32_map(
-                util::join(path, SKILL_STYLE_SPECIAL_ABILITY_DIR))?;
-        let social_statuses =
-            construct_u32_map(util::join(path, SOCIAL_STATUS_DIR))?;
-        let spell_groups =
-            construct_u32_map(util::join(path, SPELL_GROUP_DIR))?;
-        let spells = construct_u32_map(util::join(path, SPELL_DIR))?;
-        let subjects = construct_u32_map(util::join(path, SUBJECT_DIR))?;
-        let tribes = construct_u32_map(util::join(path, TRIBE_DIR))?;
-        let zibilja_rituals =
-            construct_u32_map(util::join(path, ZIBILJA_RITUAL_DIR))?;
+            builder.map_u32(SKILL_STYLE_SPECIAL_ABILITY_DIR)?;
+        let social_statuses = builder.map_u32(SOCIAL_STATUS_DIR)?;
+        let spell_groups = builder.map_u32(SPELL_GROUP_DIR)?;
+        let spell_sword_enchantments =
+            builder.map_u32(SPELL_SWORD_ENCHANTMENT_DIR)?;
+        let spells = builder.map_u32(SPELL_DIR)?;
+        let staff_enchantments = builder.map_u32(STAFF_ENCHANTMENT_DIR)?;
+        let subjects = builder.map_u32(SUBJECT_DIR)?;
+        let toy_enchantments = builder.map_u32(TOY_ENCHANTMENT_DIR)?;
+        let tribes = builder.map_u32(TRIBE_DIR)?;
+        let trinkhornzauber = builder.map_u32(TRINKHORNZAUBER_DIR)?;
+        let wand_enchantments = builder.map_u32(WAND_ENCHANTMENT_DIR)?;
+        let weapon_enchantments = builder.map_u32(WEAPON_ENCHANTMENT_DIR)?;
+        let zibilja_rituals = builder.map_u32(ZIBILJA_RITUAL_DIR)?;
         let uis =
-            construct_map(
-                util::join(path, UI_DIR),
+            builder.map(UI_DIR,
                 |_: &UI, d| {
                     let os_file_name = d.file_name();
                     let file_name = os_file_name.to_str().unwrap();
@@ -393,21 +453,27 @@ impl OptolithData {
             advanced_skill_special_abilities,
             advantages,
             ancestor_glyphs,
-            animist_powers: animist_forces,
+            animist_powers: animist_powers,
             arcane_bard_traditions,
             arcane_dancer_traditions,
+            arcane_orb_enchantments,
             aspects,
+            attire_enchantments,
             attributes,
             blessed_traditions,
             blessings,
+            bowl_enchantments,
             brawling_special_abilities,
             brews,
+            cauldron_enchantments,
             ceremonies,
+            chronicle_enchantments,
             combat_special_abilities,
             combat_style_special_abilities,
             command_special_abilities,
             conditions,
             curses,
+            dagger_rituals,
             derived_characteristics,
             disadvantages,
             domination_rituals,
@@ -415,12 +481,15 @@ impl OptolithData {
             elven_magical_songs,
             experience_levels,
             eye_colors,
+            fools_hat_enchantments,
             general_special_abilities,
             geode_rituals,
             hair_colors,
+            instrument_enchantments,
             item_groups,
             jester_tricks,
             karma_special_abilities,
+            krallenkettenzauber,
             languages,
             liturgical_chants,
             liturgical_chant_groups,
@@ -430,18 +499,27 @@ impl OptolithData {
             magical_traditions,
             magical_special_abilities,
             magic_style_special_abilities,
+            orb_enchantments,
             races,
             reaches,
+            ring_enchantments,
             rituals,
             scripts,
+            sickle_rituals,
             skills,
             skill_groups,
             skill_style_special_abilities,
             social_statuses,
             spell_groups,
+            spell_sword_enchantments,
             spells,
+            staff_enchantments,
             subjects,
+            toy_enchantments,
             tribes,
+            trinkhornzauber,
+            wand_enchantments,
+            weapon_enchantments,
             zibilja_rituals,
             uis
         })
@@ -497,8 +575,18 @@ impl OptolithData {
         self.arcane_dancer_traditions.get(&id)
     }
 
+    pub fn get_arcane_orb_enchantment(&self, id: u32)
+            -> Option<&ArcaneOrbEnchantment> {
+        self.arcane_orb_enchantments.get(&id)
+    }
+
     pub fn get_aspect(&self, id: u32) -> Option<&Aspect> {
         self.aspects.get(&id)
+    }
+
+    pub fn get_attire_enchantment(&self, id: u32)
+            -> Option<&AttireEnchantment> {
+        self.attire_enchantments.get(&id)
     }
 
     pub fn get_attribute(&self, id: u32) -> Option<&Attribute> {
@@ -513,6 +601,10 @@ impl OptolithData {
         self.blessings.get(&id)
     }
 
+    pub fn get_bowl_enchantment(&self, id: u32) -> Option<&BowlEnchantment> {
+        self.bowl_enchantments.get(&id)
+    }
+
     pub fn get_brawling_special_ability(&self, id: u32)
             -> Option<&BrawlingSpecialAbility> {
         self.brawling_special_abilities.get(&id)
@@ -522,8 +614,18 @@ impl OptolithData {
         self.brews.get(&id)
     }
 
+    pub fn get_cauldron_enchantment(&self, id: u32)
+            -> Option<&CauldronEnchantment> {
+        self.cauldron_enchantments.get(&id)
+    }
+
     pub fn get_ceremony(&self, id: u32) -> Option<&Ceremony> {
         self.ceremonies.get(&id)
+    }
+
+    pub fn get_chronicle_enchantment(&self, id: u32)
+            -> Option<&ChronicleEnchantment> {
+        self.chronicle_enchantments.get(&id)
     }
 
     pub fn get_combat_special_ability(&self, id: u32)
@@ -547,6 +649,10 @@ impl OptolithData {
 
     pub fn get_curse(&self, id: u32) -> Option<&Curse> {
         self.curses.get(&id)
+    }
+
+    pub fn get_dagger_ritual(&self, id: u32) -> Option<&DaggerRitual> {
+        self.dagger_rituals.get(&id)
     }
 
     pub fn get_derived_characteristic(&self, id: u32)
@@ -579,6 +685,11 @@ impl OptolithData {
         self.eye_colors.get(&id)
     }
 
+    pub fn get_fools_hat_enchantment(&self, id: u32)
+            -> Option<&FoolsHatEnchantment> {
+        self.fools_hat_enchantments.get(&id)
+    }
+
     pub fn get_general_special_ability(&self, id: u32)
             -> Option<&GeneralSpecialAbility> {
         self.general_special_abilities.get(&id)
@@ -592,6 +703,11 @@ impl OptolithData {
         self.hair_colors.get(&id)
     }
 
+    pub fn get_instrument_enchantment(&self, id: u32)
+            -> Option<&InstrumentEnchantment> {
+        self.instrument_enchantments.get(&id)
+    }
+
     pub fn get_item_group(&self, id: u32) -> Option<&ItemGroup> {
         self.item_groups.get(&id)
     }
@@ -603,6 +719,11 @@ impl OptolithData {
     pub fn get_karma_special_ability(&self, id: u32)
             -> Option<&KarmaSpecialAbility> {
         self.karma_special_abilities.get(&id)
+    }
+
+    pub fn get_krallenkettenzauber(&self, id: u32)
+            -> Option<&Krallenkettenzauber> {
+        self.krallenkettenzauber.get(&id)
     }
 
     pub fn get_language(&self, id: u32) -> Option<&Language> {
@@ -645,6 +766,10 @@ impl OptolithData {
         self.magic_style_special_abilities.get(&id)
     }
 
+    pub fn get_orb_enchantment(&self, id: u32) -> Option<&OrbEnchantment> {
+        self.orb_enchantments.get(&id)
+    }
+
     pub fn get_race(&self, id: u32) -> Option<&Race> {
         self.races.get(&id)
     }
@@ -653,12 +778,20 @@ impl OptolithData {
         self.reaches.get(&id)
     }
 
+    pub fn get_ring_enchantment(&self, id: u32) -> Option<&RingEnchantment> {
+        self.ring_enchantments.get(&id)
+    }
+
     pub fn get_ritual(&self, id: u32) -> Option<&Ritual> {
         self.rituals.get(&id)
     }
 
     pub fn get_script(&self, id: u32) -> Option<&Script> {
         self.scripts.get(&id)
+    }
+
+    pub fn get_sickle_ritual(&self, id: u32) -> Option<&SickleRitual> {
+        self.sickle_rituals.get(&id)
     }
 
     pub fn get_skill(&self, id: u32) -> Option<&Skill> {
@@ -686,12 +819,38 @@ impl OptolithData {
         self.spell_groups.get(&id)
     }
 
+    pub fn get_spell_sword_enchantment(&self, id: u32)
+            -> Option<&SpellSwordEnchantment> {
+        self.spell_sword_enchantments.get(&id)
+    }
+
+    pub fn get_staff_enchantment(&self, id: u32) -> Option<&StaffEnchantment> {
+        self.staff_enchantments.get(&id)
+    }
+
     pub fn get_subject(&self, id: u32) -> Option<&Subject> {
         self.subjects.get(&id)
     }
 
+    pub fn get_toy_enchantment(&self, id: u32) -> Option<&ToyEnchantment> {
+        self.toy_enchantments.get(&id)
+    }
+
     pub fn get_tribe(&self, id: u32) -> Option<&Tribe> {
         self.tribes.get(&id)
+    }
+
+    pub fn get_trinkhornzauber(&self, id: u32) -> Option<&Trinkhornzauber> {
+        self.trinkhornzauber.get(&id)
+    }
+
+    pub fn get_wand_enchantment(&self, id: u32) -> Option<&WandEnchantment> {
+        self.wand_enchantments.get(&id)
+    }
+
+    pub fn get_weapon_enchantment(&self, id: u32)
+            -> Option<&WeaponEnchantment> {
+        self.weapon_enchantments.get(&id)
     }
 
     pub fn get_zibilja_ritual(&self, id: u32) -> Option<&ZibiljaRitual> {
@@ -726,20 +885,30 @@ impl OptolithData {
                 to_dyn(self.get_arcane_bard_tradition(int_id)),
             Category::ArcaneDancerTraditions =>
                 to_dyn(self.get_arcane_dancer_tradition(int_id)),
+            Category::ArcaneOrbEnchantments =>
+                to_dyn(self.get_arcane_orb_enchantment(int_id)),
             Category::Aspects =>
                 to_dyn(self.get_aspect(int_id)),
+            Category::AttireEnchantments =>
+                to_dyn(self.get_attire_enchantment(int_id)),
             Category::Attributes =>
                 to_dyn(self.get_attribute(int_id)),
             Category::BlessedTraditions =>
                 to_dyn(self.get_blessed_tradition(int_id)),
             Category::Blessings =>
                 to_dyn(self.get_blessing(int_id)),
+            Category::BowlEnchantments =>
+                to_dyn(self.get_bowl_enchantment(int_id)),
             Category::BrawlingSpecialAbilities =>
                 to_dyn(self.get_brawling_special_ability(int_id)),
             Category::Brews =>
                 to_dyn(self.get_brew(int_id)),
+            Category::CauldronEnchantments =>
+                to_dyn(self.get_cauldron_enchantment(int_id)),
             Category::Ceremonies =>
                 to_dyn(self.get_ceremony(int_id)),
+            Category::ChronicleEnchantments =>
+                to_dyn(self.get_chronicle_enchantment(int_id)),
             Category::CombatSpecialAbilities =>
                 to_dyn(self.get_combat_special_ability(int_id)),
             Category::CombatStyleSpecialAbilities =>
@@ -750,6 +919,8 @@ impl OptolithData {
                 to_dyn(self.get_condition(int_id)),
             Category::Curses =>
                 to_dyn(self.get_curse(int_id)),
+            Category::DaggerRituals =>
+                to_dyn(self.get_dagger_ritual(int_id)),
             Category::DerivedCharacteristics =>
                 to_dyn(self.get_derived_characteristic(int_id)),
             Category::Disadvantages =>
@@ -764,18 +935,24 @@ impl OptolithData {
                 to_dyn(self.get_experience_level(int_id)),
             Category::EyeColors =>
                 to_dyn(self.get_eye_color(int_id)),
+            Category::FoolsHatEnchantments =>
+                to_dyn(self.get_fools_hat_enchantment(int_id)),
             Category::GeneralSpecialAbilities =>
                 to_dyn(self.get_general_special_ability(int_id)),
             Category::GeodeRituals =>
                 to_dyn(self.get_geode_ritual(int_id)),
             Category::HairColors =>
                 to_dyn(self.get_hair_color(int_id)),
+            Category::InstrumentEnchantments =>
+                to_dyn(self.get_instrument_enchantment(int_id)),
             Category::ItemGroups =>
                 to_dyn(self.get_item_group(int_id)),
             Category::JesterTricks =>
                 to_dyn(self.get_jester_trick(int_id)),
             Category::KarmaSpecialAbilities =>
                 to_dyn(self.get_karma_special_ability(int_id)),
+            Category::Krallenkettenzauber =>
+                to_dyn(self.get_krallenkettenzauber(int_id)),
             Category::Languages =>
                 to_dyn(self.get_language(int_id)),
             Category::LiturgicalChants =>
@@ -794,14 +971,20 @@ impl OptolithData {
                 to_dyn(self.get_magical_special_ability(int_id)),
             Category::MagicStyleSpecialAbilities =>
                 to_dyn(self.get_magic_style_special_ability(int_id)),
+            Category::OrbEnchantments =>
+                to_dyn(self.get_orb_enchantment(int_id)),
             Category::Races =>
                 to_dyn(self.get_race(int_id)),
             Category::Reaches =>
                 to_dyn(self.get_reach(int_id)),
+            Category::RingEnchantments =>
+                to_dyn(self.get_ring_enchantment(int_id)),
             Category::Rituals =>
                 to_dyn(self.get_ritual(int_id)),
             Category::Scripts =>
                 to_dyn(self.get_script(int_id)),
+            Category::SickleRituals =>
+                to_dyn(self.get_sickle_ritual(int_id)),
             Category::Skills =>
                 to_dyn(self.get_skill(int_id)),
             Category::SkillGroups =>
@@ -814,10 +997,22 @@ impl OptolithData {
                 to_dyn(self.get_spell(int_id)),
             Category::SpellGroups =>
                 to_dyn(self.get_spell_group(int_id)),
+            Category::SpellSwordEnchantments =>
+                to_dyn(self.get_spell_sword_enchantment(int_id)),
+            Category::StaffEnchantments =>
+                to_dyn(self.get_staff_enchantment(int_id)),
             Category::Subjects =>
                 to_dyn(self.get_subject(int_id)),
+            Category::ToyEnchantments =>
+                to_dyn(self.get_toy_enchantment(int_id)),
             Category::Tribes =>
                 to_dyn(self.get_tribe(int_id)),
+            Category::Trinkhornzauber =>
+                to_dyn(self.get_trinkhornzauber(int_id)),
+            Category::WandEnchantments =>
+                to_dyn(self.get_wand_enchantment(int_id)),
+            Category::WeaponEnchantments =>
+                to_dyn(self.get_weapon_enchantment(int_id)),
             Category::ZibiljaRituals =>
                 to_dyn(self.get_zibilja_ritual(int_id)),
             _ => None // TODO update until all are implemented

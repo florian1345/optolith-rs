@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::marker::PhantomData;
 
 pub mod combat;
+pub mod enchantment;
 pub mod non_profane;
 pub mod skill;
 pub mod tradition;

@@ -116,6 +116,7 @@ pub enum Category {
     LycantropicGifts,
     MagicalDances,
     MagicalMelodies,
+    MagicalRunes,
     MagicalSpecialAbilities,
     MagicalTraditions,
     MagicStyleSpecialAbilities,

@@ -12,7 +12,7 @@ use std::marker::PhantomData;
 pub mod ceremonial_item;
 pub mod combat;
 pub mod enchantment;
-pub mod gifts;
+pub mod gift;
 pub mod non_profane;
 pub mod skill;
 pub mod tradition;

@@ -33,7 +33,7 @@ use crate::data::activatable::special_ability::{
         WandEnchantment,
         WeaponEnchantment
     },
-    gifts::{
+    gift::{
         LycantropicGift,
         PactGift,
         VampiricGift
@@ -71,25 +71,6 @@ use crate::data::derived_characteristic::DerivedCharacteristic;
 use crate::data::experience_level::ExperienceLevel;
 use crate::data::item::EquipmentPackage;
 use crate::data::language::{Language, Script};
-use crate::data::non_profane_skill::karmal::{
-    Blessing,
-    Ceremony,
-    LiturgicalChant
-};
-use crate::data::non_profane_skill::magical::{
-    AnimistPower,
-    Cantrip,
-    Curse,
-    DominationRitual,
-    ElvenMagicalSong,
-    GeodeRitual,
-    JesterTrick,
-    MagicalDance,
-    MagicalMelody,
-    Ritual,
-    Spell,
-    ZibiljaRitual
-};
 use crate::data::race::Race;
 use crate::data::simple::{
     ArmorType,
@@ -108,6 +89,27 @@ use crate::data::simple::{
     Tribe
 };
 use crate::data::skill::{Skill, SkillGroup};
+use crate::data::skill::combat::{MeleeCombatTechnique, RangedCombatTechnique};
+use crate::data::skill::non_profane::karmal::{
+    Blessing,
+    Ceremony,
+    LiturgicalChant
+};
+use crate::data::skill::non_profane::magical::{
+    AnimistPower,
+    Cantrip,
+    Curse,
+    DominationRitual,
+    ElvenMagicalSong,
+    GeodeRitual,
+    JesterTrick,
+    MagicalDance,
+    MagicalMelody,
+    MagicalRune,
+    Ritual,
+    Spell,
+    ZibiljaRitual
+};
 use crate::id::{Category, Id, Identifiable};
 use crate::error::OptolithDataResult;
 use crate::util;
@@ -129,7 +131,6 @@ pub mod errata;
 pub mod experience_level;
 pub mod item;
 pub mod language;
-pub mod non_profane_skill;
 pub mod prerequisite;
 pub mod race;
 pub mod simple;
@@ -204,13 +205,16 @@ const LITURGICAL_STYLE_SPECIAL_ABILITY_DIR: &str =
 const LYCANTROPIC_GIFT_DIR: &str = "LycantropicGifts";
 const MAGICAL_DANCE_DIR: &str = "MagicalDances";
 const MAGICAL_MELODY_DIR: &str = "MagicalMelodies";
+const MAGICAL_RUNE_DIR: &str = "MagicalRunes";
 const MAGICAL_SPECIAL_ABILITY_DIR: &str = "MagicalSpecialAbilities";
 const MAGICAL_TRADITION_DIR: &str = "MagicalTraditions";
 const MAGIC_STYLE_SPECIAL_ABILITY_DIR: &str = "MagicStyleSpecialAbilities";
+const MELEE_COMBAT_TECHNIQUE_DIR: &str = "MeleeCombatTechniques";
 const ORB_ENCHANTMENT_DIR: &str = "OrbEnchantments";
 const PACT_GIFT_DIR: &str = "PactGifts";
 const POISON_DIR: &str = "Poisons";
 const RACE_DIR: &str = "Races";
+const RANGED_COMBAT_TECHNIQUE_DIR: &str = "RangedCombatTechniques";
 const REACH_DIR: &str = "Reaches";
 const RING_ENCHANTMENT_DIR: &str = "RingEnchantments";
 const RITUAL_DIR: &str = "Rituals";
@@ -304,13 +308,16 @@ pub struct OptolithData {
     lycantropic_gifts: IdMap<LycantropicGift>,
     magical_dances: IdMap<MagicalDance>,
     magical_melodies: IdMap<MagicalMelody>,
-    magical_traditions: IdMap<MagicalTradition>,
+    magical_runes: IdMap<MagicalRune>,
     magical_special_abilities: IdMap<MagicalSpecialAbility>,
+    magical_traditions: IdMap<MagicalTradition>,
     magic_style_special_abilities: IdMap<MagicStyleSpecialAbility>,
+    melee_combat_techniques: IdMap<MeleeCombatTechnique>,
     orb_enchantments: IdMap<OrbEnchantment>,
     pact_gifts: IdMap<PactGift>,
     poisons: IdMap<Poison>,
     races: IdMap<Race>,
+    ranged_combat_techniques: IdMap<RangedCombatTechnique>,
     reaches: IdMap<Reach>,
     ring_enchantments: IdMap<RingEnchantment>,
     rituals: IdMap<Ritual>,
@@ -478,15 +485,20 @@ impl OptolithData {
         let lycantropic_gifts = builder.map_u32(LYCANTROPIC_GIFT_DIR)?;
         let magical_dances = builder.map_u32(MAGICAL_DANCE_DIR)?;
         let magical_melodies = builder.map_u32(MAGICAL_MELODY_DIR)?;
-        let magical_traditions = builder.map_u32(MAGICAL_TRADITION_DIR)?;
+        let magical_runes = builder.map_u32(MAGICAL_RUNE_DIR)?;
         let magical_special_abilities =
             builder.map_u32(MAGICAL_SPECIAL_ABILITY_DIR)?;
+        let magical_traditions = builder.map_u32(MAGICAL_TRADITION_DIR)?;
         let magic_style_special_abilities =
             builder.map_u32(MAGIC_STYLE_SPECIAL_ABILITY_DIR)?;
+        let melee_combat_techniques =
+            builder.map_u32(MELEE_COMBAT_TECHNIQUE_DIR)?;
         let orb_enchantments = builder.map_u32(ORB_ENCHANTMENT_DIR)?;
         let pact_gifts = builder.map_u32(PACT_GIFT_DIR)?;
         let poisons = builder.map_u32(POISON_DIR)?;
         let races = builder.map_u32(RACE_DIR)?;
+        let ranged_combat_techniques =
+            builder.map_u32(RANGED_COMBAT_TECHNIQUE_DIR)?;
         let reaches = builder.map_u32(REACH_DIR)?;
         let ring_enchantments = builder.map_u32(RING_ENCHANTMENT_DIR)?;
         let rituals = builder.map_u32(RITUAL_DIR)?;
@@ -582,13 +594,16 @@ impl OptolithData {
             lycantropic_gifts,
             magical_dances,
             magical_melodies,
-            magical_traditions,
+            magical_runes,
             magical_special_abilities,
+            magical_traditions,
             magic_style_special_abilities,
+            melee_combat_techniques,
             orb_enchantments,
             pact_gifts,
             poisons,
             races,
+            ranged_combat_techniques,
             reaches,
             ring_enchantments,
             rituals,
@@ -893,8 +908,8 @@ impl OptolithData {
         self.magical_melodies.get(&id)
     }
 
-    pub fn get_magical_tradition(&self, id: u32) -> Option<&MagicalTradition> {
-        self.magical_traditions.get(&id)
+    pub fn get_magical_rune(&self, id: u32) -> Option<&MagicalRune> {
+        self.magical_runes.get(&id)
     }
 
     pub fn get_magical_special_ability(&self, id: u32)
@@ -902,9 +917,18 @@ impl OptolithData {
         self.magical_special_abilities.get(&id)
     }
 
+    pub fn get_magical_tradition(&self, id: u32) -> Option<&MagicalTradition> {
+        self.magical_traditions.get(&id)
+    }
+
     pub fn get_magic_style_special_ability(&self, id: u32)
             -> Option<&MagicStyleSpecialAbility> {
         self.magic_style_special_abilities.get(&id)
+    }
+
+    pub fn get_melee_combat_technique(&self, id: u32)
+            -> Option<&MeleeCombatTechnique> {
+        self.melee_combat_techniques.get(&id)
     }
 
     pub fn get_orb_enchantment(&self, id: u32) -> Option<&OrbEnchantment> {
@@ -921,6 +945,11 @@ impl OptolithData {
 
     pub fn get_race(&self, id: u32) -> Option<&Race> {
         self.races.get(&id)
+    }
+
+    pub fn get_ranged_combat_technique(&self, id: u32)
+            -> Option<&RangedCombatTechnique> {
+        self.ranged_combat_techniques.get(&id)
     }
 
     pub fn get_reach(&self, id: u32) -> Option<&Reach> {
@@ -1146,12 +1175,16 @@ impl OptolithData {
                 to_dyn(self.get_magical_dance(int_id)),
             Category::MagicalMelodies =>
                 to_dyn(self.get_magical_melody(int_id)),
-            Category::MagicalTraditions =>
-                to_dyn(self.get_magical_tradition(int_id)),
+            Category::MagicalRunes =>
+                to_dyn(self.get_magical_rune(int_id)),
             Category::MagicalSpecialAbilities =>
                 to_dyn(self.get_magical_special_ability(int_id)),
+            Category::MagicalTraditions =>
+                to_dyn(self.get_magical_tradition(int_id)),
             Category::MagicStyleSpecialAbilities =>
                 to_dyn(self.get_magic_style_special_ability(int_id)),
+            Category::MeleeCombatTechniques =>
+                to_dyn(self.get_melee_combat_technique(int_id)),
             Category::OrbEnchantments =>
                 to_dyn(self.get_orb_enchantment(int_id)),
             Category::PactGifts =>
@@ -1160,6 +1193,8 @@ impl OptolithData {
                 to_dyn(self.get_poison(int_id)),
             Category::Races =>
                 to_dyn(self.get_race(int_id)),
+            Category::RangedCombatTechniques =>
+                to_dyn(self.get_ranged_combat_technique(int_id)),
             Category::Reaches =>
                 to_dyn(self.get_reach(int_id)),
             Category::RingEnchantments =>

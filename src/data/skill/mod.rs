@@ -6,6 +6,9 @@ use crate::data::prerequisite::ActivatablePrerequisite;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
+pub mod combat;
+pub mod non_profane;
+
 /// This is one data structure used for "applications" and "uses".
 #[derive(Deserialize, Serialize)]
 pub struct ApplicationUse {

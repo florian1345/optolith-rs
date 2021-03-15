@@ -1,5 +1,5 @@
 use crate::data::{Translatable, Translations};
-use crate::data::non_profane_skill::{
+use crate::data::skill::non_profane::{
     CheckMod,
     Enhancements,
     NonProfaneSkillLocalization,

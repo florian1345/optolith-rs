@@ -6,7 +6,7 @@ use crate::data::{
     Translations
 };
 use crate::data::errata::Errata;
-use crate::data::non_profane_skill::{
+use crate::data::skill::non_profane::{
     CheckMod,
     Enhancements,
     MainParameterLocalization,
@@ -471,7 +471,6 @@ pub struct JesterTrick {
     /// If the check will be modified by Spirit or Toughness, insert `SPI` or
     /// `TOU` respectively. If the higher is the characteristic to choose,
     /// insert an array with both instead.
-    
     #[serde(rename = "checkMod")]
     pub check_mod: Option<CheckMod>,
 
@@ -492,6 +491,88 @@ impl Translatable for JesterTrick {
     type Localization = NonProfaneSkillLocalization;
 
     fn translations(&self) -> &Translations<NonProfaneSkillLocalization> {
+        &self.translations
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+pub enum MagicalRuneCheckMod {
+    CombatTechnique
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct SpeedSeparatedMainParameterLocalization {
+    pub slow: MainParameterLocalization,
+    pub fast: MainParameterLocalization
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct MagicalRuneLocalization {
+
+    /// The name of the magical rune.
+    pub name: String,
+
+    /// The native name of the magical rune.
+    #[serde(rename = "nativeName")]
+    pub native_name: String,
+
+    /// The effect description. Markdown is available. If the effect is
+    /// different for different quality levels, use "effectQualityLevels". If
+    /// there is general effect text after the list of quality levels, use
+    /// "effectAfterQualityLevels" for that.
+    pub effect: String,
+    #[serde(rename = "effectQualityLevels")]
+    pub effect_quality_levels: Option<QualityLevelEffectLocalization>,
+
+    /// The effect description after the quality levels list. Markdown is
+    /// available.
+    #[serde(rename = "effectAfterQualityLevels")]
+    pub effect_after_quality_levels: Option<String>,
+
+    /// The AE/KE cost.
+    pub cost: MainParameterLocalization,
+
+    /// The crafting time.
+    #[serde(rename = "craftingTime")]
+    pub crafting_time: SpeedSeparatedMainParameterLocalization,
+
+    /// The duration.
+    pub duration: SpeedSeparatedMainParameterLocalization,
+    pub errata: Option<Errata>
+}
+
+impl Localization for MagicalRuneLocalization {
+    fn name(&self) -> &str {
+        &self.name
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct MagicalRune {
+    pub id: u32,
+    pub check: [u32; 3],
+
+    /// If the check will be modified by any value, list it here.
+    #[serde(rename = "checkMod")]
+    pub check_mod: Option<MagicalRuneCheckMod>,
+
+    /// The property ID.
+    pub property: u32,
+    pub ic: ImprovementCost,
+    pub src: SourceRefs,
+    pub translations: Translations<MagicalRuneLocalization>
+}
+
+impl Identifiable for MagicalRune {
+    fn id(&self) -> Id {
+        Id::new(Category::MagicalRunes, self.id)
+    }
+}
+
+impl Translatable for MagicalRune {
+    type Localization = MagicalRuneLocalization;
+
+    fn translations(&self) -> &Translations<MagicalRuneLocalization> {
         &self.translations
     }
 }

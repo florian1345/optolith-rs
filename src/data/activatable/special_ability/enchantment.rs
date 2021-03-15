@@ -2,6 +2,11 @@ use crate::data::{Localization, Translatable, Translations};
 use crate::data::activatable::{APValue, SelectOptions};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::GeneralListOrByLevelPrerequisite;
+use crate::data::simple::{
+    SimpleEntity,
+    SimpleLocalization,
+    SimpleTranslations
+};
 use crate::data::src::SourceRefs;
 use crate::id::{Category, CategoryProvider, Id, Identifiable};
 
@@ -354,3 +359,64 @@ impl CategoryProvider for WeaponEnchantmentCategory {
 }
 
 pub type WeaponEnchantment = SimpleEnchantment<WeaponEnchantmentCategory>;
+
+pub struct AnimalShapePathCategory;
+
+impl CategoryProvider for AnimalShapePathCategory {
+    const CATEGORY: Category = Category::AnimalShapePaths;
+}
+
+pub type AnimalShapePath = SimpleEntity<AnimalShapePathCategory>;
+
+#[derive(Deserialize, Serialize)]
+pub struct AnimalShapeSize {
+    pub id: u32,
+
+    /// The volume points the animal shape needs
+    pub volume: u32,
+
+    /// AP value of the animal shape.
+    #[serde(rename = "apValue")]
+    pub ap_value: u32,
+    pub translations: SimpleTranslations
+}
+
+impl Identifiable for AnimalShapeSize {
+    fn id(&self) -> Id {
+        Id::new(Category::AnimalShapeSizes, self.id)
+    }
+}
+
+impl Translatable for AnimalShapeSize {
+    type Localization = SimpleLocalization;
+
+    fn translations(&self) -> &Translations<SimpleLocalization> {
+        &self.translations
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct AnimalShape {
+    pub id: u32,
+
+    /// The path of the animal shape.
+    pub path: u32,
+
+    /// The size of the animal shape.
+    pub size: u32,
+    pub translations: SimpleTranslations
+}
+
+impl Identifiable for AnimalShape {
+    fn id(&self) -> Id {
+        Id::new(Category::AnimalShapes, self.id)
+    }
+}
+
+impl Translatable for AnimalShape {
+    type Localization = SimpleLocalization;
+
+    fn translations(&self) -> &Translations<SimpleLocalization> {
+        &self.translations
+    }
+}

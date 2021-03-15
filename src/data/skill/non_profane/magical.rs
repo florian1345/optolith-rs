@@ -1,10 +1,4 @@
-use crate::data::{
-    Ids,
-    Localization,
-    SimpleTranslations,
-    Translatable,
-    Translations
-};
+use crate::data::{Ids, Localization, Translatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::skill::non_profane::{
     CheckMod,
@@ -19,6 +13,7 @@ use crate::data::prerequisite::{
     ActivatableListPrerequisite,
     IncreasableListPrerequisite
 };
+use crate::data::simple::SimpleTranslations;
 use crate::data::skill::ImprovementCost;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, CategoryProvider, Id, Identifiable};

@@ -1,12 +1,7 @@
-use crate::data::{
-    Localization,
-    SimpleLocalization,
-    SimpleTranslations,
-    Translatable,
-    Translations
-};
+use crate::data::{Localization, Translatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::InfluenceListPrerequisite;
+use crate::data::simple::{SimpleLocalization, SimpleTranslations};
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 

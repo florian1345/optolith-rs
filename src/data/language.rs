@@ -1,5 +1,6 @@
-use crate::data::{Localization, SimpleTranslations, Translatable, Translations};
+use crate::data::{Localization, Translatable, Translations};
 use crate::data::errata::{Errata, ErrataLocalization, ErrataTranslations};
+use crate::data::simple::SimpleTranslations;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 

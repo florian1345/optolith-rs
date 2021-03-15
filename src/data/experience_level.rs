@@ -1,4 +1,5 @@
-use crate::data::{SimpleLocalization, SimpleTranslations, Translatable};
+use crate::data::Translatable;
+use crate::data::simple::{SimpleLocalization, SimpleTranslations};
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};

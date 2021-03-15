@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{Localization, Translatable, Translations, SimpleTranslations};
+use crate::data::{Localization, Translatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::ActivatablePrerequisite;
+use crate::data::simple::SimpleTranslations;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 

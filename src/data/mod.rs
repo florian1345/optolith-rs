@@ -14,6 +14,9 @@ use crate::data::activatable::special_ability::{
         CommandSpecialAbility
     },
     enchantment::{
+        AnimalShape,
+        AnimalShapePath,
+        AnimalShapeSize,
         ArcaneOrbEnchantment,
         AttireEnchantment,
         BowlEnchantment,
@@ -69,7 +72,7 @@ use crate::data::status_effect::{
 use crate::data::culture::Culture;
 use crate::data::derived_characteristic::DerivedCharacteristic;
 use crate::data::experience_level::ExperienceLevel;
-use crate::data::item::EquipmentPackage;
+use crate::data::item::{EquipmentPackage, ItemGroup};
 use crate::data::language::{Language, Script};
 use crate::data::race::Race;
 use crate::data::simple::{
@@ -80,7 +83,6 @@ use crate::data::simple::{
     Element,
     EyeColor,
     HairColor,
-    ItemGroup,
     LiturgicalChantGroup,
     Reach,
     SocialStatus,
@@ -148,6 +150,9 @@ const ADVANCED_SKILL_SPECIAL_ABILITY_DIR: &str =
     "AdvancedSkillSpecialAbilities";
 const ADVANTAGE_DIR: &str = "Advantages";
 const ANCESTOR_GLYPH_DIR: &str = "AncestorGlyphs";
+const ANIMAL_SHAPE_DIR: &str = "AnimalShapes";
+const ANIMAL_SHAPE_PATH_DIR: &str = "AnimalShapePaths";
+const ANIMAL_SHAPE_SIZE_DIR: &str = "AnimalShapeSizes";
 const ANIMIST_POWER_DIR: &str = "AnimistPowers";
 const ARCANE_BARD_TRADITION_DIR: &str = "ArcaneBardTraditions";
 const ARCANE_DANCER_TRADITION_DIR: &str = "ArcaneDancerTraditions";
@@ -253,6 +258,9 @@ pub struct OptolithData {
     advanced_skill_special_abilities: IdMap<AdvancedSkillSpecialAbility>,
     advantages: IdMap<Advantage>,
     ancestor_glyphs: IdMap<AncestorGlyph>,
+    animal_shapes: IdMap<AnimalShape>,
+    animal_shape_paths: IdMap<AnimalShapePath>,
+    animal_shape_sizes: IdMap<AnimalShapeSize>,
     animist_powers: IdMap<AnimistPower>,
     arcane_bard_traditions: IdMap<ArcaneBardTradition>,
     arcane_dancer_traditions: IdMap<ArcaneDancerTradition>,
@@ -411,6 +419,9 @@ impl OptolithData {
             builder.map_u32(ADVANCED_SKILL_SPECIAL_ABILITY_DIR)?;
         let advantages = builder.map_u32(ADVANTAGE_DIR)?;
         let ancestor_glyphs = builder.map_u32(ANCESTOR_GLYPH_DIR)?;
+        let animal_shapes = builder.map_u32(ANIMAL_SHAPE_DIR)?;
+        let animal_shape_paths = builder.map_u32(ANIMAL_SHAPE_PATH_DIR)?;
+        let animal_shape_sizes = builder.map_u32(ANIMAL_SHAPE_SIZE_DIR)?;
         let animist_powers = builder.map_u32(ANIMIST_POWER_DIR)?;
         let arcane_bard_traditions =
             builder.map_u32(ARCANE_BARD_TRADITION_DIR)?;
@@ -539,7 +550,10 @@ impl OptolithData {
             advanced_skill_special_abilities,
             advantages,
             ancestor_glyphs,
-            animist_powers: animist_powers,
+            animal_shapes,
+            animal_shape_paths,
+            animal_shape_sizes,
+            animist_powers,
             arcane_bard_traditions,
             arcane_dancer_traditions,
             arcane_orb_enchantments,
@@ -664,6 +678,18 @@ impl OptolithData {
 
     pub fn get_ancestor_glyph(&self, id: u32) -> Option<&AncestorGlyph> {
         self.ancestor_glyphs.get(&id)
+    }
+
+    pub fn get_animal_shape(&self, id: u32) -> Option<&AnimalShape> {
+        self.animal_shapes.get(&id)
+    }
+
+    pub fn get_animal_shape_path(&self, id: u32) -> Option<&AnimalShapePath> {
+        self.animal_shape_paths.get(&id)
+    }
+
+    pub fn get_animal_shape_size(&self, id: u32) -> Option<&AnimalShapeSize> {
+        self.animal_shape_sizes.get(&id)
     }
 
     pub fn get_animist_power(&self, id: u32) -> Option<&AnimistPower> {
@@ -1065,6 +1091,12 @@ impl OptolithData {
                 to_dyn(self.get_advantage(int_id)),
             Category::AncestorGlyphs =>
                 to_dyn(self.get_ancestor_glyph(int_id)),
+            Category::AnimalShapes =>
+                to_dyn(self.get_animal_shape(int_id)),
+            Category::AnimalShapePaths =>
+                to_dyn(self.get_animal_shape_path(int_id)),
+            Category::AnimalShapeSizes =>
+                to_dyn(self.get_animal_shape_size(int_id)),
             Category::AnimistPowers =>
                 to_dyn(self.get_animist_power(int_id)),
             Category::ArcaneBardTraditions =>
@@ -1263,18 +1295,6 @@ pub trait Localization {
     }
 }
 
-/// A [Localization] that consists only of a string.
-#[derive(Deserialize, Serialize)]
-pub struct SimpleLocalization {
-    pub name: String
-}
-
-impl Localization for SimpleLocalization {
-    fn name(&self) -> &str {
-        &self.name
-    }
-}
-
 impl Localization for String {
     fn name(&self) -> &str {
         &self
@@ -1283,8 +1303,6 @@ impl Localization for String {
 
 /// A map of language identifiers to [Localization]s of type `L`.
 pub type Translations<L> = HashMap<String, L>;
-
-pub type SimpleTranslations = Translations<SimpleLocalization>;
 
 /// A trait for entities which are translatable, i.e. for which [Translation]s
 /// of some [Localization] type `L` exist.

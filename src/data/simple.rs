@@ -1,9 +1,23 @@
-use crate::data::{SimpleLocalization, SimpleTranslations, Translatable};
+use crate::data::{Localization, Translations, Translatable};
 use crate::id::{Category, CategoryProvider, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
 use std::marker::PhantomData;
+
+/// A [Localization] that consists only of a string.
+#[derive(Deserialize, Serialize)]
+pub struct SimpleLocalization {
+    pub name: String
+}
+
+impl Localization for SimpleLocalization {
+    fn name(&self) -> &str {
+        &self.name
+    }
+}
+
+pub type SimpleTranslations = Translations<SimpleLocalization>;
 
 /// A data entity that consists of an ID and
 /// [SimpleTranslations](crate::data::SimpleTranslations).
@@ -88,14 +102,6 @@ impl CategoryProvider for HairColorCategory {
 }
 
 pub type HairColor = SimpleEntity<HairColorCategory>;
-
-pub struct ItemGroupCategory;
-
-impl CategoryProvider for ItemGroupCategory {
-    const CATEGORY: Category = Category::ItemGroups;
-}
-
-pub type ItemGroup = SimpleEntity<ItemGroupCategory>;
 
 pub struct LiturgicalChantGroupCategory;
 

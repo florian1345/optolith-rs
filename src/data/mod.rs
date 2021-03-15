@@ -33,6 +33,11 @@ use crate::data::activatable::special_ability::{
         WandEnchantment,
         WeaponEnchantment
     },
+    gifts::{
+        LycantropicGift,
+        PactGift,
+        VampiricGift
+    },
     non_profane::{
         AdvancedKarmaSpecialAbility,
         AdvancedMagicalSpecialAbility,
@@ -55,10 +60,16 @@ use crate::data::activatable::special_ability::{
 };
 use crate::data::aspect::Aspect;
 use crate::data::attribute::Attribute;
-use crate::data::condition::Condition;
+use crate::data::status_effect::{
+    Condition,
+    Disease,
+    Poison,
+    State
+};
 use crate::data::culture::Culture;
 use crate::data::derived_characteristic::DerivedCharacteristic;
 use crate::data::experience_level::ExperienceLevel;
+use crate::data::item::EquipmentPackage;
 use crate::data::language::{Language, Script};
 use crate::data::non_profane_skill::karmal::{
     Blessing,
@@ -112,11 +123,11 @@ pub mod activatable;
 pub mod aspect;
 pub mod attribute;
 pub mod combat_technique;
-pub mod condition;
 pub mod culture;
 pub mod derived_characteristic;
 pub mod errata;
 pub mod experience_level;
+pub mod item;
 pub mod language;
 pub mod non_profane_skill;
 pub mod prerequisite;
@@ -124,6 +135,7 @@ pub mod race;
 pub mod simple;
 pub mod skill;
 pub mod src;
+pub mod status_effect;
 
 const ADVANCED_COMBAT_SPECIAL_ABILITY_DIR: &str =
     "AdvancedCombatSpecialAbilities";
@@ -166,9 +178,11 @@ const CURSE_DIR: &str = "Curses";
 const DAGGER_RITUAL_DIR: &str = "DaggerRituals";
 const DERIVED_CHARACTERISTIC_DIR: &str = "DerivedCharacteristics";
 const DISADVANTAGE_DIR: &str = "Disadvantages";
+const DISEASE_DIR: &str = "Diseases";
 const DOMINATION_RITUAL_DIR: &str = "DominationRituals";
 const ELEMENT_DIR: &str = "Elements";
 const ELVEN_MAGICAL_SONG_DIR: &str = "ElvenMagicalSongs";
+const EQUIPMENT_PACKAGE_DIR: &str = "EquipmentPackages";
 const EXPERIENCE_LEVEL_DIR: &str = "ExperienceLevels";
 const EYE_COLOR_DIR: &str = "EyeColors";
 const FOOLS_HAT_ENCHANTMENT_DIR: &str = "FoolsHatEnchantments";
@@ -187,12 +201,15 @@ const LITURGICAL_CHANT_DIR: &str = "LiturgicalChants";
 const LITURGICAL_CHANT_GROUP_DIR: &str = "LiturgicalChantGroups";
 const LITURGICAL_STYLE_SPECIAL_ABILITY_DIR: &str =
     "LiturgicalStyleSpecialAbilities";
+const LYCANTROPIC_GIFT_DIR: &str = "LycantropicGifts";
 const MAGICAL_DANCE_DIR: &str = "MagicalDances";
 const MAGICAL_MELODY_DIR: &str = "MagicalMelodies";
 const MAGICAL_SPECIAL_ABILITY_DIR: &str = "MagicalSpecialAbilities";
 const MAGICAL_TRADITION_DIR: &str = "MagicalTraditions";
 const MAGIC_STYLE_SPECIAL_ABILITY_DIR: &str = "MagicStyleSpecialAbilities";
 const ORB_ENCHANTMENT_DIR: &str = "OrbEnchantments";
+const PACT_GIFT_DIR: &str = "PactGifts";
+const POISON_DIR: &str = "Poisons";
 const RACE_DIR: &str = "Races";
 const REACH_DIR: &str = "Reaches";
 const RING_ENCHANTMENT_DIR: &str = "RingEnchantments";
@@ -207,11 +224,13 @@ const SPELL_DIR: &str = "Spells";
 const SPELL_GROUP_DIR: &str = "SpellGroups";
 const SPELL_SWORD_ENCHANTMENT_DIR: &str = "SpellSwordEnchantments";
 const STAFF_ENCHANTMENT_DIR: &str = "StaffEnchantments";
+const STATE_DIR: &str = "States";
 const SUBJECT_DIR: &str = "Subjects";
 const TOY_ENCHANTMENT_DIR: &str = "ToyEnchantments";
 const TRIBE_DIR: &str = "Tribes";
 const TRINKHORNZAUBER_DIR: &str = "Trinkhornzauber";
 const UI_DIR: &str = "UI";
+const VAMPIRIC_GIFT_DIR: &str = "VampiricGifts";
 const WAND_ENCHANTMENT_DIR: &str = "WandEnchantments";
 const WEAPON_ENCHANTMENT_DIR: &str = "WeaponEnchantments";
 const ZIBILJA_RITUAL_DIR: &str = "ZibiljaRituals";
@@ -260,9 +279,11 @@ pub struct OptolithData {
     dagger_rituals: IdMap<DaggerRitual>,
     derived_characteristics: IdMap<DerivedCharacteristic>,
     disadvantages: IdMap<Disadvantage>,
+    diseases: IdMap<Disease>,
     domination_rituals: IdMap<DominationRitual>,
     elements: IdMap<Element>,
     elven_magical_songs: IdMap<ElvenMagicalSong>,
+    equipment_packages: IdMap<EquipmentPackage>,
     experience_levels: IdMap<ExperienceLevel>,
     eye_colors: IdMap<EyeColor>,
     fools_hat_enchantments: IdMap<FoolsHatEnchantment>,
@@ -280,12 +301,15 @@ pub struct OptolithData {
     liturgical_chants: IdMap<LiturgicalChant>,
     liturgical_chant_groups: IdMap<LiturgicalChantGroup>,
     liturgical_style_special_abilities: IdMap<LiturgicalStyleSpecialAbility>,
+    lycantropic_gifts: IdMap<LycantropicGift>,
     magical_dances: IdMap<MagicalDance>,
     magical_melodies: IdMap<MagicalMelody>,
     magical_traditions: IdMap<MagicalTradition>,
     magical_special_abilities: IdMap<MagicalSpecialAbility>,
     magic_style_special_abilities: IdMap<MagicStyleSpecialAbility>,
     orb_enchantments: IdMap<OrbEnchantment>,
+    pact_gifts: IdMap<PactGift>,
+    poisons: IdMap<Poison>,
     races: IdMap<Race>,
     reaches: IdMap<Reach>,
     ring_enchantments: IdMap<RingEnchantment>,
@@ -300,10 +324,12 @@ pub struct OptolithData {
     spell_groups: IdMap<SpellGroup>,
     spell_sword_enchantments: IdMap<SpellSwordEnchantment>,
     staff_enchantments: IdMap<StaffEnchantment>,
+    states: IdMap<State>,
     subjects: IdMap<Subject>,
     toy_enchantments: IdMap<ToyEnchantment>,
     tribes: IdMap<Tribe>,
     trinkhornzauber: IdMap<Trinkhornzauber>,
+    vampiric_gifts: IdMap<VampiricGift>,
     wand_enchantments: IdMap<WandEnchantment>,
     weapon_enchantments: IdMap<WeaponEnchantment>,
     zibilja_rituals: IdMap<ZibiljaRitual>,
@@ -421,9 +447,11 @@ impl OptolithData {
         let derived_characteristics =
             builder.map_u32(DERIVED_CHARACTERISTIC_DIR)?;
         let disadvantages = builder.map_u32(DISADVANTAGE_DIR)?;
+        let diseases = builder.map_u32(DISEASE_DIR)?;
         let domination_rituals = builder.map_u32(DOMINATION_RITUAL_DIR)?;
         let elements = builder.map_u32(ELEMENT_DIR)?;
         let elven_magical_songs = builder.map_u32(ELVEN_MAGICAL_SONG_DIR)?;
+        let equipment_packages = builder.map_u32(EQUIPMENT_PACKAGE_DIR)?;
         let experience_levels = builder.map_u32(EXPERIENCE_LEVEL_DIR)?;
         let eye_colors = builder.map_u32(EYE_COLOR_DIR)?;
         let fools_hat_enchantments =
@@ -447,6 +475,7 @@ impl OptolithData {
             builder.map_u32(LITURGICAL_CHANT_GROUP_DIR)?;
         let liturgical_style_special_abilities =
             builder.map_u32(LITURGICAL_STYLE_SPECIAL_ABILITY_DIR)?;
+        let lycantropic_gifts = builder.map_u32(LYCANTROPIC_GIFT_DIR)?;
         let magical_dances = builder.map_u32(MAGICAL_DANCE_DIR)?;
         let magical_melodies = builder.map_u32(MAGICAL_MELODY_DIR)?;
         let magical_traditions = builder.map_u32(MAGICAL_TRADITION_DIR)?;
@@ -455,6 +484,8 @@ impl OptolithData {
         let magic_style_special_abilities =
             builder.map_u32(MAGIC_STYLE_SPECIAL_ABILITY_DIR)?;
         let orb_enchantments = builder.map_u32(ORB_ENCHANTMENT_DIR)?;
+        let pact_gifts = builder.map_u32(PACT_GIFT_DIR)?;
+        let poisons = builder.map_u32(POISON_DIR)?;
         let races = builder.map_u32(RACE_DIR)?;
         let reaches = builder.map_u32(REACH_DIR)?;
         let ring_enchantments = builder.map_u32(RING_ENCHANTMENT_DIR)?;
@@ -471,10 +502,12 @@ impl OptolithData {
             builder.map_u32(SPELL_SWORD_ENCHANTMENT_DIR)?;
         let spells = builder.map_u32(SPELL_DIR)?;
         let staff_enchantments = builder.map_u32(STAFF_ENCHANTMENT_DIR)?;
+        let states = builder.map_u32(STATE_DIR)?;
         let subjects = builder.map_u32(SUBJECT_DIR)?;
         let toy_enchantments = builder.map_u32(TOY_ENCHANTMENT_DIR)?;
         let tribes = builder.map_u32(TRIBE_DIR)?;
         let trinkhornzauber = builder.map_u32(TRINKHORNZAUBER_DIR)?;
+        let vampiric_gifts = builder.map_u32(VAMPIRIC_GIFT_DIR)?;
         let wand_enchantments = builder.map_u32(WAND_ENCHANTMENT_DIR)?;
         let weapon_enchantments = builder.map_u32(WEAPON_ENCHANTMENT_DIR)?;
         let zibilja_rituals = builder.map_u32(ZIBILJA_RITUAL_DIR)?;
@@ -524,9 +557,11 @@ impl OptolithData {
             dagger_rituals,
             derived_characteristics,
             disadvantages,
+            diseases,
             domination_rituals,
             elements,
             elven_magical_songs,
+            equipment_packages,
             experience_levels,
             eye_colors,
             fools_hat_enchantments,
@@ -544,12 +579,15 @@ impl OptolithData {
             liturgical_chants,
             liturgical_chant_groups,
             liturgical_style_special_abilities,
+            lycantropic_gifts,
             magical_dances,
             magical_melodies,
             magical_traditions,
             magical_special_abilities,
             magic_style_special_abilities,
             orb_enchantments,
+            pact_gifts,
+            poisons,
             races,
             reaches,
             ring_enchantments,
@@ -564,10 +602,12 @@ impl OptolithData {
             spell_sword_enchantments,
             spells,
             staff_enchantments,
+            states,
             subjects,
             toy_enchantments,
             tribes,
             trinkhornzauber,
+            vampiric_gifts,
             wand_enchantments,
             weapon_enchantments,
             zibilja_rituals,
@@ -745,6 +785,10 @@ impl OptolithData {
         self.disadvantages.get(&id)
     }
 
+    pub fn get_disease(&self, id: u32) -> Option<&Disease> {
+        self.diseases.get(&id)
+    }
+
     pub fn get_domination_ritual(&self, id: u32) -> Option<&DominationRitual> {
         self.domination_rituals.get(&id)
     }
@@ -756,6 +800,10 @@ impl OptolithData {
     pub fn get_elven_magical_song(&self, id: u32)
             -> Option<&ElvenMagicalSong> {
         self.elven_magical_songs.get(&id)
+    }
+
+    pub fn get_equipment_package(&self, id: u32) -> Option<&EquipmentPackage> {
+        self.equipment_packages.get(&id)
     }
 
     pub fn get_experience_level(&self, id: u32) -> Option<&ExperienceLevel> {
@@ -833,6 +881,10 @@ impl OptolithData {
         self.liturgical_style_special_abilities.get(&id)
     }
 
+    pub fn get_lycantropic_gift(&self, id: u32) -> Option<&LycantropicGift> {
+        self.lycantropic_gifts.get(&id)
+    }
+
     pub fn get_magical_dance(&self, id: u32) -> Option<&MagicalDance> {
         self.magical_dances.get(&id)
     }
@@ -857,6 +909,14 @@ impl OptolithData {
 
     pub fn get_orb_enchantment(&self, id: u32) -> Option<&OrbEnchantment> {
         self.orb_enchantments.get(&id)
+    }
+
+    pub fn get_pact_gift(&self, id: u32) -> Option<&PactGift> {
+        self.pact_gifts.get(&id)
+    }
+
+    pub fn get_poison(&self, id: u32) -> Option<&Poison> {
+        self.poisons.get(&id)
     }
 
     pub fn get_race(&self, id: u32) -> Option<&Race> {
@@ -917,6 +977,10 @@ impl OptolithData {
         self.staff_enchantments.get(&id)
     }
 
+    pub fn get_state(&self, id: u32) -> Option<&State> {
+        self.states.get(&id)
+    }
+
     pub fn get_subject(&self, id: u32) -> Option<&Subject> {
         self.subjects.get(&id)
     }
@@ -931,6 +995,10 @@ impl OptolithData {
 
     pub fn get_trinkhornzauber(&self, id: u32) -> Option<&Trinkhornzauber> {
         self.trinkhornzauber.get(&id)
+    }
+
+    pub fn get_vampiric_gift(&self, id: u32) -> Option<&VampiricGift> {
+        self.vampiric_gifts.get(&id)
     }
 
     pub fn get_wand_enchantment(&self, id: u32) -> Option<&WandEnchantment> {
@@ -1028,12 +1096,16 @@ impl OptolithData {
                 to_dyn(self.get_derived_characteristic(int_id)),
             Category::Disadvantages =>
                 to_dyn(self.get_disadvantage(int_id)),
+            Category::Diseases =>
+                to_dyn(self.get_disease(int_id)),
             Category::DominationRituals =>
                 to_dyn(self.get_domination_ritual(int_id)),
             Category::Elements =>
                 to_dyn(self.get_element(int_id)),
             Category::ElvenMagicalSongs =>
                 to_dyn(self.get_elven_magical_song(int_id)),
+            Category::EquipmentPackages =>
+                to_dyn(self.get_equipment_package(int_id)),
             Category::ExperienceLevels =>
                 to_dyn(self.get_experience_level(int_id)),
             Category::EyeColors =>
@@ -1068,6 +1140,8 @@ impl OptolithData {
                 to_dyn(self.get_liturgical_chant_group(int_id)),
             Category::LiturgicalStyleSpecialAbilities =>
                 to_dyn(self.get_liturgical_style_special_ability(int_id)),
+            Category::LycantropicGifts =>
+                to_dyn(self.get_lycantropic_gift(int_id)),
             Category::MagicalDances =>
                 to_dyn(self.get_magical_dance(int_id)),
             Category::MagicalMelodies =>
@@ -1080,6 +1154,10 @@ impl OptolithData {
                 to_dyn(self.get_magic_style_special_ability(int_id)),
             Category::OrbEnchantments =>
                 to_dyn(self.get_orb_enchantment(int_id)),
+            Category::PactGifts =>
+                to_dyn(self.get_pact_gift(int_id)),
+            Category::Poisons =>
+                to_dyn(self.get_poison(int_id)),
             Category::Races =>
                 to_dyn(self.get_race(int_id)),
             Category::Reaches =>
@@ -1108,6 +1186,8 @@ impl OptolithData {
                 to_dyn(self.get_spell_sword_enchantment(int_id)),
             Category::StaffEnchantments =>
                 to_dyn(self.get_staff_enchantment(int_id)),
+            Category::States =>
+                to_dyn(self.get_state(int_id)),
             Category::Subjects =>
                 to_dyn(self.get_subject(int_id)),
             Category::ToyEnchantments =>
@@ -1116,6 +1196,8 @@ impl OptolithData {
                 to_dyn(self.get_tribe(int_id)),
             Category::Trinkhornzauber =>
                 to_dyn(self.get_trinkhornzauber(int_id)),
+            Category::VampiricGifts =>
+                to_dyn(self.get_vampiric_gift(int_id)),
             Category::WandEnchantments =>
                 to_dyn(self.get_wand_enchantment(int_id)),
             Category::WeaponEnchantments =>

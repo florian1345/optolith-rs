@@ -92,6 +92,7 @@ pub enum Category {
     DominationRituals,
     Elements,
     ElvenMagicalSongs,
+    EquipmentPackages,
     ExperienceLevels,
     EyeColors,
     FamiliarSpecialAbilities,

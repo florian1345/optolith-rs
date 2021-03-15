@@ -1,5 +1,5 @@
 use crate::data::{Localization, SimpleTranslations, Translatable, Translations};
-use crate::data::errata::Errata;
+use crate::data::errata::{Errata, ErrataLocalization, ErrataTranslations};
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
@@ -65,18 +65,6 @@ impl Identifiable for Language {
 }
 
 #[derive(Deserialize, Serialize)]
-pub struct ScriptLocalization {
-    pub name: String,
-    pub errata: Option<Errata>
-}
-
-impl Localization for ScriptLocalization {
-    fn name(&self) -> &str {
-        &self.name
-    }
-}
-
-#[derive(Deserialize, Serialize)]
 pub struct Script {
     pub id: u32,
 
@@ -95,7 +83,7 @@ pub struct Script {
     #[serde(rename = "isExtinct")]
     pub is_extinct: bool,
     pub src: SourceRefs,
-    pub translations: Translations<ScriptLocalization>
+    pub translations: ErrataTranslations
 }
 
 impl Identifiable for Script {
@@ -105,9 +93,9 @@ impl Identifiable for Script {
 }
 
 impl Translatable for Script {
-    type Localization = ScriptLocalization;
+    type Localization = ErrataLocalization;
 
-    fn translations(&self) -> &Translations<ScriptLocalization> {
+    fn translations(&self) -> &Translations<ErrataLocalization> {
         &self.translations
     }
 }

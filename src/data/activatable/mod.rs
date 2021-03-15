@@ -42,7 +42,7 @@ pub enum ActivatableType {
     BlessedTradition,
     PactGift,
     SikaryanDrainSpecialAbility,
-    LykanthropicGift,
+    LycantropicGift,
     Talentstilsonderfertigkeit,
     AdvancedSkillSpecialAbility,
     ArcaneOrbEnchantment,

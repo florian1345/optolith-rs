@@ -1,12 +1,12 @@
 use crate::data::{Localization, Translatable, Translations};
 use crate::data::activatable::{APValue, SelectOptions};
-use crate::data::combat_technique::CombatTechniqueId;
 use crate::data::errata::Errata;
 use crate::data::prerequisite::{
     ArcaneTraditionListPrerequisite,
     GeneralListOrByLevelPrerequisite
 };
 use crate::data::simple::{SimpleLocalization, SimpleTranslations};
+use crate::data::skill::combat::CombatTechniqueId;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, CategoryProvider, Id, Identifiable};
 

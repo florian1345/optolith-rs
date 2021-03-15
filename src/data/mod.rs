@@ -126,7 +126,6 @@ pub mod academy;
 pub mod activatable;
 pub mod aspect;
 pub mod attribute;
-pub mod combat_technique;
 pub mod culture;
 pub mod derived_characteristic;
 pub mod errata;

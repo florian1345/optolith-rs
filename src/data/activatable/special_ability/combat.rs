@@ -4,8 +4,8 @@ use crate::data::activatable::special_ability::{
     AdvancedSpecialAbilities,
     SpecialAbilityLocalization
 };
-use crate::data::combat_technique::CombatTechniqueId;
 use crate::data::prerequisite::GeneralListOrByLevelPrerequisite;
+use crate::data::skill::combat::CombatTechniqueId;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, CategoryProvider, Id, Identifiable};
 

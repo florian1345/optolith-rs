@@ -87,3 +87,10 @@ impl Translatable for RangedCombatTechnique {
         &self.translations
     }
 }
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum CombatTechniqueId {
+    MeleeCombatTechnique(u32),
+    RangedCombatTechnique(u32)
+}

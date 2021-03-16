@@ -108,3 +108,10 @@ impl Translatable for Blessing {
         &self.translations
     }
 }
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum KarmalWorksId {
+    LiturgicalChant(u32),
+    Ceremony(u32)
+}

@@ -203,3 +203,58 @@ impl CategoryProvider for GeneralSpecialAbilityCategory {
 pub type GeneralSpecialAbility =
     SimpleSpecialAbility<GeneralSpecialAbilityCategory,
         SpecialAbilityLocalization>;
+
+#[derive(Deserialize, Serialize)]
+pub enum SpecialAbilityType {
+    GeneralSpecialAbility,
+    FatePointSpecialAbility,
+    CombatSpecialAbility,
+    MagicalSpecialAbility,
+    StaffEnchantment,
+    FamiliarSpecialAbility,
+    KarmaSpecialAbility,
+    ProtectiveWardingCircleSpecialAbility,
+    CombatStyleSpecialAbility,
+    AdvancedCombatSpecialAbility,
+    CommandSpecialAbility,
+    MagicStyleSpecialAbility,
+    AdvancedMagicalSpecialAbility,
+    SpellSwordEnchantment,
+    DaggerRitual,
+    InstrumentEnchantment,
+    AttireEnchantment,
+    OrbEnchantment,
+    WandEnchantment,
+    BrawlingSpecialAbility,
+    AncestorGlyph,
+    CeremonialItemSpecialAbility,
+    Sermon,
+    LiturgicalStyleSpecialAbility,
+    AdvancedKarmaSpecialAbility,
+    Vision,
+    MagicalTradition,
+    BlessedTradition,
+    PactGift,
+    SikaryanDrainSpecialAbility,
+    LycantropicGift,
+    Talentstilsonderfertigkeit,
+    AdvancedSkillSpecialAbility,
+    ArcaneOrbEnchantment,
+    CauldronEnchantment,
+    FoolsHatEnchantment,
+    ToyEnchantment,
+    BowlEnchantment,
+    FatePointSexSpecialAbility,
+    SexSpecialAbility,
+    WeaponEnchantment,
+    SickleRitual,
+    RingEnchantment,
+    ChronicleEnchantment
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct SpecialAbilityId {
+    #[serde(rename = "type")]
+    pub sa_type: SpecialAbilityType,
+    pub value: u32
+}

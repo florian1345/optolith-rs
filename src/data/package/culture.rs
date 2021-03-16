@@ -5,6 +5,7 @@ use crate::data::{
     Translations
 };
 use crate::data::errata::Errata;
+use crate::data::package::PackageSkill;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
@@ -18,15 +19,6 @@ pub enum ProfessionsException {
 }
 
 pub type ProfessionsExceptions = Vec<ProfessionsException>;
-
-#[derive(Deserialize, Serialize)]
-pub struct CulturalPackageSkill {
-    pub id: u32,
-
-    /// The skill points for the respective skill you get for buying the
-    /// cultural package.
-    pub value: u32
-}
 
 #[derive(Deserialize, Serialize)]
 pub struct CultureLocalization {
@@ -161,7 +153,7 @@ pub struct Culture {
 
     /// The skill points you get for buying the culture package.
     #[serde(rename = "culturalPackageSkills")]
-    pub cultural_package_skills: Vec<CulturalPackageSkill>,
+    pub cultural_package_skills: Vec<PackageSkill>,
     pub src: SourceRefs,
     pub translations: Translations<CultureLocalization>
 }

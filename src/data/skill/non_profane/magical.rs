@@ -571,3 +571,26 @@ impl Translatable for MagicalRune {
         &self.translations
     }
 }
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum StandardSpellworkId {
+    Spell(u32),
+    Ritual(u32)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum SpellworkId {
+    Spell(u32),
+    Ritual(u32),
+    Curse(u32),
+    ElvenMagicalSong(u32),
+    DominationRitual(u32),
+    MagicalMelody(u32),
+    MagicalDance(u32),
+    JesterTrick(u32),
+    AnimistPower(u32),
+    GeodeRitual(u32),
+    ZibiljaRitual(u32)
+}

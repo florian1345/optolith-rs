@@ -69,11 +69,13 @@ use crate::data::status_effect::{
     Poison,
     State
 };
-use crate::data::culture::Culture;
 use crate::data::derived_characteristic::DerivedCharacteristic;
 use crate::data::experience_level::ExperienceLevel;
 use crate::data::item::{EquipmentPackage, ItemGroup};
 use crate::data::language::{Language, Script};
+use crate::data::package::culture::Culture;
+use crate::data::package::profession::Profession;
+use crate::data::patron::{Patron, PatronCategory};
 use crate::data::race::Race;
 use crate::data::simple::{
     ArmorType,
@@ -126,12 +128,13 @@ pub mod academy;
 pub mod activatable;
 pub mod aspect;
 pub mod attribute;
-pub mod culture;
 pub mod derived_characteristic;
 pub mod errata;
 pub mod experience_level;
 pub mod item;
 pub mod language;
+pub mod package;
+pub mod patron;
 pub mod prerequisite;
 pub mod race;
 pub mod simple;
@@ -216,7 +219,10 @@ const MAGIC_STYLE_SPECIAL_ABILITY_DIR: &str = "MagicStyleSpecialAbilities";
 const MELEE_COMBAT_TECHNIQUE_DIR: &str = "MeleeCombatTechniques";
 const ORB_ENCHANTMENT_DIR: &str = "OrbEnchantments";
 const PACT_GIFT_DIR: &str = "PactGifts";
+const PATRON_DIR: &str = "Patrons";
+const PATRON_CATEGORY_DIR: &str = "PatronCategories";
 const POISON_DIR: &str = "Poisons";
+// const PROFESSION_DIR: &str = "Professions";
 const RACE_DIR: &str = "Races";
 const RANGED_COMBAT_TECHNIQUE_DIR: &str = "RangedCombatTechniques";
 const REACH_DIR: &str = "Reaches";
@@ -322,7 +328,10 @@ pub struct OptolithData {
     melee_combat_techniques: IdMap<MeleeCombatTechnique>,
     orb_enchantments: IdMap<OrbEnchantment>,
     pact_gifts: IdMap<PactGift>,
+    patrons: IdMap<Patron>,
+    patron_categories: IdMap<PatronCategory>,
     poisons: IdMap<Poison>,
+    professions: IdMap<Profession>,
     races: IdMap<Race>,
     ranged_combat_techniques: IdMap<RangedCombatTechnique>,
     reaches: IdMap<Reach>,
@@ -505,7 +514,11 @@ impl OptolithData {
             builder.map_u32(MELEE_COMBAT_TECHNIQUE_DIR)?;
         let orb_enchantments = builder.map_u32(ORB_ENCHANTMENT_DIR)?;
         let pact_gifts = builder.map_u32(PACT_GIFT_DIR)?;
+        let patrons = builder.map_u32(PATRON_DIR)?;
+        let patron_categories = builder.map_u32(PATRON_CATEGORY_DIR)?;
         let poisons = builder.map_u32(POISON_DIR)?;
+        // TODO reactivate once errors are gone
+        let professions = HashMap::new(); //builder.map_u32(PROFESSION_DIR)?;
         let races = builder.map_u32(RACE_DIR)?;
         let ranged_combat_techniques =
             builder.map_u32(RANGED_COMBAT_TECHNIQUE_DIR)?;
@@ -614,7 +627,10 @@ impl OptolithData {
             melee_combat_techniques,
             orb_enchantments,
             pact_gifts,
+            patrons,
+            patron_categories,
             poisons,
+            professions,
             races,
             ranged_combat_techniques,
             reaches,
@@ -964,8 +980,20 @@ impl OptolithData {
         self.pact_gifts.get(&id)
     }
 
+    pub fn get_patron(&self, id: u32) -> Option<&Patron> {
+        self.patrons.get(&id)
+    }
+
+    pub fn get_patron_categories(&self, id: u32) -> Option<&PatronCategory> {
+        self.patron_categories.get(&id)
+    }
+
     pub fn get_poison(&self, id: u32) -> Option<&Poison> {
         self.poisons.get(&id)
+    }
+
+    pub fn get_profession(&self, id: u32) -> Option<&Profession> {
+        self.professions.get(&id)
     }
 
     pub fn get_race(&self, id: u32) -> Option<&Race> {
@@ -1220,8 +1248,14 @@ impl OptolithData {
                 to_dyn(self.get_orb_enchantment(int_id)),
             Category::PactGifts =>
                 to_dyn(self.get_pact_gift(int_id)),
+            Category::Patrons =>
+                to_dyn(self.get_patron(int_id)),
+            Category::PatronCategories =>
+                to_dyn(self.get_patron_categories(int_id)),
             Category::Poisons =>
                 to_dyn(self.get_poison(int_id)),
+            Category::Professions =>
+                to_dyn(self.get_profession(int_id)),
             Category::Races =>
                 to_dyn(self.get_race(int_id)),
             Category::RangedCombatTechniques =>

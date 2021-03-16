@@ -2,17 +2,11 @@ use crate::data::{Localization, Translatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::InfluenceListPrerequisite;
 use crate::data::simple::{SimpleLocalization, SimpleTranslations};
+use crate::data::skill::non_profane::magical::StandardSpellworkId;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
-
-#[derive(Deserialize, Serialize)]
-#[serde(tag = "type", content = "value")]
-pub enum Spellwork {
-    Spell(u32),
-    Ritual(u32)
-}
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
@@ -23,7 +17,7 @@ pub enum ElectiveSpellworkRestriction {
 #[derive(Deserialize, Serialize)]
 pub struct ElectiveSpellwork {
     #[serde(flatten)]
-    pub spellwork: Spellwork,
+    pub spellwork: StandardSpellworkId,
 
     /// The elective spellwork may only take effect if a certain condition is
     /// met. The condition may be related to professions or profession
@@ -42,7 +36,7 @@ pub enum RestrictedSpellwork {
     /// property up to a certain number may be allowed.
     Property {
         id: u32,
-        exclude: Option<Vec<Spellwork>>
+        exclude: Option<Vec<StandardSpellworkId>>
     },
     Spell(u32),
     Ritual(u32),
@@ -53,7 +47,7 @@ pub enum RestrictedSpellwork {
 
 #[derive(Deserialize, Serialize)]
 pub struct SpellworkAdjustment {
-    pub id: Spellwork,
+    pub id: StandardSpellworkId,
 
     /// `value` will be added to the current SR.
     pub value: u32

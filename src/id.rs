@@ -130,6 +130,7 @@ pub enum Category {
     Patrons,
     PersonalityTraits,
     Poisons,
+    Professions,
     Properties,
     ProtectiveWardingCircleSpecialAbilities,
     Races,

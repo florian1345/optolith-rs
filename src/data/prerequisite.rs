@@ -343,3 +343,22 @@ pub type InfluencePrerequisite =
 pub enum InfluenceListPrerequisite {
     Plain(Vec<InfluencePrerequisite>)
 }
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum ProfessionPrerequisiteNoDisplay {
+    Sex(SexPrerequisite),
+    Race(RacePrerequisite),
+    Culture(CulturePrerequisite),
+    Activatable(ActivatablePrerequisite),
+    Increasable(IncreasablePrerequisite)
+}
+
+pub type ProfessionPrerequisite =
+    DisplayPrerequisite<ProfessionPrerequisiteNoDisplay>;
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum ProfessionListPrerequisite {
+    Plain(Vec<ProfessionPrerequisite>)
+}

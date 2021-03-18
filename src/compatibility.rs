@@ -12,14 +12,21 @@ const ADVANCED_KARMA_SPECIAL_ABILITIES_FILE: &'static str =
     "AdvancedKarmaSpecialAbilitiesIdMap.yml";
 const ADVANCED_MAGICAL_SPECIAL_ABILITIES_FILE: &'static str =
     "AdvancedMagicalSpecialAbilitiesidMap.yml";
+const ADVANCED_SKILL_SPECIAL_ABILITIES_FILE: &'static str =
+    "AdvancedSkillSpecialAbilitiesIdMap.yml";
 const ADVANTAGES_FILE: &'static str = "AdvantagesIdMap.yml";
 const ANCESTOR_GLYPHS_FILE: &'static str = "AncestorGlyphsIdMap.yml";
 const ANIMIST_POWERS_FILE: &'static str = "AnimistPowersIdMap.yml";
+const ARCANE_ORB_ENCHANTMENTS_FILE: &'static str =
+    "ArcaneOrbEnchantmentsIdMap.yml";
 const ASPECTS_FILE: &'static str = "AspectsIdMap.yml";
 const ATTIRE_ENCHANTMENTS_FILE: &'static str = "AttireEnchantmentsIdMap.yml";
 const BLESSED_TRADITIONS_FILE: &'static str = "BlessedTraditionsIdMap.yml";
+const BOWL_ENCHANTMENTS_FILE: &'static str = "BowlEnchantmentsIdMap.yml";
 const BRAWLING_SPECIAL_ABILTIES_FILE: &'static str =
     "BrawlingSpecialAbilitiesIdMap.yml";
+const CAULDRON_ENCHANTMENTS_FILE: &'static str =
+    "CauldronEnchantmentsIdMap.yml";
 const CEREMONIAL_ITEM_SPECIAL_ABILITIES_FILE: &'static str =
     "CeremonialItemSpecialAbilitiesIdMap.yml";
 const CEREMONIES_FILE: &'static str = "CeremoniesIdMap.yml";
@@ -38,26 +45,22 @@ const DISADVANTAGES_FILE: &'static str = "DisadvantagesIdMap.yml";
 const DISEASES_FILE: &'static str = "DiseasesIdMap.yml";
 const DOMINATION_RITUALS_FILE: &'static str = "DominationRitualsIdMap.yml";
 const ELVEN_MAGICAL_SONGS_FILE: &'static str = "ElvenMagicalSongsIdMap.yml";
-const ADVANCED_SKILL_SPECIAL_ABILITIES_FILE: &'static str =
-    "AdvancedSkillSpecialAbilitiesIdMap.yml";
 const FAMILIAR_SPECIAL_ABILITIES_FILE: &'static str =
     "FamiliarSpecialAbilitiesIdMap.yml";
+const FATE_POINT_SEX_SPECIAL_ABILITIES_FILE: &'static str =
+    "FatePointSexSpecialAbilitiesIdMap.yml";
 const FATE_POINT_SPECIAL_ABILITIES_FILE: &'static str =
     "FatePointSpecialAbilitiesIdMap.yml";
+const FOOLS_HAT_ENCHANTMENTS_FILE: &'static str =
+    "FoolsHatEnchantmentsIdMap.yml";
 const GENERAL_SPECIAL_ABILITIES_FILE: &'static str =
     "GeneralSpecialAbilitiesIdMap.yml";
 const GEODE_RITUALS_FILE: &'static str = "GeodeRitualsIdMap.yml";
 const INSTRUMENT_ENCHANTMENTS_FILE: &'static str =
     "InstrumentEnchantmentsIdMap.yml";
 const JESTER_TRICKS_FILE: &'static str = "JesterTricksIdMap.yml";
-const FOOLS_HAT_ENCHANTMENTS_FILE: &'static str =
-    "FoolsHatEnchantmentsIdMap.yml";
 const KARMA_SPECIAL_ABILITIES_FILE: &'static str =
     "KarmaSpecialAbilitiesIdMap.yml";
-const CAULDRON_ENCHANTMENTS_FILE: &'static str =
-    "CauldronEnchantmentsIdMap.yml";
-const ARCANE_ORB_ENCHANTMENTS_FILE: &'static str =
-    "ArcaneOrbEnchantmentsIdMap.yml";
 const LITURGICAL_CHANTS_FILE: &'static str = "LiturgicalChantsIdMap.yml";
 const LITURGICAL_STYLE_SPECIAL_ABILITIES_FILE: &'static str =
     "LiturgicalStyleSpecialAbilitiesIdMap.yml";
@@ -81,10 +84,7 @@ const RANGED_COMBAT_TECHNIQUES_FILE: &'static str =
     "RangedCombatTechniquesIdMap.yml";
 const RING_ENCHANTMENTS_FILE: &'static str = "RingEnchantmentsIdMap.yml";
 const RITUALS_FILE: &'static str = "RitualsIdMap.yml";
-const BOWL_ENCHANTMENTS_FILE: &'static str = "BowlEnchantmentsIdMap.yml";
 const SERMONS_FILE: &'static str = "SermonsIdMap.yml";
-const FATE_POINT_SEX_SPECIAL_ABILITIES_FILE: &'static str =
-    "FatePointSexSpecialAbilitiesIdMap.yml";
 const SEX_SPECIAL_ABILITIES_FILE: &'static str =
     "SexSpecialAbilitiesIdMap.yml";
 const SICKLE_RITUALS_FILE: &'static str = "SickleRitualsIdMap.yml";
@@ -95,10 +95,11 @@ const SKILL_STYLE_SPECIAL_ABILITIES_FILE: &'static str =
 const SPELLS_FILE: &'static str = "SpellsIdMap.yml";
 const SPELL_SWORD_ENCHANTMENTS_FILE: &'static str =
     "SpellSwordEnchantmentsIdMap.yml";
-const TOY_ENCHANTMENTS_FILE: &'static str = "ToyEnchantmentsIdMap.yml";
 const STAFF_ENCHANTMENTS_FILE: &'static str = "StaffEnchantmentsIdMap.yml";
 const STATES_FILE: &'static str = "StatesIdMap.yml";
+const TOY_ENCHANTMENTS_FILE: &'static str = "ToyEnchantmentsIdMap.yml";
 const VAMPIRIC_GIFTS_FILE: &'static str = "VampiricGiftsIdMap.yml";
+const VISIONS_FILE: &'static str = "VisionsIdMap.yml";
 const WEAPON_ENCHANTMENTS_FILE: &'static str = "WeaponEnchantmentsIdMap.yml";
 const WAND_ENCHANTMENTS_FILE: &'static str = "WandEnchantmentsIdMap.yml";
 const ZIBILJA_RITUALS_FILE: &'static str = "ZibiljaRitualsIdMap.yml";
@@ -199,14 +200,22 @@ impl Compatibility {
             Category::AdvancedKarmaSpecialAbilities)?;
         res.load_str_id_map(ADVANCED_MAGICAL_SPECIAL_ABILITIES_FILE,
             Category::AdvancedMagicalSpecialAbilities)?;
+        res.load_str_id_map(ADVANCED_SKILL_SPECIAL_ABILITIES_FILE, 
+            Category::AdvancedSkillSpecialAbilities)?;
         res.load_str_id_map(ADVANTAGES_FILE, Category::Advantages)?;
         res.load_str_id_map(ANCESTOR_GLYPHS_FILE, Category::AncestorGlyphs)?;
         res.load_str_id_map(ANIMIST_POWERS_FILE, Category::AnimistPowers)?;
+        res.load_str_id_map(ARCANE_ORB_ENCHANTMENTS_FILE,
+            Category::ArcaneOrbEnchantments)?;
         res.load_str_id_map(ASPECTS_FILE, Category::Aspects)?;
         res.load_str_id_map(ATTIRE_ENCHANTMENTS_FILE,
             Category::AttireEnchantments)?;
+        res.load_str_id_map(BOWL_ENCHANTMENTS_FILE,
+            Category::BowlEnchantments)?;
         res.load_str_id_map(BRAWLING_SPECIAL_ABILTIES_FILE,
             Category::BrawlingSpecialAbilities)?;
+        res.load_str_id_map(CAULDRON_ENCHANTMENTS_FILE,
+            Category::CauldronEnchantments)?;
         res.load_str_id_map(CEREMONIAL_ITEM_SPECIAL_ABILITIES_FILE,
             Category::CeremonialItemSpecialAbilities)?;
         res.load_str_id_map(CEREMONIES_FILE, Category::Ceremonies)?;
@@ -227,26 +236,22 @@ impl Compatibility {
             Category::DominationRituals)?;
         res.load_str_id_map(ELVEN_MAGICAL_SONGS_FILE,
             Category::ElvenMagicalSongs)?;
-        res.load_str_id_map(ADVANCED_SKILL_SPECIAL_ABILITIES_FILE, 
-            Category::AdvancedSkillSpecialAbilities)?;
         res.load_str_id_map(FAMILIAR_SPECIAL_ABILITIES_FILE, 
             Category::FamiliarSpecialAbilities)?;
+        res.load_str_id_map(FATE_POINT_SEX_SPECIAL_ABILITIES_FILE,
+            Category::FatePointSexSpecialAbilities)?;
         res.load_str_id_map(FATE_POINT_SPECIAL_ABILITIES_FILE,
             Category::FatePointSpecialAbilities)?;
+        res.load_str_id_map(FOOLS_HAT_ENCHANTMENTS_FILE,
+            Category::FoolsHatEnchantments)?;
         res.load_str_id_map(GENERAL_SPECIAL_ABILITIES_FILE,
             Category::GeneralSpecialAbilities)?;
         res.load_str_id_map(GEODE_RITUALS_FILE, Category::GeodeRituals)?;
         res.load_str_id_map(INSTRUMENT_ENCHANTMENTS_FILE,
             Category::InstrumentEnchantments)?;
         res.load_str_id_map(JESTER_TRICKS_FILE, Category::JesterTricks)?;
-        res.load_str_id_map(FOOLS_HAT_ENCHANTMENTS_FILE,
-            Category::FoolsHatEnchantments)?;
         res.load_str_id_map(KARMA_SPECIAL_ABILITIES_FILE,
             Category::KarmaSpecialAbilities)?;
-        res.load_str_id_map(CAULDRON_ENCHANTMENTS_FILE,
-            Category::CauldronEnchantments)?;
-        res.load_str_id_map(ARCANE_ORB_ENCHANTMENTS_FILE,
-            Category::ArcaneOrbEnchantments)?;
         res.load_str_id_map(LITURGICAL_CHANTS_FILE,
             Category::LiturgicalChants)?;
         res.load_str_id_map(LITURGICAL_STYLE_SPECIAL_ABILITIES_FILE,
@@ -270,11 +275,7 @@ impl Compatibility {
         res.load_str_id_map(RING_ENCHANTMENTS_FILE,
             Category::RingEnchantments)?;
         res.load_str_id_map(RITUALS_FILE, Category::Rituals)?;
-        res.load_str_id_map(BOWL_ENCHANTMENTS_FILE,
-            Category::BowlEnchantments)?;
         res.load_str_id_map(SERMONS_FILE, Category::Sermons)?;
-        res.load_str_id_map(FATE_POINT_SEX_SPECIAL_ABILITIES_FILE,
-            Category::FatePointSexSpecialAbilities)?;
         res.load_str_id_map(SEX_SPECIAL_ABILITIES_FILE,
             Category::SexSpecialAbilities)?;
         res.load_str_id_map(SICKLE_RITUALS_FILE, Category::SickleRituals)?;
@@ -285,11 +286,12 @@ impl Compatibility {
         res.load_str_id_map(SPELLS_FILE, Category::Spells)?;
         res.load_str_id_map(SPELL_SWORD_ENCHANTMENTS_FILE,
             Category::SpellSwordEnchantments)?;
-        res.load_str_id_map(TOY_ENCHANTMENTS_FILE, Category::ToyEnchantments)?;
         res.load_str_id_map(STAFF_ENCHANTMENTS_FILE,
             Category::StaffEnchantments)?;
         res.load_str_id_map(STATES_FILE, Category::States)?;
+        res.load_str_id_map(TOY_ENCHANTMENTS_FILE, Category::ToyEnchantments)?;
         res.load_str_id_map(VAMPIRIC_GIFTS_FILE, Category::VampiricGifts)?;
+        res.load_str_id_map(VISIONS_FILE, Category::Visions)?;
         res.load_str_id_map(WEAPON_ENCHANTMENTS_FILE,
             Category::WeaponEnchantments)?;
         res.load_str_id_map(WAND_ENCHANTMENTS_FILE,

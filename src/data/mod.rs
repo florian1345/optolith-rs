@@ -4,7 +4,6 @@ use crate::data::activatable::character_trait::{
     Disadvantage
 };
 use crate::data::activatable::special_ability::{
-    GeneralSpecialAbility,
     ceremonial_item::CeremonialItemSpecialAbility,
     combat::{
         AdvancedCombatSpecialAbility,
@@ -46,15 +45,27 @@ use crate::data::activatable::special_ability::{
         AdvancedKarmaSpecialAbility,
         AdvancedMagicalSpecialAbility,
         AncestorGlyph,
+        FamiliarSpecialAbility,
         KarmaSpecialAbility,
         LiturgicalStyleSpecialAbility,
         MagicalSpecialAbility,
-        MagicStyleSpecialAbility
+        MagicStyleSpecialAbility,
+        ProtectiveWardingCircleSpecialAbility,
+        Sermon,
+        Vision
+    },
+    ordinary::{
+        FatePointSexSpecialAbility,
+        FatePointSpecialAbility,
+        GeneralSpecialAbility,
+        SexSpecialAbility,
+        SikaryanDrainSpecialAbility
     },
     skill::{
         AdvancedSkillSpecialAbility,
         SkillStyleSpecialAbility
     },
+    trade_secret::TradeSecret,
     tradition::{
         ArcaneBardTradition,
         ArcaneDancerTradition,
@@ -195,6 +206,10 @@ const ELVEN_MAGICAL_SONG_DIR: &str = "ElvenMagicalSongs";
 const EQUIPMENT_PACKAGE_DIR: &str = "EquipmentPackages";
 const EXPERIENCE_LEVEL_DIR: &str = "ExperienceLevels";
 const EYE_COLOR_DIR: &str = "EyeColors";
+const FAMILIAR_SPECIAL_ABILITY_DIR: &str = "FamiliarSpecialAbilities";
+const FATE_POINT_SEX_SPECIAL_ABILITY_DIR: &str =
+    "FatePointSexSpecialAbilities";
+const FATE_POINT_SPECIAL_ABILITY_DIR: &str = "FatePointSpecialAbilities";
 const FOOLS_HAT_ENCHANTMENT_DIR: &str = "FoolsHatEnchantments";
 const GENERAL_SPECIAL_ABILITY_DIR: &str = "GeneralSpecialAbilities";
 const GEODE_RITUAL_DIR: &str = "GeodeRituals";
@@ -227,13 +242,19 @@ const PATRON_DIR: &str = "Patrons";
 const PATRON_CATEGORY_DIR: &str = "PatronCategories";
 const POISON_DIR: &str = "Poisons";
 // const PROFESSION_DIR: &str = "Professions";
+const PROTECTIVE_WARDING_CIRCLE_SPECIAL_ABILITY_DIR: &str =
+    "ProtectiveWardingCircleSpecialAbilities";
 const RACE_DIR: &str = "Races";
 const RANGED_COMBAT_TECHNIQUE_DIR: &str = "RangedCombatTechniques";
 const REACH_DIR: &str = "Reaches";
 const RING_ENCHANTMENT_DIR: &str = "RingEnchantments";
 const RITUAL_DIR: &str = "Rituals";
 const SCRIPT_DIR: &str = "Scripts";
+const SERMON_DIR: &str = "Sermons";
+const SEX_SPECIAL_ABILITY_DIR: &str = "SexSpecialAbilities";
 const SICKLE_RITUAL_DIR: &str = "SickleRituals";
+const SIKARYAN_DRAIN_SPECIAL_ABILITY_DIR: &str =
+    "SikaryanDrainSpecialAbilities";
 const SKILL_DIR: &str = "Skills";
 const SKILL_GROUP_DIR: &str = "SkillGroups";
 const SKILL_STYLE_SPECIAL_ABILITY_DIR: &str = "SkillStyleSpecialAbilities";
@@ -245,10 +266,12 @@ const STAFF_ENCHANTMENT_DIR: &str = "StaffEnchantments";
 const STATE_DIR: &str = "States";
 const SUBJECT_DIR: &str = "Subjects";
 const TOY_ENCHANTMENT_DIR: &str = "ToyEnchantments";
+const TRADE_SECRET_DIR: &str = "TradeSecrets";
 const TRIBE_DIR: &str = "Tribes";
 const TRINKHORNZAUBER_DIR: &str = "Trinkhornzauber";
 const UI_DIR: &str = "UI";
 const VAMPIRIC_GIFT_DIR: &str = "VampiricGifts";
+const VISION_DIR: &str = "Visions";
 const WAND_ENCHANTMENT_DIR: &str = "WandEnchantments";
 const WEAPON_ENCHANTMENT_DIR: &str = "WeaponEnchantments";
 const ZIBILJA_RITUAL_DIR: &str = "ZibiljaRituals";
@@ -307,6 +330,9 @@ pub struct OptolithData {
     equipment_packages: IdMap<EquipmentPackage>,
     experience_levels: IdMap<ExperienceLevel>,
     eye_colors: IdMap<EyeColor>,
+    familiar_special_abilities: IdMap<FamiliarSpecialAbility>,
+    fate_point_sex_special_abilities: IdMap<FatePointSexSpecialAbility>,
+    fate_point_special_abilities: IdMap<FatePointSpecialAbility>,
     fools_hat_enchantments: IdMap<FoolsHatEnchantment>,
     general_special_abilities: IdMap<GeneralSpecialAbility>,
     geode_rituals: IdMap<GeodeRitual>,
@@ -338,13 +364,18 @@ pub struct OptolithData {
     patron_categories: IdMap<PatronCategory>,
     poisons: IdMap<Poison>,
     professions: IdMap<Profession>,
+    protective_warding_circle_special_abilities:
+        IdMap<ProtectiveWardingCircleSpecialAbility>,
     races: IdMap<Race>,
     ranged_combat_techniques: IdMap<RangedCombatTechnique>,
     reaches: IdMap<Reach>,
     ring_enchantments: IdMap<RingEnchantment>,
     rituals: IdMap<Ritual>,
     scripts: IdMap<Script>,
+    sex_special_abilities: IdMap<SexSpecialAbility>,
+    sermons: IdMap<Sermon>,
     sickle_rituals: IdMap<SickleRitual>,
+    sikaryan_drain_special_abilities: IdMap<SikaryanDrainSpecialAbility>,
     skills: IdMap<Skill>,
     skill_groups: IdMap<SkillGroup>,
     skill_style_special_abilities: IdMap<SkillStyleSpecialAbility>,
@@ -356,9 +387,11 @@ pub struct OptolithData {
     states: IdMap<State>,
     subjects: IdMap<Subject>,
     toy_enchantments: IdMap<ToyEnchantment>,
+    trade_secrets: IdMap<TradeSecret>,
     tribes: IdMap<Tribe>,
     trinkhornzauber: IdMap<Trinkhornzauber>,
     vampiric_gifts: IdMap<VampiricGift>,
+    visions: IdMap<Vision>,
     wand_enchantments: IdMap<WandEnchantment>,
     weapon_enchantments: IdMap<WeaponEnchantment>,
     zibilja_rituals: IdMap<ZibiljaRitual>,
@@ -486,6 +519,12 @@ impl OptolithData {
         let equipment_packages = builder.map_u32(EQUIPMENT_PACKAGE_DIR)?;
         let experience_levels = builder.map_u32(EXPERIENCE_LEVEL_DIR)?;
         let eye_colors = builder.map_u32(EYE_COLOR_DIR)?;
+        let familiar_special_abilities =
+            builder.map_u32(FAMILIAR_SPECIAL_ABILITY_DIR)?;
+        let fate_point_sex_special_abilities =
+            builder.map_u32(FATE_POINT_SEX_SPECIAL_ABILITY_DIR)?;
+        let fate_point_special_abilities =
+            builder.map_u32(FATE_POINT_SPECIAL_ABILITY_DIR)?;
         let fools_hat_enchantments =
             builder.map_u32(FOOLS_HAT_ENCHANTMENT_DIR)?;
         let general_special_abilities =
@@ -528,6 +567,8 @@ impl OptolithData {
         let poisons = builder.map_u32(POISON_DIR)?;
         // TODO reactivate once errors are gone
         let professions = HashMap::new(); //builder.map_u32(PROFESSION_DIR)?;
+        let protective_warding_circle_special_abilities =
+            builder.map_u32(PROTECTIVE_WARDING_CIRCLE_SPECIAL_ABILITY_DIR)?;
         let races = builder.map_u32(RACE_DIR)?;
         let ranged_combat_techniques =
             builder.map_u32(RANGED_COMBAT_TECHNIQUE_DIR)?;
@@ -535,7 +576,11 @@ impl OptolithData {
         let ring_enchantments = builder.map_u32(RING_ENCHANTMENT_DIR)?;
         let rituals = builder.map_u32(RITUAL_DIR)?;
         let scripts = builder.map_u32(SCRIPT_DIR)?;
+        let sex_special_abilities = builder.map_u32(SEX_SPECIAL_ABILITY_DIR)?;
+        let sermons = builder.map_u32(SERMON_DIR)?;
         let sickle_rituals = builder.map_u32(SICKLE_RITUAL_DIR)?;
+        let sikaryan_drain_special_abilities =
+            builder.map_u32(SIKARYAN_DRAIN_SPECIAL_ABILITY_DIR)?;
         let skills = builder.map_u32(SKILL_DIR)?;
         let skill_groups = builder.map_u32(SKILL_GROUP_DIR)?;
         let skill_style_special_abilities =
@@ -549,9 +594,11 @@ impl OptolithData {
         let states = builder.map_u32(STATE_DIR)?;
         let subjects = builder.map_u32(SUBJECT_DIR)?;
         let toy_enchantments = builder.map_u32(TOY_ENCHANTMENT_DIR)?;
+        let trade_secrets = builder.map_u32(TRADE_SECRET_DIR)?;
         let tribes = builder.map_u32(TRIBE_DIR)?;
         let trinkhornzauber = builder.map_u32(TRINKHORNZAUBER_DIR)?;
         let vampiric_gifts = builder.map_u32(VAMPIRIC_GIFT_DIR)?;
+        let visions = builder.map_u32(VISION_DIR)?;
         let wand_enchantments = builder.map_u32(WAND_ENCHANTMENT_DIR)?;
         let weapon_enchantments = builder.map_u32(WEAPON_ENCHANTMENT_DIR)?;
         let zibilja_rituals = builder.map_u32(ZIBILJA_RITUAL_DIR)?;
@@ -611,6 +658,9 @@ impl OptolithData {
             equipment_packages,
             experience_levels,
             eye_colors,
+            familiar_special_abilities,
+            fate_point_sex_special_abilities,
+            fate_point_special_abilities,
             fools_hat_enchantments,
             general_special_abilities,
             geode_rituals,
@@ -642,13 +692,17 @@ impl OptolithData {
             patron_categories,
             poisons,
             professions,
+            protective_warding_circle_special_abilities,
             races,
             ranged_combat_techniques,
             reaches,
             ring_enchantments,
             rituals,
             scripts,
+            sex_special_abilities,
+            sermons,
             sickle_rituals,
+            sikaryan_drain_special_abilities,
             skills,
             skill_groups,
             skill_style_special_abilities,
@@ -660,9 +714,11 @@ impl OptolithData {
             states,
             subjects,
             toy_enchantments,
+            trade_secrets,
             tribes,
             trinkhornzauber,
             vampiric_gifts,
+            visions,
             wand_enchantments,
             weapon_enchantments,
             zibilja_rituals,
@@ -881,6 +937,21 @@ impl OptolithData {
         self.eye_colors.get(&id)
     }
 
+    pub fn get_familiar_special_ability(&self, id: u32)
+            -> Option<&FamiliarSpecialAbility> {
+        self.familiar_special_abilities.get(&id)
+    }
+
+    pub fn get_fate_point_sex_special_ability(&self, id: u32)
+            -> Option<&FatePointSexSpecialAbility> {
+        self.fate_point_sex_special_abilities.get(&id)
+    }
+
+    pub fn get_fate_point_special_ability(&self, id: u32)
+            -> Option<&FatePointSpecialAbility> {
+        self.fate_point_special_abilities.get(&id)
+    }
+
     pub fn get_fools_hat_enchantment(&self, id: u32)
             -> Option<&FoolsHatEnchantment> {
         self.fools_hat_enchantments.get(&id)
@@ -1016,6 +1087,11 @@ impl OptolithData {
         self.professions.get(&id)
     }
 
+    pub fn get_protective_warding_circle_special_ability(&self, id: u32)
+            -> Option<&ProtectiveWardingCircleSpecialAbility> {
+        self.protective_warding_circle_special_abilities.get(&id)
+    }
+
     pub fn get_race(&self, id: u32) -> Option<&Race> {
         self.races.get(&id)
     }
@@ -1041,8 +1117,22 @@ impl OptolithData {
         self.scripts.get(&id)
     }
 
+    pub fn get_sex_special_ability(&self, id: u32)
+            -> Option<&SexSpecialAbility> {
+        self.sex_special_abilities.get(&id)
+    }
+
+    pub fn get_sermon(&self, id: u32) -> Option<&Sermon> {
+        self.sermons.get(&id)
+    }
+
     pub fn get_sickle_ritual(&self, id: u32) -> Option<&SickleRitual> {
         self.sickle_rituals.get(&id)
+    }
+
+    pub fn get_sikaryan_drain_special_ability(&self, id: u32)
+            -> Option<&SikaryanDrainSpecialAbility> {
+        self.sikaryan_drain_special_abilities.get(&id)
     }
 
     pub fn get_skill(&self, id: u32) -> Option<&Skill> {
@@ -1091,6 +1181,10 @@ impl OptolithData {
         self.toy_enchantments.get(&id)
     }
 
+    pub fn get_trade_secret(&self, id: u32) -> Option<&TradeSecret> {
+        self.trade_secrets.get(&id)
+    }
+
     pub fn get_tribe(&self, id: u32) -> Option<&Tribe> {
         self.tribes.get(&id)
     }
@@ -1101,6 +1195,10 @@ impl OptolithData {
 
     pub fn get_vampiric_gift(&self, id: u32) -> Option<&VampiricGift> {
         self.vampiric_gifts.get(&id)
+    }
+
+    pub fn get_vision(&self, id: u32) -> Option<&Vision> {
+        self.visions.get(&id)
     }
 
     pub fn get_wand_enchantment(&self, id: u32) -> Option<&WandEnchantment> {
@@ -1218,6 +1316,12 @@ impl OptolithData {
                 to_dyn(self.get_experience_level(int_id)),
             Category::EyeColors =>
                 to_dyn(self.get_eye_color(int_id)),
+            Category::FamiliarSpecialAbilities =>
+                to_dyn(self.get_familiar_special_ability(int_id)),
+            Category::FatePointSexSpecialAbilities =>
+                to_dyn(self.get_fate_point_sex_special_ability(int_id)),
+            Category::FatePointSpecialAbilities =>
+                to_dyn(self.get_fate_point_special_ability(int_id)),
             Category::FoolsHatEnchantments =>
                 to_dyn(self.get_fools_hat_enchantment(int_id)),
             Category::GeneralSpecialAbilities =>
@@ -1280,6 +1384,9 @@ impl OptolithData {
                 to_dyn(self.get_poison(int_id)),
             Category::Professions =>
                 to_dyn(self.get_profession(int_id)),
+            Category::ProtectiveWardingCircleSpecialAbilities =>
+                to_dyn(self.get_protective_warding_circle_special_ability(
+                    int_id)),
             Category::Races =>
                 to_dyn(self.get_race(int_id)),
             Category::RangedCombatTechniques =>
@@ -1292,8 +1399,12 @@ impl OptolithData {
                 to_dyn(self.get_ritual(int_id)),
             Category::Scripts =>
                 to_dyn(self.get_script(int_id)),
+            Category::SexSpecialAbilities =>
+                to_dyn(self.get_sex_special_ability(int_id)),
             Category::SickleRituals =>
                 to_dyn(self.get_sickle_ritual(int_id)),
+            Category::SikaryanDrainSpecialAbilities =>
+                to_dyn(self.get_sikaryan_drain_special_ability(int_id)),
             Category::Skills =>
                 to_dyn(self.get_skill(int_id)),
             Category::SkillGroups =>
@@ -1316,12 +1427,16 @@ impl OptolithData {
                 to_dyn(self.get_subject(int_id)),
             Category::ToyEnchantments =>
                 to_dyn(self.get_toy_enchantment(int_id)),
+            Category::TradeSecrets =>
+                to_dyn(self.get_trade_secret(int_id)),
             Category::Tribes =>
                 to_dyn(self.get_tribe(int_id)),
             Category::Trinkhornzauber =>
                 to_dyn(self.get_trinkhornzauber(int_id)),
             Category::VampiricGifts =>
                 to_dyn(self.get_vampiric_gift(int_id)),
+            Category::Visions =>
+                to_dyn(self.get_vision(int_id)),
             Category::WandEnchantments =>
                 to_dyn(self.get_wand_enchantment(int_id)),
             Category::WeaponEnchantments =>

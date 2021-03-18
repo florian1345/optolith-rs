@@ -159,6 +159,7 @@ pub enum Category {
     Tribes,
     Trinkhornzauber,
     VampiricGifts,
+    Visions,
     WandEnchantments,
     WeaponEnchantments,
     ZibiljaRituals

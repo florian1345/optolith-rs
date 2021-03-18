@@ -3,7 +3,7 @@ use crate::data::activatable::{APValue, SelectOptions};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::GeneralListOrByLevelPrerequisite;
 use crate::data::src::SourceRefs;
-use crate::id::{Category, CategoryProvider, Id, Identifiable};
+use crate::id::{CategoryProvider, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
@@ -14,7 +14,9 @@ pub mod combat;
 pub mod enchantment;
 pub mod gift;
 pub mod non_profane;
+pub mod ordinary;
 pub mod skill;
+pub mod trade_secret;
 pub mod tradition;
 
 #[derive(Deserialize, Serialize)]
@@ -193,16 +195,6 @@ where
         Id::new(C::CATEGORY, self.id)
     }
 }
-
-pub struct GeneralSpecialAbilityCategory;
-
-impl CategoryProvider for GeneralSpecialAbilityCategory {
-    const CATEGORY: Category = Category::GeneralSpecialAbilities;
-}
-
-pub type GeneralSpecialAbility =
-    SimpleSpecialAbility<GeneralSpecialAbilityCategory,
-        SpecialAbilityLocalization>;
 
 #[derive(Deserialize, Serialize)]
 pub enum SpecialAbilityType {

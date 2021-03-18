@@ -5,7 +5,9 @@ use crate::data::activatable::special_ability::{
     SimpleSpecialAbility,
     SpecialAbilityLocalization
 };
+use crate::data::errata::{ErrataLocalization, ErrataTranslations};
 use crate::data::prerequisite::GeneralListOrByLevelPrerequisite;
+use crate::data::simple::SimpleTranslations;
 use crate::data::src::SourceRefs;
 use crate::id::{CategoryProvider, Category, Id, Identifiable};
 
@@ -111,6 +113,42 @@ impl Translatable for PactGift {
     type Localization = EffectSpecialAbilityLocalization;
 
     fn translations(&self) -> &Translations<EffectSpecialAbilityLocalization> {
+        &self.translations
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct UncategorizedSimpleEntity {
+    pub id: u32,
+    pub translations: SimpleTranslations
+}
+
+pub type PactCategoryType = UncategorizedSimpleEntity;
+pub type PactCategoryDomain = UncategorizedSimpleEntity;
+
+#[derive(Deserialize, Serialize)]
+pub struct PactCategory {
+    pub id: u32,
+
+    /// Types in the category.
+    pub types: Vec<PactCategoryType>,
+
+    /// Available domains.
+    pub domains: Vec<PactCategoryDomain>,
+    pub src: SourceRefs,
+    pub translations: ErrataTranslations
+}
+
+impl Identifiable for PactCategory {
+    fn id(&self) -> Id {
+        Id::new(Category::PactCategories, self.id)
+    }
+}
+
+impl Translatable for PactCategory {
+    type Localization = ErrataLocalization;
+
+    fn translations(&self) -> &ErrataTranslations {
         &self.translations
     }
 }

@@ -3,8 +3,7 @@ use crate::data::skill::non_profane::{
     CheckMod,
     Enhancements,
     NonProfaneSkillLocalization,
-    SmallNonProfaneSkillLocalization,
-    Traditions
+    SmallNonProfaneSkillLocalization
 };
 use crate::data::skill::ImprovementCost;
 use crate::data::src::SourceRefs;
@@ -27,7 +26,7 @@ pub struct ImprovableKarmalSkill<C: CategoryProvider> {
 
     /// The tradition(s) the chant/ceremony is available for. The integers
     /// represent the tradition ids.
-    pub traditions: Traditions,
+    pub traditions: Vec<u32>,
 
     /// The aspect(s) of the tradition(s) the chant/ceremony is part of. The
     /// integers represent the aspect IDs.

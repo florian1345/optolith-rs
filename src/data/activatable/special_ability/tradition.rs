@@ -5,7 +5,11 @@ use crate::data::prerequisite::{
     ArcaneTraditionListPrerequisite,
     GeneralListOrByLevelPrerequisite
 };
-use crate::data::simple::{SimpleLocalization, SimpleTranslations};
+use crate::data::simple::{
+    SimpleEntity,
+    SimpleLocalization,
+    SimpleTranslations
+};
 use crate::data::skill::combat::CombatTechniqueId;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, CategoryProvider, Id, Identifiable};
@@ -329,3 +333,12 @@ impl CategoryProvider for ArcaneDancerTraditionCategory {
 
 pub type ArcaneDancerTradition =
     ArcaneProfessionTradition<ArcaneDancerTraditionCategory>;
+
+pub struct MagicalTraditionPlaceholderCategory;
+
+impl CategoryProvider for MagicalTraditionPlaceholderCategory {
+    const CATEGORY: Category = Category::MagicalTraditionPlaceholders;
+}
+
+pub type MagicalTraditionPlaceholder =
+    SimpleEntity<MagicalTraditionPlaceholderCategory>;

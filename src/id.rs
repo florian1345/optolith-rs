@@ -121,6 +121,7 @@ pub enum Category {
     MagicalRunes,
     MagicalSpecialAbilities,
     MagicalTraditions,
+    MagicalTraditionPlaceholders,
     MagicStyleSpecialAbilities,
     MeleeCombatTechniques,
     OrbEnchantments,

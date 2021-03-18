@@ -38,6 +38,7 @@ use crate::data::activatable::special_ability::{
     },
     gift::{
         LycantropicGift,
+        PactCategory,
         PactGift,
         VampiricGift
     },
@@ -58,7 +59,8 @@ use crate::data::activatable::special_ability::{
         ArcaneBardTradition,
         ArcaneDancerTradition,
         BlessedTradition,
-        MagicalTradition
+        MagicalTradition,
+        MagicalTraditionPlaceholder
     }
 };
 use crate::data::aspect::Aspect;
@@ -215,9 +217,11 @@ const MAGICAL_MELODY_DIR: &str = "MagicalMelodies";
 const MAGICAL_RUNE_DIR: &str = "MagicalRunes";
 const MAGICAL_SPECIAL_ABILITY_DIR: &str = "MagicalSpecialAbilities";
 const MAGICAL_TRADITION_DIR: &str = "MagicalTraditions";
+const MAGICAL_TRADITION_PLACEHOLDER_DIR: &str = "MagicalTraditionPlaceholders";
 const MAGIC_STYLE_SPECIAL_ABILITY_DIR: &str = "MagicStyleSpecialAbilities";
 const MELEE_COMBAT_TECHNIQUE_DIR: &str = "MeleeCombatTechniques";
 const ORB_ENCHANTMENT_DIR: &str = "OrbEnchantments";
+const PACT_CATEGORY_DIR: &str = "PactCategories";
 const PACT_GIFT_DIR: &str = "PactGifts";
 const PATRON_DIR: &str = "Patrons";
 const PATRON_CATEGORY_DIR: &str = "PatronCategories";
@@ -324,9 +328,11 @@ pub struct OptolithData {
     magical_runes: IdMap<MagicalRune>,
     magical_special_abilities: IdMap<MagicalSpecialAbility>,
     magical_traditions: IdMap<MagicalTradition>,
+    magical_tradition_placeholders: IdMap<MagicalTraditionPlaceholder>,
     magic_style_special_abilities: IdMap<MagicStyleSpecialAbility>,
     melee_combat_techniques: IdMap<MeleeCombatTechnique>,
     orb_enchantments: IdMap<OrbEnchantment>,
+    pact_categories: IdMap<PactCategory>,
     pact_gifts: IdMap<PactGift>,
     patrons: IdMap<Patron>,
     patron_categories: IdMap<PatronCategory>,
@@ -508,11 +514,14 @@ impl OptolithData {
         let magical_special_abilities =
             builder.map_u32(MAGICAL_SPECIAL_ABILITY_DIR)?;
         let magical_traditions = builder.map_u32(MAGICAL_TRADITION_DIR)?;
+        let magical_tradition_placeholders =
+            builder.map_u32(MAGICAL_TRADITION_PLACEHOLDER_DIR)?;
         let magic_style_special_abilities =
             builder.map_u32(MAGIC_STYLE_SPECIAL_ABILITY_DIR)?;
         let melee_combat_techniques =
             builder.map_u32(MELEE_COMBAT_TECHNIQUE_DIR)?;
         let orb_enchantments = builder.map_u32(ORB_ENCHANTMENT_DIR)?;
+        let pact_categories = builder.map_u32(PACT_CATEGORY_DIR)?;
         let pact_gifts = builder.map_u32(PACT_GIFT_DIR)?;
         let patrons = builder.map_u32(PATRON_DIR)?;
         let patron_categories = builder.map_u32(PATRON_CATEGORY_DIR)?;
@@ -623,9 +632,11 @@ impl OptolithData {
             magical_runes,
             magical_special_abilities,
             magical_traditions,
+            magical_tradition_placeholders,
             magic_style_special_abilities,
             melee_combat_techniques,
             orb_enchantments,
+            pact_categories,
             pact_gifts,
             patrons,
             patron_categories,
@@ -962,6 +973,11 @@ impl OptolithData {
         self.magical_traditions.get(&id)
     }
 
+    pub fn get_magical_tradition_placeholder(&self, id: u32)
+            -> Option<&MagicalTraditionPlaceholder> {
+        self.magical_tradition_placeholders.get(&id)
+    }
+
     pub fn get_magic_style_special_ability(&self, id: u32)
             -> Option<&MagicStyleSpecialAbility> {
         self.magic_style_special_abilities.get(&id)
@@ -974,6 +990,10 @@ impl OptolithData {
 
     pub fn get_orb_enchantment(&self, id: u32) -> Option<&OrbEnchantment> {
         self.orb_enchantments.get(&id)
+    }
+
+    pub fn get_pact_category(&self, id: u32) -> Option<&PactCategory> {
+        self.pact_categories.get(&id)
     }
 
     pub fn get_pact_gift(&self, id: u32) -> Option<&PactGift> {
@@ -1240,12 +1260,16 @@ impl OptolithData {
                 to_dyn(self.get_magical_special_ability(int_id)),
             Category::MagicalTraditions =>
                 to_dyn(self.get_magical_tradition(int_id)),
+            Category::MagicalTraditionPlaceholders =>
+                to_dyn(self.get_magical_tradition_placeholder(int_id)),
             Category::MagicStyleSpecialAbilities =>
                 to_dyn(self.get_magic_style_special_ability(int_id)),
             Category::MeleeCombatTechniques =>
                 to_dyn(self.get_melee_combat_technique(int_id)),
             Category::OrbEnchantments =>
                 to_dyn(self.get_orb_enchantment(int_id)),
+            Category::PactCategories =>
+                to_dyn(self.get_pact_category(int_id)),
             Category::PactGifts =>
                 to_dyn(self.get_pact_gift(int_id)),
             Category::Patrons =>

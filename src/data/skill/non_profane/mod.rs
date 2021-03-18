@@ -20,24 +20,8 @@ pub enum CheckMod {
     #[serde(rename = "TOU")]
     Toughness,
     #[serde(rename = "SPI/TOU")]
-    Higher
-}
-
-/// This represents the constant string "General".
-/// TODO find a better solution
-#[derive(Deserialize, Serialize)]
-pub enum General {
-    General
-}
-
-/// The tradition(s) the spell is available for. The integers represent the
-/// tradition ids. Use the General constant to express the general availability
-/// to all traditions.
-#[derive(Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum Traditions {
-    General(General),
-    List(Vec<u32>)
+    Higher,
+    SummoningDifficulty
 }
 
 #[derive(Deserialize, Serialize)]

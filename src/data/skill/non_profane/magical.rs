@@ -6,8 +6,7 @@ use crate::data::skill::non_profane::{
     MainParameterLocalization,
     NonProfaneSkillLocalization,
     QualityLevelEffectLocalization,
-    SmallNonProfaneSkillLocalization,
-    Traditions
+    SmallNonProfaneSkillLocalization
 };
 use crate::data::prerequisite::{
     ActivatableListPrerequisite,
@@ -31,7 +30,13 @@ pub struct MagicalSkill<C: CategoryProvider> {
     #[serde(rename = "checkMod")]
     pub check_mod: Option<CheckMod>,
     pub ic: ImprovementCost,
-    pub traditions: Traditions,
+    pub traditions: Vec<u32>,
+
+    /// The tradition(s) the spell is available for, but where the traditions
+    /// does not exist as an SA yet. The integers represent the tradition
+    /// placeholder identifiers.
+    #[serde(rename = "traditionPlaceholders")]
+    pub tradition_placeholders: Option<Vec<u32>>,
 
     /// The property ID.
     pub property: u32,

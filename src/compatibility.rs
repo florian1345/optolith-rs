@@ -6,103 +6,103 @@ use serde::{Deserialize, Serialize};
 
 use std::collections::HashMap;
 
-const ADVANCED_COMBAT_SPECIAL_ABILITIES_FILE: &'static str =
+const ADVANCED_COMBAT_SPECIAL_ABILITIES_FILE: &str =
     "AdvancedCombatSpecialAbilitiesIdMap.yml";
-const ADVANCED_KARMA_SPECIAL_ABILITIES_FILE: &'static str =
+const ADVANCED_KARMA_SPECIAL_ABILITIES_FILE: &str =
     "AdvancedKarmaSpecialAbilitiesIdMap.yml";
-const ADVANCED_MAGICAL_SPECIAL_ABILITIES_FILE: &'static str =
+const ADVANCED_MAGICAL_SPECIAL_ABILITIES_FILE: &str =
     "AdvancedMagicalSpecialAbilitiesidMap.yml";
-const ADVANCED_SKILL_SPECIAL_ABILITIES_FILE: &'static str =
+const ADVANCED_SKILL_SPECIAL_ABILITIES_FILE: &str =
     "AdvancedSkillSpecialAbilitiesIdMap.yml";
-const ADVANTAGES_FILE: &'static str = "AdvantagesIdMap.yml";
-const ANCESTOR_GLYPHS_FILE: &'static str = "AncestorGlyphsIdMap.yml";
-const ANIMIST_POWERS_FILE: &'static str = "AnimistPowersIdMap.yml";
-const ARCANE_ORB_ENCHANTMENTS_FILE: &'static str =
+const ADVANTAGES_FILE: &str = "AdvantagesIdMap.yml";
+const ANCESTOR_GLYPHS_FILE: &str = "AncestorGlyphsIdMap.yml";
+const ANIMIST_POWERS_FILE: &str = "AnimistPowersIdMap.yml";
+const ARCANE_ORB_ENCHANTMENTS_FILE: &str =
     "ArcaneOrbEnchantmentsIdMap.yml";
-const ASPECTS_FILE: &'static str = "AspectsIdMap.yml";
-const ATTIRE_ENCHANTMENTS_FILE: &'static str = "AttireEnchantmentsIdMap.yml";
-const BLESSED_TRADITIONS_FILE: &'static str = "BlessedTraditionsIdMap.yml";
-const BOWL_ENCHANTMENTS_FILE: &'static str = "BowlEnchantmentsIdMap.yml";
-const BRAWLING_SPECIAL_ABILTIES_FILE: &'static str =
+const ASPECTS_FILE: &str = "AspectsIdMap.yml";
+const ATTIRE_ENCHANTMENTS_FILE: &str = "AttireEnchantmentsIdMap.yml";
+const BLESSED_TRADITIONS_FILE: &str = "BlessedTraditionsIdMap.yml";
+const BOWL_ENCHANTMENTS_FILE: &str = "BowlEnchantmentsIdMap.yml";
+const BRAWLING_SPECIAL_ABILTIES_FILE: &str =
     "BrawlingSpecialAbilitiesIdMap.yml";
-const CAULDRON_ENCHANTMENTS_FILE: &'static str =
+const CAULDRON_ENCHANTMENTS_FILE: &str =
     "CauldronEnchantmentsIdMap.yml";
-const CEREMONIAL_ITEM_SPECIAL_ABILITIES_FILE: &'static str =
+const CEREMONIAL_ITEM_SPECIAL_ABILITIES_FILE: &str =
     "CeremonialItemSpecialAbilitiesIdMap.yml";
-const CEREMONIES_FILE: &'static str = "CeremoniesIdMap.yml";
-const CHRONICLE_ENCHANTMENTS_FILE: &'static str = "ChronicleEnchantmentsIdMap.yml";
-const COMBAT_SPECIAL_ABILITIES_FILE: &'static str =
+const CEREMONIES_FILE: &str = "CeremoniesIdMap.yml";
+const CHRONICLE_ENCHANTMENTS_FILE: &str = "ChronicleEnchantmentsIdMap.yml";
+const COMBAT_SPECIAL_ABILITIES_FILE: &str =
     "CombatSpecialAbilitiesIdMap.yml";
-const COMBAT_STYLE_SPECIAL_ABILITIES_FILE: &'static str =
+const COMBAT_STYLE_SPECIAL_ABILITIES_FILE: &str =
     "CombatStyleSpecialAbilitiesIdMap.yml";
-const COMMAND_SPECIAL_ABILITIES_FILE: &'static str =
+const COMMAND_SPECIAL_ABILITIES_FILE: &str =
     "CommandSpecialAbilitiesIdMap.yml";
-const CONDITIONS_FILE: &'static str = "ConditionsIdMap.yml";
-const CULTURES_FILE: &'static str = "CulturesIdMap.yml";
-const CURSES_FILE: &'static str = "CursesIdMap.yml";
-const DAGGER_RITUALS_FILE: &'static str = "DaggerRitualsIdMap.yml";
-const DISADVANTAGES_FILE: &'static str = "DisadvantagesIdMap.yml";
-const DISEASES_FILE: &'static str = "DiseasesIdMap.yml";
-const DOMINATION_RITUALS_FILE: &'static str = "DominationRitualsIdMap.yml";
-const ELVEN_MAGICAL_SONGS_FILE: &'static str = "ElvenMagicalSongsIdMap.yml";
-const FAMILIAR_SPECIAL_ABILITIES_FILE: &'static str =
+const CONDITIONS_FILE: &str = "ConditionsIdMap.yml";
+const CULTURES_FILE: &str = "CulturesIdMap.yml";
+const CURSES_FILE: &str = "CursesIdMap.yml";
+const DAGGER_RITUALS_FILE: &str = "DaggerRitualsIdMap.yml";
+const DISADVANTAGES_FILE: &str = "DisadvantagesIdMap.yml";
+const DISEASES_FILE: &str = "DiseasesIdMap.yml";
+const DOMINATION_RITUALS_FILE: &str = "DominationRitualsIdMap.yml";
+const ELVEN_MAGICAL_SONGS_FILE: &str = "ElvenMagicalSongsIdMap.yml";
+const FAMILIAR_SPECIAL_ABILITIES_FILE: &str =
     "FamiliarSpecialAbilitiesIdMap.yml";
-const FATE_POINT_SEX_SPECIAL_ABILITIES_FILE: &'static str =
+const FATE_POINT_SEX_SPECIAL_ABILITIES_FILE: &str =
     "FatePointSexSpecialAbilitiesIdMap.yml";
-const FATE_POINT_SPECIAL_ABILITIES_FILE: &'static str =
+const FATE_POINT_SPECIAL_ABILITIES_FILE: &str =
     "FatePointSpecialAbilitiesIdMap.yml";
-const FOOLS_HAT_ENCHANTMENTS_FILE: &'static str =
+const FOOLS_HAT_ENCHANTMENTS_FILE: &str =
     "FoolsHatEnchantmentsIdMap.yml";
-const GENERAL_SPECIAL_ABILITIES_FILE: &'static str =
+const GENERAL_SPECIAL_ABILITIES_FILE: &str =
     "GeneralSpecialAbilitiesIdMap.yml";
-const GEODE_RITUALS_FILE: &'static str = "GeodeRitualsIdMap.yml";
-const INSTRUMENT_ENCHANTMENTS_FILE: &'static str =
+const GEODE_RITUALS_FILE: &str = "GeodeRitualsIdMap.yml";
+const INSTRUMENT_ENCHANTMENTS_FILE: &str =
     "InstrumentEnchantmentsIdMap.yml";
-const JESTER_TRICKS_FILE: &'static str = "JesterTricksIdMap.yml";
-const KARMA_SPECIAL_ABILITIES_FILE: &'static str =
+const JESTER_TRICKS_FILE: &str = "JesterTricksIdMap.yml";
+const KARMA_SPECIAL_ABILITIES_FILE: &str =
     "KarmaSpecialAbilitiesIdMap.yml";
-const LITURGICAL_CHANTS_FILE: &'static str = "LiturgicalChantsIdMap.yml";
-const LITURGICAL_STYLE_SPECIAL_ABILITIES_FILE: &'static str =
+const LITURGICAL_CHANTS_FILE: &str = "LiturgicalChantsIdMap.yml";
+const LITURGICAL_STYLE_SPECIAL_ABILITIES_FILE: &str =
     "LiturgicalStyleSpecialAbilitiesIdMap.yml";
-const LYCANTROPIC_GIFTS_FILE: &'static str =
+const LYCANTROPIC_GIFTS_FILE: &str =
     "LycantropicGiftsIdMap.yml";
-const MAGICAL_DANCES_FILE: &'static str = "MagicalDancesIdMap.yml";
-const MAGICAL_MELODIES_FILE: &'static str = "MagicalMelodiesIdMap.yml";
-const MAGICAL_SPECIAL_ABILITIES_FILE: &'static str =
+const MAGICAL_DANCES_FILE: &str = "MagicalDancesIdMap.yml";
+const MAGICAL_MELODIES_FILE: &str = "MagicalMelodiesIdMap.yml";
+const MAGICAL_SPECIAL_ABILITIES_FILE: &str =
     "MagicalSpecialAbilitiesIdMap.yml";
-const MAGICAL_TRADITIONS_FILE: &'static str = "MagicalTraditionsIdMap.yml";
-const MAGIC_STYLE_SPECIAL_ABILITIES_FILE: &'static str =
+const MAGICAL_TRADITIONS_FILE: &str = "MagicalTraditionsIdMap.yml";
+const MAGIC_STYLE_SPECIAL_ABILITIES_FILE: &str =
     "MagicStyleSpecialAbilitiesIdMap.yml";
-const MELEE_COMBAT_TECHNIQUES_FILE: &'static str =
+const MELEE_COMBAT_TECHNIQUES_FILE: &str =
     "MeleeCombatTechniquesIdMap.yml";
-const ORB_ENCHANTMENTS_FILE: &'static str = "OrbEnchantmentsIdMap.yml";
-const PACT_GIFTS_FILE: &'static str = "PactGiftsIdMap.yml";
-const POISONS_FILE: &'static str = "PoisonsIdMap.yml";
-const PROTECTIVE_WARDING_CIRCLE_SPECIAL_ABILITIES_FILE: &'static str =
+const ORB_ENCHANTMENTS_FILE: &str = "OrbEnchantmentsIdMap.yml";
+const PACT_GIFTS_FILE: &str = "PactGiftsIdMap.yml";
+const POISONS_FILE: &str = "PoisonsIdMap.yml";
+const PROTECTIVE_WARDING_CIRCLE_SPECIAL_ABILITIES_FILE: &str =
     "ProtectiveWardingCircleSpecialAbilitiesIdMap.yml";
-const RANGED_COMBAT_TECHNIQUES_FILE: &'static str =
+const RANGED_COMBAT_TECHNIQUES_FILE: &str =
     "RangedCombatTechniquesIdMap.yml";
-const RING_ENCHANTMENTS_FILE: &'static str = "RingEnchantmentsIdMap.yml";
-const RITUALS_FILE: &'static str = "RitualsIdMap.yml";
-const SERMONS_FILE: &'static str = "SermonsIdMap.yml";
-const SEX_SPECIAL_ABILITIES_FILE: &'static str =
+const RING_ENCHANTMENTS_FILE: &str = "RingEnchantmentsIdMap.yml";
+const RITUALS_FILE: &str = "RitualsIdMap.yml";
+const SERMONS_FILE: &str = "SermonsIdMap.yml";
+const SEX_SPECIAL_ABILITIES_FILE: &str =
     "SexSpecialAbilitiesIdMap.yml";
-const SICKLE_RITUALS_FILE: &'static str = "SickleRitualsIdMap.yml";
-const SIKARYAN_DRAIN_SPECIAL_ABILITIES_FILE: &'static str =
+const SICKLE_RITUALS_FILE: &str = "SickleRitualsIdMap.yml";
+const SIKARYAN_DRAIN_SPECIAL_ABILITIES_FILE: &str =
     "SikaryanDrainSpecialAbilitiesIdMap.yml";
-const SKILL_STYLE_SPECIAL_ABILITIES_FILE: &'static str =
+const SKILL_STYLE_SPECIAL_ABILITIES_FILE: &str =
     "SkillStyleSpecialAbilititesIdMap.yml";
-const SPELLS_FILE: &'static str = "SpellsIdMap.yml";
-const SPELL_SWORD_ENCHANTMENTS_FILE: &'static str =
+const SPELLS_FILE: &str = "SpellsIdMap.yml";
+const SPELL_SWORD_ENCHANTMENTS_FILE: &str =
     "SpellSwordEnchantmentsIdMap.yml";
-const STAFF_ENCHANTMENTS_FILE: &'static str = "StaffEnchantmentsIdMap.yml";
-const STATES_FILE: &'static str = "StatesIdMap.yml";
-const TOY_ENCHANTMENTS_FILE: &'static str = "ToyEnchantmentsIdMap.yml";
-const VAMPIRIC_GIFTS_FILE: &'static str = "VampiricGiftsIdMap.yml";
-const VISIONS_FILE: &'static str = "VisionsIdMap.yml";
-const WEAPON_ENCHANTMENTS_FILE: &'static str = "WeaponEnchantmentsIdMap.yml";
-const WAND_ENCHANTMENTS_FILE: &'static str = "WandEnchantmentsIdMap.yml";
-const ZIBILJA_RITUALS_FILE: &'static str = "ZibiljaRitualsIdMap.yml";
+const STAFF_ENCHANTMENTS_FILE: &str = "StaffEnchantmentsIdMap.yml";
+const STATES_FILE: &str = "StatesIdMap.yml";
+const TOY_ENCHANTMENTS_FILE: &str = "ToyEnchantmentsIdMap.yml";
+const VAMPIRIC_GIFTS_FILE: &str = "VampiricGiftsIdMap.yml";
+const VISIONS_FILE: &str = "VisionsIdMap.yml";
+const WEAPON_ENCHANTMENTS_FILE: &str = "WeaponEnchantmentsIdMap.yml";
+const WAND_ENCHANTMENTS_FILE: &str = "WandEnchantmentsIdMap.yml";
+const ZIBILJA_RITUALS_FILE: &str = "ZibiljaRitualsIdMap.yml";
 
 /// This struct manages the mappings from old IDs used in character files to
 /// new IDs used in the Optolith data files.

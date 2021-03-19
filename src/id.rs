@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-pub const PREFIX_ADV: &'static str = "ADV";
-pub const PREFIX_DISADV: &'static str = "DISADV";
-pub const PREFIX_SA: &'static str = "SA";
+pub const PREFIX_ADV: &str = "ADV";
+pub const PREFIX_DISADV: &str = "DISADV";
+pub const PREFIX_SA: &str = "SA";
 
 pub const ADV_NIMBLE: u32 = 9;
 pub const ADV_BLESSED: u32 = 12;
@@ -43,9 +43,9 @@ pub const DISADV_DECREASED_TOUGHNESS: u32 = 27;
 pub const DISADV_MAIMED: u32 = 48;
 pub const DISADV_MAIMED_ONE_LEGGED: u32 = 3;
 
-pub const L10N_ADVANTAGES: &'static str = "header.tabs.advantages";
-pub const L10N_DISADVANTAGES: &'static str = "header.tabs.disadvantages";
-pub const L10N_SKILLS: &'static str = "header.tabs.skills";
+pub const L10N_ADVANTAGES: &str = "header.tabs.advantages";
+pub const L10N_DISADVANTAGES: &str = "header.tabs.disadvantages";
+pub const L10N_SKILLS: &str = "header.tabs.skills";
 
 /// An enumeration of all categories of data that may be referenced.
 #[derive(Copy, Clone, Deserialize, Eq, Hash, PartialEq, Serialize)]

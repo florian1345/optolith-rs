@@ -362,3 +362,19 @@ pub type ProfessionPrerequisite =
 pub enum ProfessionListPrerequisite {
     Plain(Vec<ProfessionPrerequisite>)
 }
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum PersonalityTraitPrerequisiteNoDisplay {
+    Culture(CulturePrerequisite),
+    Special
+}
+
+pub type PersonalityTraitPrerequisite =
+    DisplayPrerequisite<PersonalityTraitPrerequisiteNoDisplay>;
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum PersonalityTraitListPrerequisite {
+    Plain(Vec<PersonalityTraitPrerequisite>)
+}

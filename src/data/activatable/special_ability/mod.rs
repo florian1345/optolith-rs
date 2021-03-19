@@ -2,8 +2,9 @@ use crate::data::{Localization, Translatable, Translations};
 use crate::data::activatable::{APValue, SelectOptions};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::GeneralListOrByLevelPrerequisite;
+use crate::data::simple::SimpleEntity;
 use crate::data::src::SourceRefs;
-use crate::id::{CategoryProvider, Id, Identifiable};
+use crate::id::{Category, CategoryProvider, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
@@ -250,3 +251,11 @@ pub struct SpecialAbilityId {
     pub sa_type: SpecialAbilityType,
     pub value: u32
 }
+
+pub struct SpecialAbilityGroupCategory;
+
+impl CategoryProvider for SpecialAbilityGroupCategory {
+    const CATEGORY: Category = Category::SpecialAbilityGroups;
+}
+
+pub type SpecialAbilityGroup = SimpleEntity<SpecialAbilityGroupCategory>;

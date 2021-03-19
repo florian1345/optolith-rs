@@ -4,6 +4,7 @@ use crate::data::activatable::character_trait::{
     Disadvantage
 };
 use crate::data::activatable::special_ability::{
+    SpecialAbilityGroup,
     ceremonial_item::CeremonialItemSpecialAbility,
     combat::{
         AdvancedCombatSpecialAbility,
@@ -89,6 +90,9 @@ use crate::data::language::{Language, Script};
 use crate::data::package::culture::Culture;
 use crate::data::package::profession::Profession;
 use crate::data::patron::{Patron, PatronCategory};
+use crate::data::personality_trait::PersonalityTrait;
+use crate::data::property::Property;
+use crate::data::publication::Publication;
 use crate::data::race::Race;
 use crate::data::simple::{
     ArmorType,
@@ -142,13 +146,17 @@ pub mod activatable;
 pub mod aspect;
 pub mod attribute;
 pub mod derived_characteristic;
+pub mod effects_localization;
 pub mod errata;
 pub mod experience_level;
 pub mod item;
 pub mod language;
 pub mod package;
 pub mod patron;
+pub mod personality_trait;
 pub mod prerequisite;
+pub mod property;
+pub mod publication;
 pub mod race;
 pub mod simple;
 pub mod skill;
@@ -240,10 +248,13 @@ const PACT_CATEGORY_DIR: &str = "PactCategories";
 const PACT_GIFT_DIR: &str = "PactGifts";
 const PATRON_DIR: &str = "Patrons";
 const PATRON_CATEGORY_DIR: &str = "PatronCategories";
+const PERSONALITY_TRAIT_DIR: &str = "PersonalityTraits";
 const POISON_DIR: &str = "Poisons";
 // const PROFESSION_DIR: &str = "Professions";
+const PROPERTY_DIR: &str = "Properties";
 const PROTECTIVE_WARDING_CIRCLE_SPECIAL_ABILITY_DIR: &str =
     "ProtectiveWardingCircleSpecialAbilities";
+const PUBLICATION_DIR: &str = "Publications";
 const RACE_DIR: &str = "Races";
 const RANGED_COMBAT_TECHNIQUE_DIR: &str = "RangedCombatTechniques";
 const REACH_DIR: &str = "Reaches";
@@ -259,6 +270,7 @@ const SKILL_DIR: &str = "Skills";
 const SKILL_GROUP_DIR: &str = "SkillGroups";
 const SKILL_STYLE_SPECIAL_ABILITY_DIR: &str = "SkillStyleSpecialAbilities";
 const SOCIAL_STATUS_DIR: &str = "SocialStatuses";
+const SPECIAL_ABILITY_GROUP_DIR: &str = "SpecialAbilityGroups";
 const SPELL_DIR: &str = "Spells";
 const SPELL_GROUP_DIR: &str = "SpellGroups";
 const SPELL_SWORD_ENCHANTMENT_DIR: &str = "SpellSwordEnchantments";
@@ -362,10 +374,13 @@ pub struct OptolithData {
     pact_gifts: IdMap<PactGift>,
     patrons: IdMap<Patron>,
     patron_categories: IdMap<PatronCategory>,
+    personality_traits: IdMap<PersonalityTrait>,
     poisons: IdMap<Poison>,
     professions: IdMap<Profession>,
+    properties: IdMap<Property>,
     protective_warding_circle_special_abilities:
         IdMap<ProtectiveWardingCircleSpecialAbility>,
+    publications: IdMap<Publication>,
     races: IdMap<Race>,
     ranged_combat_techniques: IdMap<RangedCombatTechnique>,
     reaches: IdMap<Reach>,
@@ -380,6 +395,7 @@ pub struct OptolithData {
     skill_groups: IdMap<SkillGroup>,
     skill_style_special_abilities: IdMap<SkillStyleSpecialAbility>,
     social_statuses: IdMap<SocialStatus>,
+    special_ability_groups: IdMap<SpecialAbilityGroup>,
     spells: IdMap<Spell>,
     spell_groups: IdMap<SpellGroup>,
     spell_sword_enchantments: IdMap<SpellSwordEnchantment>,
@@ -564,11 +580,14 @@ impl OptolithData {
         let pact_gifts = builder.map_u32(PACT_GIFT_DIR)?;
         let patrons = builder.map_u32(PATRON_DIR)?;
         let patron_categories = builder.map_u32(PATRON_CATEGORY_DIR)?;
+        let personality_traits = builder.map_u32(PERSONALITY_TRAIT_DIR)?;
         let poisons = builder.map_u32(POISON_DIR)?;
         // TODO reactivate once errors are gone
         let professions = HashMap::new(); //builder.map_u32(PROFESSION_DIR)?;
+        let properties = builder.map_u32(PROPERTY_DIR)?;
         let protective_warding_circle_special_abilities =
             builder.map_u32(PROTECTIVE_WARDING_CIRCLE_SPECIAL_ABILITY_DIR)?;
+        let publications = builder.map_u32(PUBLICATION_DIR)?;
         let races = builder.map_u32(RACE_DIR)?;
         let ranged_combat_techniques =
             builder.map_u32(RANGED_COMBAT_TECHNIQUE_DIR)?;
@@ -586,6 +605,7 @@ impl OptolithData {
         let skill_style_special_abilities =
             builder.map_u32(SKILL_STYLE_SPECIAL_ABILITY_DIR)?;
         let social_statuses = builder.map_u32(SOCIAL_STATUS_DIR)?;
+        let special_ability_groups = builder.map_u32(SPECIAL_ABILITY_GROUP_DIR)?;
         let spell_groups = builder.map_u32(SPELL_GROUP_DIR)?;
         let spell_sword_enchantments =
             builder.map_u32(SPELL_SWORD_ENCHANTMENT_DIR)?;
@@ -690,9 +710,12 @@ impl OptolithData {
             pact_gifts,
             patrons,
             patron_categories,
+            personality_traits,
             poisons,
             professions,
+            properties,
             protective_warding_circle_special_abilities,
+            publications,
             races,
             ranged_combat_techniques,
             reaches,
@@ -707,6 +730,7 @@ impl OptolithData {
             skill_groups,
             skill_style_special_abilities,
             social_statuses,
+            special_ability_groups,
             spell_groups,
             spell_sword_enchantments,
             spells,
@@ -1079,6 +1103,10 @@ impl OptolithData {
         self.patron_categories.get(&id)
     }
 
+    pub fn get_personality_trait(&self, id: u32) -> Option<&PersonalityTrait> {
+        self.personality_traits.get(&id)
+    }
+
     pub fn get_poison(&self, id: u32) -> Option<&Poison> {
         self.poisons.get(&id)
     }
@@ -1087,9 +1115,17 @@ impl OptolithData {
         self.professions.get(&id)
     }
 
+    pub fn get_property(&self, id: u32) -> Option<&Property> {
+        self.properties.get(&id)
+    }
+
     pub fn get_protective_warding_circle_special_ability(&self, id: u32)
             -> Option<&ProtectiveWardingCircleSpecialAbility> {
         self.protective_warding_circle_special_abilities.get(&id)
+    }
+
+    pub fn get_publication(&self, id: u32) -> Option<&Publication> {
+        self.publications.get(&id)
     }
 
     pub fn get_race(&self, id: u32) -> Option<&Race> {
@@ -1150,6 +1186,11 @@ impl OptolithData {
 
     pub fn get_social_status(&self, id: u32) -> Option<&SocialStatus> {
         self.social_statuses.get(&id)
+    }
+
+    pub fn get_special_ability_group(&self, id: u32)
+            -> Option<&SpecialAbilityGroup> {
+        self.special_ability_groups.get(&id)
     }
 
     pub fn get_spell(&self, id: u32) -> Option<&Spell> {
@@ -1380,13 +1421,19 @@ impl OptolithData {
                 to_dyn(self.get_patron(int_id)),
             Category::PatronCategories =>
                 to_dyn(self.get_patron_categories(int_id)),
+            Category::PersonalityTraits =>
+                to_dyn(self.get_personality_trait(int_id)),
             Category::Poisons =>
                 to_dyn(self.get_poison(int_id)),
             Category::Professions =>
                 to_dyn(self.get_profession(int_id)),
+            Category::Properties =>
+                to_dyn(self.get_property(int_id)),
             Category::ProtectiveWardingCircleSpecialAbilities =>
                 to_dyn(self.get_protective_warding_circle_special_ability(
                     int_id)),
+            Category::Publications =>
+                to_dyn(self.get_publication(int_id)),
             Category::Races =>
                 to_dyn(self.get_race(int_id)),
             Category::RangedCombatTechniques =>
@@ -1413,6 +1460,8 @@ impl OptolithData {
                 to_dyn(self.get_skill_style_special_ability(int_id)),
             Category::SocialStatuses =>
                 to_dyn(self.get_social_status(int_id)),
+            Category::SpecialAbilityGroups =>
+                to_dyn(self.get_special_ability_group(int_id)),
             Category::Spells =>
                 to_dyn(self.get_spell(int_id)),
             Category::SpellGroups =>

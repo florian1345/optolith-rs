@@ -1,5 +1,5 @@
-use crate::data::{Localization, Translatable, Translations};
-use crate::data::errata::Errata;
+use crate::data::{Translatable, Translations};
+use crate::data::effects_localization::EffectsLocalization;
 use crate::data::prerequisite::InfluenceListPrerequisite;
 use crate::data::simple::{SimpleLocalization, SimpleTranslations};
 use crate::data::skill::non_profane::magical::StandardSpellworkId;
@@ -157,37 +157,11 @@ impl Translatable for Guideline {
 }
 
 #[derive(Deserialize, Serialize)]
-pub struct InfluenceEffectLocalization {
-
-    /// A label that is displayed and placed before the actual text.
-    pub label: String,
-
-    /// The effect text.
-    pub text: String
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct InfluenceLocalization {
-    pub name: String,
-
-    /// The effects of the influence. They should be sorted like they are in
-    /// the book.
-    pub effects: Vec<InfluenceEffectLocalization>,
-    pub errata: Option<Errata>
-}
-
-impl Localization for InfluenceLocalization {
-    fn name(&self) -> &str {
-        &self.name
-    }
-}
-
-#[derive(Deserialize, Serialize)]
 pub struct Influence {
     pub id: u32,
     pub prerequisites: InfluenceListPrerequisite,
     pub src: SourceRefs,
-    pub translations: Translations<InfluenceLocalization>
+    pub translations: Translations<EffectsLocalization>
 }
 
 impl Identifiable for Influence {
@@ -197,9 +171,9 @@ impl Identifiable for Influence {
 }
 
 impl Translatable for Influence {
-    type Localization = InfluenceLocalization;
+    type Localization = EffectsLocalization;
 
-    fn translations(&self) -> &Translations<InfluenceLocalization> {
+    fn translations(&self) -> &Translations<EffectsLocalization> {
         &self.translations
     }
 }

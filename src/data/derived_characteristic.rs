@@ -15,7 +15,6 @@ pub struct DerivedCharacteristicLocalization {
     pub calc_no_primary: Option<String>
 }
 
-
 impl Localization for DerivedCharacteristicLocalization {
     fn name(&self) -> &str {
         &self.name

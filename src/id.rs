@@ -142,6 +142,7 @@ pub enum Category {
     Rituals,
     Scripts,
     Sermons,
+    SexPractices,
     SexSpecialAbilities,
     SickleRituals,
     SikaryanDrainSpecialAbilities,

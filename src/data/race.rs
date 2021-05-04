@@ -12,6 +12,7 @@ use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct AttributeAdjustment {
     pub id: u32,
     pub value: i32
@@ -26,12 +27,14 @@ pub enum DieSides {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Die {
     pub amount: i32,
     pub sides: DieSides
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct StartingAge {
     #[serde(rename = "experienceLevelId")]
     pub experience_level_id: u32,
@@ -40,6 +43,7 @@ pub struct StartingAge {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct RaceVariantLocalization {
     pub name: String,
     #[serde(rename = "commonAdvantages")]
@@ -59,6 +63,7 @@ impl Localization for RaceVariantLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Phenotype {
     #[serde(rename = "commonCultures")]
     pub common_cultures: Vec<u32>,
@@ -73,6 +78,7 @@ pub struct Phenotype {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct RaceVariant {
     pub id: u32,
     #[serde(rename = "commonAdvantages")]
@@ -90,6 +96,7 @@ pub struct RaceVariant {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum TypeSpecificData {
     WithVariants {
         variants: Vec<RaceVariant>
@@ -98,6 +105,7 @@ pub enum TypeSpecificData {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct RaceLocalization {
     pub name: String,
     #[serde(rename = "attributeAdjustments")]
@@ -126,6 +134,7 @@ impl Localization for RaceLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Race {
     pub id: u32,
     #[serde(rename = "apValue")]

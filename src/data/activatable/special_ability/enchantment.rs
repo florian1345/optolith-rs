@@ -15,6 +15,7 @@ use serde::{Deserialize, Serialize};
 use std::marker::PhantomData;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SimpleEnchantmentLocalization {
     
     /// The name of the entry.
@@ -22,8 +23,8 @@ pub struct SimpleEnchantmentLocalization {
 
     /// The name of the entry shown in Wiki. Only use when `name` needs to be
     /// different from full name.
-    #[serde(rename = "nameInWiki")]
-    pub name_in_wiki: Option<String>,
+    #[serde(rename = "nameInLibrary")]
+    pub name_in_library: Option<String>,
 
     /// A string that is used as a placeholder text for an input field.
     pub input: Option<String>,
@@ -79,6 +80,7 @@ impl Localization for SimpleEnchantmentLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct UnboundEnchantmentLocalization {
     
     /// The name of the entry.
@@ -139,12 +141,14 @@ impl Localization for UnboundEnchantmentLocalization {
 /// if there is no clear property.
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum Property {
     DependingOnProperty,
     Single(Option<u32>)
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct BasicEnchantment<C: CategoryProvider, L: Localization> {
     pub id: u32,
     pub levels: Option<u32>,
@@ -184,6 +188,7 @@ where
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct CauldronEnchantment {
     pub id: u32,
     pub levels: Option<u32>,
@@ -369,6 +374,7 @@ impl CategoryProvider for AnimalShapePathCategory {
 pub type AnimalShapePath = SimpleEntity<AnimalShapePathCategory>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct AnimalShapeSize {
     pub id: u32,
 
@@ -396,6 +402,7 @@ impl Translatable for AnimalShapeSize {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct AnimalShape {
     pub id: u32,
 

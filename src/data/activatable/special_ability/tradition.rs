@@ -1,9 +1,15 @@
 use crate::data::{Localization, Translatable, Translations};
-use crate::data::activatable::{APValue, SelectOptions};
+use crate::data::activatable::{
+    APValue,
+    SelectOptions,
+    SkillApplications,
+    SkillUses
+};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::{
     ArcaneTraditionListPrerequisite,
-    GeneralListOrByLevelPrerequisite
+    GeneralListOrByLevelPrerequisite,
+    MagicalTraditionPrerequisite
 };
 use crate::data::simple::{
     SimpleEntity,
@@ -20,6 +26,7 @@ use std::marker::PhantomData;
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum FavoredCombatTechniques {
     All,
     AllMelee,
@@ -28,12 +35,14 @@ pub enum FavoredCombatTechniques {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct FavoredSkillsSelection {
     pub amount: u32,
     pub options: Vec<u32>
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SpecialRuleLocalization {
 
     /// An optional label that is displayed and placed before the actual text.
@@ -44,6 +53,7 @@ pub struct SpecialRuleLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct BlessedTraditionLocalization {
 
     /// The tradition's name.
@@ -104,10 +114,25 @@ impl Localization for BlessedTraditionLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct BlessedTradition {
     pub id: u32,
     pub levels: Option<u32>,
     pub max: Option<u32>,
+    
+    /// Registers new applications, which get enabled once this entry is
+    /// activated. It specifies an entry-unique identifier and the skill it
+    /// belongs to. A translation can be left out if its name equals the name
+    /// of the origin entry.
+    #[serde(rename = "skillApplications")]
+    pub skill_applications: Option<SkillApplications>,
+
+    /// Registers uses, which get enabled once this entry is activated. It
+    /// specifies an entry-unique identifier and the skill it belongs to. A
+    /// translation can be left out if its name equals the name of the origin
+    /// entry.
+    #[serde(rename = "skillUses")]
+    pub skill_uses: Option<SkillUses>,
     #[serde(rename = "selectOptions")]
     pub select_options: Option<SelectOptions>,
 
@@ -135,6 +160,11 @@ pub struct BlessedTradition {
     /// Is this a schamanistic tradition?
     #[serde(rename = "isShamanistic")]
     pub is_shamanistic: bool,
+
+    /// The select option identifier of the disadvantage Principles that
+    /// represent this tradition's code.
+    #[serde(rename = "associatedPrinciplesId")]
+    pub associated_principles_id: Option<u32>,
     #[serde(rename = "apValue")]
     pub ap_value: Option<APValue>,
     pub prerequisites: Option<GeneralListOrByLevelPrerequisite>,
@@ -157,12 +187,13 @@ impl Translatable for BlessedTradition {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MagicalTraditionLocalization {
     pub name: String,
 
     /// The name used for the traditions list of arcane spellworks if it is
     /// different than the name of the special ability (`name`).
-    #[serde(rename = "selectOptions")]
+    #[serde(rename = "nameForArcaneSpellworks")]
     pub name_for_arcane_spellworks: Option<String>,
 
     /// The name of the entry shown in Wiki. Only use when `name` needs to be
@@ -215,6 +246,7 @@ impl Localization for MagicalTraditionLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MagicalTradition {
     pub id: u32,
     pub levels: Option<u32>,
@@ -244,6 +276,10 @@ pub struct MagicalTradition {
     #[serde(rename = "canLearnRituals")]
     pub can_learn_rituals: bool,
 
+    /// Can this magical tradition bind familiars?
+    #[serde(rename = "canBindFamiliars")]
+    pub can_bind_familiars: bool,
+
     /// Does the tradition allow learning more traditions or having learned a
     /// different tradition before learning this tradition?
     #[serde(rename = "allowMultipleTraditions")]
@@ -268,9 +304,12 @@ pub struct MagicalTradition {
     /// spellworks of this tradition, insert the different tradition's id here.
     #[serde(rename = "useArcaneSpellworksFromTradition")]
     pub use_arcane_spellworks_from_tradition: Option<u32>,
+
+    // TODO influences?
+
     #[serde(rename = "apValue")]
     pub ap_value: Option<APValue>,
-    pub prerequisites: Option<GeneralListOrByLevelPrerequisite>,
+    pub prerequisites: Option<MagicalTraditionPrerequisite>,
     pub src: SourceRefs,
     pub translations: Translations<MagicalTraditionLocalization>
 }
@@ -291,6 +330,7 @@ impl Translatable for MagicalTradition {
 
 /// A schema that matches both the arcane bard and dancer traditions.
 #[derive(Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ArcaneProfessionTradition<C: CategoryProvider> {
     pub id: u32,
     pub prerequisites: ArcaneTraditionListPrerequisite,

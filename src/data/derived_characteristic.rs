@@ -4,6 +4,7 @@ use crate::data::{Localization, Translatable, Translations};
 use crate::id::{Category, Id, Identifiable};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct DerivedCharacteristicLocalization {
     pub name: String,
     #[serde(rename = "nameAbbr")]
@@ -22,6 +23,7 @@ impl Localization for DerivedCharacteristicLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct DerivedCharacteristic {
     pub id: u32,
     pub translations: Translations<DerivedCharacteristicLocalization>

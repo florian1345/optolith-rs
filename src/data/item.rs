@@ -7,12 +7,14 @@ use crate::id::{Category, CategoryProvider, Id, Identifiable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ItemStack {
     pub id: u32,
     pub amount: Option<u32>
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct EquipmentPackage {
     pub id: u32,
 

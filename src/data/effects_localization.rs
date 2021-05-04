@@ -4,6 +4,7 @@ use crate::data::errata::Errata;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct LabelText {
 
     /// A label that is displayed and placed before the actual text.
@@ -14,6 +15,7 @@ pub struct LabelText {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct EffectsLocalization {
     pub name: String,
 

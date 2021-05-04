@@ -1,5 +1,10 @@
 use crate::data::{Translatable, Translations};
-use crate::data::activatable::{APValue, SelectOptions};
+use crate::data::activatable::{
+    APValue,
+    SelectOptions,
+    SkillApplications,
+    SkillUses
+};
 use crate::data::activatable::special_ability::{
     EffectSpecialAbilityLocalization
 };
@@ -10,10 +15,25 @@ use crate::id::{Category, Id, Identifiable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct CeremonialItemSpecialAbility {
     pub id: u32,
     pub levels: Option<u32>,
     pub max: Option<u32>,
+
+    /// Registers new applications, which get enabled once this entry is
+    /// activated. It specifies an entry-unique identifier and the skill it
+    /// belongs to. A translation can be left out if its name equals the name
+    /// of the origin entry.
+    #[serde(rename = "skillApplications")]
+    pub skill_applications: Option<SkillApplications>,
+
+    /// Registers uses, which get enabled once this entry is activated. It
+    /// specifies an entry-unique identifier and the skill it belongs to. A
+    /// translation can be left out if its name equals the name of the origin
+    /// entry.
+    #[serde(rename = "skillUses")]
+    pub skill_uses: Option<SkillUses>,
     #[serde(rename = "selectOptions")]
     pub select_options: Option<SelectOptions>,
 

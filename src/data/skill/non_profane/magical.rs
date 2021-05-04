@@ -23,6 +23,7 @@ use std::marker::PhantomData;
 
 /// A spell or ritual.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MagicalSkill<C: CategoryProvider> {
     pub id: u32,
     pub check: [u32; 3],
@@ -100,6 +101,7 @@ impl CategoryProvider for RitualCategory {
 pub type Ritual = MagicalSkill<RitualCategory>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Cantrip {
     pub id: u32,
 
@@ -133,6 +135,7 @@ impl Translatable for Cantrip {
 /// Stores the information about a music tradition in the context of a magical
 /// dance/melody.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MusicTraditionSpecificData {
 
     /// The music tradition's id.
@@ -144,6 +147,7 @@ pub struct MusicTraditionSpecificData {
 
 /// A localization of a magical dance or melody.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MusicalMagicLocalization {
 
     /// The name of the dance/melody.
@@ -177,6 +181,7 @@ impl Localization for MusicalMagicLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MagicalDance {
     pub id: u32,
     pub check: [u32; 3],
@@ -208,6 +213,7 @@ impl Translatable for MagicalDance {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MagicalMelody {
     pub id: u32,
     pub check: [u32; 3],
@@ -242,6 +248,7 @@ impl Translatable for MagicalMelody {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ElvenMagicalSongLocalization {
 
     /// The name of the elven magical song.
@@ -262,6 +269,7 @@ impl Localization for ElvenMagicalSongLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ElvenMagicalSong {
     pub id: u32,
     pub check: [u32; 3],
@@ -299,6 +307,7 @@ impl Translatable for ElvenMagicalSong {
 /// A struct which contains localizations for spells or rituals which have no
 /// specified range or casting time.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct NoRangeTimeLocalization {
     pub name: String,
     pub effect: String,
@@ -316,6 +325,7 @@ impl Localization for NoRangeTimeLocalization {
 /// A struct for rituals for one specific tradition that share many rules such
 /// that they do not appear in the schema.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SimpleMagicalSkill<C: CategoryProvider, L: Localization> {
     pub id: u32,
     pub check: [u32; 3],
@@ -386,6 +396,7 @@ pub type GeodeRitual =
     SimpleMagicalSkill<GeodeRitualCategory, NonProfaneSkillLocalization>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ZibiljaRitual {
     pub id: u32,
     pub check: [u32; 3],
@@ -434,6 +445,7 @@ impl Translatable for ZibiljaRitual {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct AnimistPower {
     pub id: u32,
     pub check: [u32; 3],
@@ -464,6 +476,7 @@ impl Translatable for AnimistPower {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct JesterTrick {
     pub id: u32,
     pub check: [u32; 3],
@@ -496,17 +509,20 @@ impl Translatable for JesterTrick {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum MagicalRuneCheckMod {
     CombatTechnique
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SpeedSeparatedMainParameterLocalization {
     pub slow: MainParameterLocalization,
     pub fast: MainParameterLocalization
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MagicalRuneLocalization {
 
     /// The name of the magical rune.
@@ -548,6 +564,7 @@ impl Localization for MagicalRuneLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MagicalRune {
     pub id: u32,
     pub check: [u32; 3],
@@ -579,6 +596,7 @@ impl Translatable for MagicalRune {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum StandardSpellworkId {
     Spell(u32),
     Ritual(u32)
@@ -586,6 +604,7 @@ pub enum StandardSpellworkId {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum SpellworkId {
     Spell(u32),
     Ritual(u32),

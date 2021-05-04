@@ -3,10 +3,12 @@ use crate::data::activatable::special_ability::{
     AdvancedSpecialAbilities,
     EffectSpecialAbilityLocalization,
     SimpleSpecialAbility,
+    SkillInfluencingSpecialAbility,
     SpecialAbilityLocalization
 };
 use crate::data::activatable::special_ability::ordinary::{
-    OrdinarySpecialAbility
+    OrdinarySpecialAbility,
+    OrdinarySkillInfluencingSpecialAbility
 };
 use crate::data::errata::Errata;
 use crate::id::{Category, CategoryProvider, Id, Identifiable};
@@ -20,7 +22,7 @@ impl CategoryProvider for MagicalSpecialAbilityCategory {
 }
 
 pub type MagicalSpecialAbility =
-    OrdinarySpecialAbility<MagicalSpecialAbilityCategory>;
+    OrdinarySkillInfluencingSpecialAbility<MagicalSpecialAbilityCategory>;
 
 pub struct KarmaSpecialAbilityCategory;
 
@@ -47,7 +49,7 @@ impl CategoryProvider for AdvancedKarmaSpecialAbilityCategory {
 }
 
 pub type AdvancedKarmaSpecialAbility =
-    OrdinarySpecialAbility<AdvancedKarmaSpecialAbilityCategory>;
+    OrdinarySkillInfluencingSpecialAbility<AdvancedKarmaSpecialAbilityCategory>;
 
 pub struct SermonCategory;
     
@@ -76,6 +78,7 @@ pub type FamiliarSpecialAbility =
         EffectSpecialAbilityLocalization>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct AncestorGlyphLocalization {
 
     /// The name of the entry.
@@ -141,6 +144,7 @@ pub type AncestorGlyph = SimpleSpecialAbility<AncestorGlyphCategory,
     AncestorGlyphLocalization>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProtectiveWardingCircleSpecialAbilityLocalization {
     pub name: String,
 
@@ -207,9 +211,10 @@ pub type ProtectiveWardingCircleSpecialAbility =
         ProtectiveWardingCircleSpecialAbilityLocalization>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct NonProfaneStyleSpecialAbility<C: CategoryProvider> {
     #[serde(flatten)]
-    pub data: SimpleSpecialAbility<C, SpecialAbilityLocalization>,
+    pub data: SkillInfluencingSpecialAbility<C, SpecialAbilityLocalization>,
     pub advanced: AdvancedSpecialAbilities
 }
 
@@ -230,6 +235,7 @@ impl<C: CategoryProvider> Translatable for NonProfaneStyleSpecialAbility<C> {
 // TODO figure out why C suddenly requires Deserialize, Serialize
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MagicStyleSpecialAbilityCategory;
 
 impl CategoryProvider for MagicStyleSpecialAbilityCategory {
@@ -240,6 +246,7 @@ pub type MagicStyleSpecialAbility =
     NonProfaneStyleSpecialAbility<MagicStyleSpecialAbilityCategory>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct LiturgicalStyleSpecialAbilityCategory;
 
 impl CategoryProvider for LiturgicalStyleSpecialAbilityCategory {

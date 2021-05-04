@@ -1,5 +1,10 @@
 use crate::data::{Localization, Translatable, Translations};
-use crate::data::activatable::{APValue, SelectOptions};
+use crate::data::activatable::{
+    APValue,
+    SelectOptions,
+    SkillApplications,
+    SkillUses
+};
 use crate::data::prerequisite::TraitlListOrByLevelPrerequisite;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
@@ -17,6 +22,7 @@ pub enum TraitGroup {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct TraitLocalization {
 
     /// The name of the entry.
@@ -24,8 +30,8 @@ pub struct TraitLocalization {
 
     /// The name of the entry shown in Wiki. Only use when `name` needs to be
     /// different from full name.
-    #[serde(rename = "nameInWiki")]
-    pub name_in_wiki: Option<String>,
+    #[serde(rename = "nameInLibrary")]
+    pub name_in_library: Option<String>,
 
     /// A string that is used as a placeholder text for an input field.
     pub input: Option<String>,
@@ -74,10 +80,25 @@ impl Localization for TraitLocalization {
 /// The intrinsic trait of a character. This is used as a generic term for
 /// advantages and disadvantages.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Trait {
     pub id: u32,
     pub levels: Option<u32>,
     pub max: Option<u32>,
+
+    /// Registers new applications, which get enabled once this entry is
+    /// activated. It specifies an entry-unique identifier and the skill it
+    /// belongs to. A translation can be left out if its name equals the name
+    /// of the origin entry.
+    #[serde(rename = "skillApplications")]
+    pub skill_applications: Option<SkillApplications>,
+
+    /// Registers uses, which get enabled once this entry is activated. It
+    /// specifies an entry-unique identifier and the skill it belongs to. A
+    /// translation can be left out if its name equals the name of the origin
+    /// entry.
+    #[serde(rename = "skillUses")]
+    pub skill_uses: Option<SkillUses>,
     #[serde(rename = "selectOptions")]
     pub select_options: Option<SelectOptions>,
     pub group: TraitGroup,
@@ -99,6 +120,7 @@ pub struct Trait {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Advantage {
     #[serde(flatten)]
     pub data: Trait
@@ -119,6 +141,7 @@ impl Translatable for Advantage {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Disadvantage {
     #[serde(flatten)]
     pub data: Trait

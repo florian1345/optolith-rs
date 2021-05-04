@@ -33,18 +33,21 @@ pub type VampiricGift =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum PactGiftDemonicConsumption {
     Fixed(u32),
     PerLevel(u32)
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum AutomaticEntryAction {
     Add,
     Remove
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum AutomaticEntrySelectionTargetType {
     MagicalTraditions,
     MagicalDilettanteTraditions
@@ -52,6 +55,7 @@ pub enum AutomaticEntrySelectionTargetType {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum AutomaticEntryTarget {
     Selection {
         #[serde(rename = "type")]
@@ -65,6 +69,7 @@ pub enum AutomaticEntryTarget {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct AutomaticEntry {
 
     /// What type of action is applied to the target?
@@ -80,6 +85,7 @@ pub struct AutomaticEntry {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct PactGift {
     pub id: u32,
     pub levels: Option<u32>,
@@ -118,6 +124,7 @@ impl Translatable for PactGift {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct UncategorizedSimpleEntity {
     pub id: u32,
     pub translations: SimpleTranslations
@@ -127,6 +134,7 @@ pub type PactCategoryType = UncategorizedSimpleEntity;
 pub type PactCategoryDomain = UncategorizedSimpleEntity;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct PactCategory {
     pub id: u32,
 

@@ -3,6 +3,7 @@ use crate::data::{Localization, Translations};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Erratum {
     pub date: String,
     pub description: String
@@ -11,6 +12,7 @@ pub struct Erratum {
 pub type Errata = Vec<Erratum>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ErrataLocalization {
     pub name: String,
     pub errata: Option<Errata>

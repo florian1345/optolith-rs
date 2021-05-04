@@ -7,6 +7,7 @@ use crate::id::{Category, Id, Identifiable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct CombatTechniqueLocalization {
     pub name: String,
 
@@ -23,6 +24,7 @@ impl Localization for CombatTechniqueLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MeleeCombatTechnique {
     pub id: u32,
 
@@ -58,6 +60,7 @@ impl Translatable for MeleeCombatTechnique {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct RangedCombatTechnique {
     pub id: u32,
 
@@ -90,6 +93,7 @@ impl Translatable for RangedCombatTechnique {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum CombatTechniqueId {
     MeleeCombatTechnique(u32),
     RangedCombatTechnique(u32)

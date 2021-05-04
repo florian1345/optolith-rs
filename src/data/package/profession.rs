@@ -23,6 +23,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum SkillSpecializationSelectOption {
     Single(Ids),
     Group(Ids)
@@ -33,12 +34,14 @@ pub enum SkillSpecializationSelectOption {
 /// from which you can choose a spell.
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
+#[serde(deny_unknown_fields)]
 pub enum SkillSpecializationSelectOptions {
     Single(SkillSpecializationSelectOption),
     Multiple(Vec<SkillSpecializationSelectOption>)
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SelectableCombatTechniques {
 
     /// Number of selectable CTs.
@@ -51,6 +54,7 @@ pub struct SelectableCombatTechniques {
 
 /// Select one or more combat techniques you get a CtR bonus for.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct CombatTechniqueSelectOptions {
 
     /// Specify the number of combat techniques that can be selected so that
@@ -68,6 +72,7 @@ pub struct CombatTechniqueSelectOptions {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct CantripSelectOptions {
 
     /// Number of selectable cantrips.
@@ -78,6 +83,7 @@ pub struct CantripSelectOptions {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SkillSelectOptions {
 
     /// If specified, you may only choose from skills of the specified group.
@@ -88,6 +94,7 @@ pub struct SkillSelectOptions {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SpellSelectOption {
     pub id: StandardSpellworkId,
     pub value: u32
@@ -102,6 +109,7 @@ pub type SpellSelectOptions = Vec<Vec<SpellSelectOption>>;
 pub type LiturgicalChantSelectOptions = Vec<Vec<ProfessionLiturgicalChants>>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionOptions {
     #[serde(rename = "skillSpecialization")]
     pub skill_specialization: Option<SkillSpecializationSelectOptions>,
@@ -128,6 +136,7 @@ pub struct ProfessionOptions {
 
 /// A special ability contained in a profession package.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionSpecialAbility {
     pub id: SpecialAbilityId,
 
@@ -140,6 +149,7 @@ pub struct ProfessionSpecialAbility {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionCombatTechnique {
     pub id: CombatTechniqueId,
 
@@ -149,6 +159,7 @@ pub struct ProfessionCombatTechnique {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionSpell {
     pub id: SpellworkId,
 
@@ -157,6 +168,7 @@ pub struct ProfessionSpell {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionLiturgicalChants {
     pub id: KarmalWorksId,
 
@@ -166,12 +178,14 @@ pub struct ProfessionLiturgicalChants {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ProfessionVariantSelectOptions<T> {
     Remove,
     Override(T)
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionVariantOptions {
 
     /// Either valid options or an object set to \"false\" to remove the
@@ -219,6 +233,7 @@ pub struct ProfessionVariantOptions {
 
 /// A special ability contained in or removed by a profession variant package.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionVariantSpecialAbility {
     pub id: SpecialAbilityId,
 
@@ -234,6 +249,7 @@ pub struct ProfessionVariantSpecialAbility {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionVariantCombatTechnique {
     pub id: CombatTechniqueId,
 
@@ -243,6 +259,7 @@ pub struct ProfessionVariantCombatTechnique {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionVariantSkill {
     pub id: u32,
 
@@ -251,6 +268,7 @@ pub struct ProfessionVariantSkill {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionVariantSpell {
     pub id: SpellworkId,
 
@@ -259,6 +277,7 @@ pub struct ProfessionVariantSpell {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionVariantLiturgicalChants {
     pub id: KarmalWorksId,
 
@@ -269,6 +288,7 @@ pub struct ProfessionVariantLiturgicalChants {
 /// If a profession name is different for male and female heroes, use this
 /// object.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct NameBySex {
 
     /// Male name.
@@ -280,12 +300,14 @@ pub struct NameBySex {
 
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
+#[serde(deny_unknown_fields)]
 pub enum NameMaybeBySex {
     Universal(String),
     BySex(NameBySex)
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionVariantLocalization {
     pub name: NameMaybeBySex,
 
@@ -303,6 +325,7 @@ pub struct ProfessionVariantLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionVariant {
     pub id: u32,
 
@@ -352,6 +375,7 @@ pub struct ProfessionVariant {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfessionLocalization {
     pub name: NameMaybeBySex,
 
@@ -392,6 +416,7 @@ impl Localization for ProfessionLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Profession {
     pub id: u32,
 

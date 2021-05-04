@@ -5,6 +5,7 @@ use crate::id::{Category, Id, Identifiable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ExperienceLevel {
     pub id: u32,
 

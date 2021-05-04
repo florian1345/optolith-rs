@@ -1,4 +1,5 @@
 use crate::data::{Translatable, Translations};
+use crate::data::prerequisite::LiturgicalChantListPrerequisite;
 use crate::data::skill::non_profane::{
     CheckMod,
     Enhancements,
@@ -14,6 +15,7 @@ use serde::{Deserialize, Serialize};
 use std::marker::PhantomData;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ImprovableKarmalSkill<C: CategoryProvider> {
     pub id: u32,
     pub check: [u32; 3],
@@ -48,6 +50,7 @@ pub struct ImprovableKarmalSkill<C: CategoryProvider> {
     #[serde(rename = "durationNoMod")]
     pub duration_no_mod: bool,
     pub enhancements: Option<Enhancements>,
+    pub prerequisites: Option<LiturgicalChantListPrerequisite>,
     pub src: SourceRefs,
     pub translations: Translations<NonProfaneSkillLocalization>,
     #[serde(skip)]
@@ -110,6 +113,7 @@ impl Translatable for Blessing {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum KarmalWorksId {
     LiturgicalChant(u32),
     Ceremony(u32)

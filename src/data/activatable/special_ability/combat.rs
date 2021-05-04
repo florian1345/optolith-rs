@@ -1,5 +1,10 @@
 use crate::data::{Translatable, Translations};
-use crate::data::activatable::{APValue, SelectOptions};
+use crate::data::activatable::{
+    APValue,
+    SelectOptions,
+    SkillApplications,
+    SkillUses
+};
 use crate::data::activatable::special_ability::{
     AdvancedSpecialAbilities,
     SpecialAbilityLocalization
@@ -15,6 +20,7 @@ use std::marker::PhantomData;
 
 /// Type of combat special ability. The type id.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum CombatSpecialAbilityType {
     Passive,
     BaseManeuver,
@@ -23,6 +29,7 @@ pub enum CombatSpecialAbilityType {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum AllCombatTechniqueRestriction {
     Improvised,
     PointedBlade,
@@ -33,18 +40,21 @@ pub enum AllCombatTechniqueRestriction {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum AllMeleeCombatTechniqueRestriction {
     Improvised,
     PointedBlade,
     Mount,
     HasParry,
     OneHanded,
+    ParryingWeapon,
     Race(u32),
     ExcludeTechniques(Vec<u32>)
 }
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum AllRangedCombatTechniqueRestriction {
     Improvised,
     PointedBlade,
@@ -55,6 +65,7 @@ pub enum AllRangedCombatTechniqueRestriction {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum SpecificCombatTechniqueRestriction {
     Improvised,
     PointedBlade,
@@ -65,6 +76,7 @@ pub enum SpecificCombatTechniqueRestriction {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SpecificCombatTechnique {
     pub id: CombatTechniqueId,
     pub restrictions: Option<Vec<SpecificCombatTechniqueRestriction>>
@@ -78,6 +90,7 @@ pub struct SpecificCombatTechnique {
 /// one-handed weapons.
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ApplicableCombatTechniques {
     None,
     DependingOnCombatStyle,
@@ -88,12 +101,27 @@ pub enum ApplicableCombatTechniques {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct CombatSpecialAbilitySuper<C: CategoryProvider> {
     pub id: u32,
     pub levels: Option<u32>,
     pub max: Option<u32>,
     #[serde(rename = "type")]
     pub csa_type: CombatSpecialAbilityType,
+
+    /// Registers new applications, which get enabled once this entry is
+    /// activated. It specifies an entry-unique identifier and the skill it
+    /// belongs to. A translation can be left out if its name equals the name
+    /// of the origin entry.
+    #[serde(rename = "skillApplications")]
+    pub skill_applications: Option<SkillApplications>,
+
+    /// Registers uses, which get enabled once this entry is activated. It
+    /// specifies an entry-unique identifier and the skill it belongs to. A
+    /// translation can be left out if its name equals the name of the origin
+    /// entry.
+    #[serde(rename = "skillUses")]
+    pub skill_uses: Option<SkillUses>,
     #[serde(rename = "selectOptions")]
     pub select_options: Option<SelectOptions>,
     pub prerequisites: Option<GeneralListOrByLevelPrerequisite>,
@@ -161,6 +189,7 @@ pub type CommandSpecialAbility =
     CombatSpecialAbilitySuper<CommandSpecialAbilityCategory>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct CombatStyleSpecialAbility {
     pub id: u32,
     pub levels: Option<u32>,

@@ -1,11 +1,15 @@
 use crate::data::activatable::special_ability::{
     SimpleSpecialAbility,
+    SkillInfluencingSpecialAbility,
     SpecialAbilityLocalization
 };
 use crate::id::{Category, CategoryProvider};
 
 pub type OrdinarySpecialAbility<C> =
     SimpleSpecialAbility<C, SpecialAbilityLocalization>;
+
+pub type OrdinarySkillInfluencingSpecialAbility<C> =
+    SkillInfluencingSpecialAbility<C, SpecialAbilityLocalization>;
 
 pub struct GeneralSpecialAbilityCategory;
 
@@ -14,7 +18,7 @@ impl CategoryProvider for GeneralSpecialAbilityCategory {
 }
 
 pub type GeneralSpecialAbility =
-    OrdinarySpecialAbility<GeneralSpecialAbilityCategory>;
+    OrdinarySkillInfluencingSpecialAbility<GeneralSpecialAbilityCategory>;
 
 pub struct FatePointSpecialAbilityCategory;
 
@@ -23,7 +27,7 @@ impl CategoryProvider for FatePointSpecialAbilityCategory {
 }
 
 pub type FatePointSpecialAbility =
-    OrdinarySpecialAbility<FatePointSpecialAbilityCategory>;
+    OrdinarySkillInfluencingSpecialAbility<FatePointSpecialAbilityCategory>;
 
 pub struct SexSpecialActivityCategory;
 
@@ -32,7 +36,7 @@ impl CategoryProvider for SexSpecialActivityCategory {
 }
 
 pub type SexSpecialAbility =
-    OrdinarySpecialAbility<SexSpecialActivityCategory>;
+    OrdinarySkillInfluencingSpecialAbility<SexSpecialActivityCategory>;
 
 pub struct FatePointSexSpecialAbilityCategory;
 

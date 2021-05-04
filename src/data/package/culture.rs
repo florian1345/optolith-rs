@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ProfessionsException {
     Single(u32),
     Group(u32)
@@ -21,6 +22,7 @@ pub enum ProfessionsException {
 pub type ProfessionsExceptions = Vec<ProfessionsException>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct CultureLocalization {
 
     /// The name of the culture.
@@ -75,6 +77,7 @@ impl Localization for CultureLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Culture {
     pub id: u32,
 

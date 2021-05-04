@@ -2,7 +2,6 @@ use crate::error::{self, OptolithDataResult};
 
 use serde::{Deserialize, Serialize};
 
-use std::ffi::OsString;
 use std::fs::{self, DirEntry, File, ReadDir};
 use std::io::{Read, Write};
 use std::path::PathBuf;
@@ -25,16 +24,16 @@ where
     for<'de> T : Deserialize<'de>
 {
     let mut res = deserialize_yaml_file_do(file);
-    error::set_file(&mut res, OsString::from(file.file_name().unwrap()));
+    error::set_file(&mut res, file);
     res
 }
 
-pub struct UtilReadDir {
+pub struct UtilReadDir<'a> {
     read_dir: ReadDir,
-    file: OsString
+    file: &'a PathBuf
 }
 
-impl Iterator for UtilReadDir {
+impl<'a> Iterator for UtilReadDir<'a> {
     type Item = OptolithDataResult<DirEntry>;
 
     fn next(&mut self) -> Option<OptolithDataResult<DirEntry>> {
@@ -42,7 +41,7 @@ impl Iterator for UtilReadDir {
             Some(Ok(d)) => Some(Ok(d)),
             Some(Err(e)) => {
                 let mut res = Err(e.into());
-                error::set_file(&mut res, self.file.clone());
+                error::set_file(&mut res, self.file);
                 Some(res)
             },
             None => None
@@ -53,13 +52,13 @@ impl Iterator for UtilReadDir {
 fn read_dir_do(path: &PathBuf) -> OptolithDataResult<UtilReadDir> {
     Ok(UtilReadDir {
         read_dir: fs::read_dir(path)?,
-        file: OsString::from(path.file_name().unwrap())
+        file: path
     })
 }
 
 pub fn read_dir(path: &PathBuf) -> OptolithDataResult<UtilReadDir> {
     let mut res = read_dir_do(path);
-    error::set_file(&mut res, OsString::from(path.file_name().unwrap()));
+    error::set_file(&mut res, path);
     res
 }
 

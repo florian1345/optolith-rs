@@ -7,6 +7,7 @@ use crate::id::{Category, Id, Identifiable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct TradeSecretLocalization {
     pub name: String,
 
@@ -22,6 +23,7 @@ impl Localization for TradeSecretLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct TradeSecret {
     pub id: u32,
 

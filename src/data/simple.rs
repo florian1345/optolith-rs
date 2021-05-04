@@ -7,6 +7,7 @@ use std::marker::PhantomData;
 
 /// A [Localization] that consists only of a string.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SimpleLocalization {
     pub name: String
 }
@@ -22,6 +23,7 @@ pub type SimpleTranslations = Translations<SimpleLocalization>;
 /// A data entity that consists of an ID and
 /// [SimpleTranslations](crate::data::SimpleTranslations).
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SimpleEntity<C: CategoryProvider> {
     pub id: u32,
     pub translations: SimpleTranslations,

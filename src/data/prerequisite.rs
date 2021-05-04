@@ -12,6 +12,7 @@ use crate::data::activatable::{
 /// lists: You can hide them or replace them with a text.
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum DisplayOption {
     Hide,
     ReplaceWith(Translations<String>)
@@ -25,6 +26,7 @@ pub type SexPrerequisite = Sex;
 /// if the entry does not allow one of the races.
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
+#[serde(deny_unknown_fields)]
 pub enum RacePrerequisite {
     Single(u32),
     List(Vec<u32>),
@@ -39,6 +41,7 @@ pub type CulturePrerequisite = Ids;
 
 /// Requires a specific pact.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct PactPrerequisite {
 
     /// The required pact category.
@@ -60,6 +63,7 @@ pub type StatePrerequisite = Ids;
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum RuleId {
     FocusRule(u32),
     OptionalRule(u32)
@@ -67,6 +71,7 @@ pub enum RuleId {
 
 /// Requires a specific focus or optional rule to be active.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct RulePrerequisite {
     pub id: RuleId
 }
@@ -74,6 +79,7 @@ pub struct RulePrerequisite {
 /// Requires the primary attribute at a specific value.
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum PrimaryAttributePrerequisite {
     Blessed(u32),
     Magical(u32)
@@ -81,6 +87,7 @@ pub enum PrimaryAttributePrerequisite {
 
 /// Requires a specific advantage, disadvantage, special ability.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ActivatablePrerequisite {
     pub id: ActivatableId,
     pub active: bool,
@@ -89,6 +96,7 @@ pub struct ActivatablePrerequisite {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ActivatableMultiId {
     #[serde(rename = "type")]
     pub act_type: ActivatableType,
@@ -97,6 +105,7 @@ pub struct ActivatableMultiId {
 
 /// Require one advantage, disadvantage or special ability from a set.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ActivatableMultiEntryPrerequisite {
     pub id: ActivatableMultiId,
     pub active: bool,
@@ -107,6 +116,7 @@ pub struct ActivatableMultiEntryPrerequisite {
 /// Requires one of a set of options on a specific advantage, disadvantage,
 /// special ability.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ActivatableMultiSelectPrerequisite {
     pub id: ActivatableId,
 
@@ -128,6 +138,7 @@ pub struct ActivatableMultiSelectPrerequisite {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum IncreasableType {
     Attribute,
     Skill,
@@ -140,6 +151,7 @@ pub enum IncreasableType {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct IncreasableId {
     #[serde(rename = "type")]
     pub inc_type: IncreasableType,
@@ -151,12 +163,14 @@ pub struct IncreasableId {
 /// active automatically, so to require them to be active you can set the value
 /// to 0.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct IncreasablePrerequisite {
     pub id: IncreasableId,
     pub value: u32
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct IncreasableMultiId {
     #[serde(rename = "type")]
     pub inc_type: IncreasableType,
@@ -168,14 +182,37 @@ pub struct IncreasableMultiId {
 /// be active automatically, so to require them to be active you can set the
 /// value to 0.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct IncreasableMultiEntryPrerequisite {
     pub id: IncreasableMultiId,
     pub value: u32
 }
 
+/// Requires a specific publication to be active.
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct PublicationPrerequisite {
+    pub id: u32
+}
+
+/// The `when` property defines that the prerequisite it is defined for only
+/// takes effect if the prerequisites in this list are matched.
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
-pub enum GeneralPrerequisiteNoDisplay {
+#[serde(deny_unknown_fields)]
+pub enum WhenSingle {
+    Publication(PublicationPrerequisite)
+}
+
+pub type When = Vec<WhenSingle>;
+
+// TODO add deny_unknown_fields to this, TraitPrerequisiteNoDisplayNoWhen,
+// DisplayPrerequisite and WhenPrerequisite once
+// https://github.com/serde-rs/serde/issues/1547 is fixed.
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+pub enum GeneralPrerequisiteNoDisplayNoWhen {
     Sex(SexPrerequisite),
     Race(RacePrerequisite),
     Culture(CulturePrerequisite),
@@ -197,21 +234,29 @@ pub enum GeneralPrerequisiteNoDisplay {
 #[derive(Deserialize, Serialize)]
 pub struct DisplayPrerequisite<P> {
     #[serde(flatten)]
-    #[serde(bound(deserialize = "P: Deserialize<'de>"))]
     pub prerequisite: P,
     #[serde(rename = "displayOption")]
     pub display_option: Option<DisplayOption>
 }
 
+/// A prerequisite that wraps data of type `P` which is missing an optional
+/// [When] field.
+#[derive(Deserialize, Serialize)]
+pub struct WhenPrerequisite<P> {
+    #[serde(flatten)]
+    pub prerequisite: P,
+    pub when: Option<When>
+}
+
 pub type GeneralPrerequisite =
-    DisplayPrerequisite<GeneralPrerequisiteNoDisplay>;
+    WhenPrerequisite<DisplayPrerequisite<GeneralPrerequisiteNoDisplayNoWhen>>;
 
 pub type GeneralListPrerequisite = Vec<GeneralPrerequisite>;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ByLevelPrerequisiteSingle<P> {
     pub level: u32,
-    #[serde(bound(deserialize = "P: Deserialize<'de>"))]
     pub prerequisites: P
 }
 
@@ -220,10 +265,9 @@ pub type GeneralByLevelPrerequisite =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ListOrByLevelPrerequisite<L, B> {
-    #[serde(bound(deserialize = "L: Deserialize<'de>"))]
     Plain(L),
-    #[serde(bound(deserialize = "B: Deserialize<'de>"))]
     ByLevel(B)
 }
 
@@ -234,7 +278,7 @@ pub type GeneralListOrByLevelPrerequisite =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
-pub enum TraitPrerequisiteNoDisplay {
+pub enum TraitPrerequisiteNoDisplayNoWhen {
     CommonSuggestedByRCP,
     Sex(SexPrerequisite),
     Race(RacePrerequisite),
@@ -252,7 +296,8 @@ pub enum TraitPrerequisiteNoDisplay {
     TraditionCanUseRituals
 }
 
-pub type TraitPrerequisite = DisplayPrerequisite<TraitPrerequisiteNoDisplay>;
+pub type TraitPrerequisite =
+    WhenPrerequisite<DisplayPrerequisite<TraitPrerequisiteNoDisplayNoWhen>>;
 
 pub type TraitListPrerequisite = Vec<TraitPrerequisite>;
 
@@ -264,6 +309,7 @@ pub type TraitlListOrByLevelPrerequisite =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ArcaneTraditionPrerequisiteNoDisplay {
     Sex(SexPrerequisite),
     Culture(CulturePrerequisite)
@@ -274,6 +320,7 @@ pub type ArcaneTraditionPrerequisite =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ArcaneTraditionListPrerequisite {
     Plain(Vec<ArcaneTraditionPrerequisite>)
 }
@@ -281,6 +328,7 @@ pub enum ArcaneTraditionListPrerequisite {
 /// A prerequisite enumeration that only contains an increasable prerequisite.
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum OnlyIncreasablePrerequisiteNoDisplay {
     Increasable(IncreasablePrerequisite)
 }
@@ -290,6 +338,7 @@ pub type OnlyIncreasablePrerequisite =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum IncreasableListPrerequisite {
     Plain(Vec<OnlyIncreasablePrerequisite>)
 }
@@ -297,6 +346,7 @@ pub enum IncreasableListPrerequisite {
 /// A prerequisite enumeration that only contains an activatable prerequisite.
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum OnlyActivatablePrerequisiteNoDisplay {
     Activatable(ActivatablePrerequisite)
 }
@@ -306,6 +356,7 @@ pub type OnlyActivatablePrerequisite =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ActivatableListPrerequisite {
     Plain(Vec<OnlyActivatablePrerequisite>)
 }
@@ -313,6 +364,7 @@ pub enum ActivatableListPrerequisite {
 /// Require a previous enhancement.
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum EnhancementPrerequisite {
     Enhancement(u32)
 }
@@ -321,6 +373,7 @@ pub type EnhancementListPrerequisite = Vec<EnhancementPrerequisite>;
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum InfluencePrerequisiteNoDisplay {
     MagicalTradition {
         id: u32
@@ -340,12 +393,14 @@ pub type InfluencePrerequisite =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum InfluenceListPrerequisite {
     Plain(Vec<InfluencePrerequisite>)
 }
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ProfessionPrerequisiteNoDisplay {
     Sex(SexPrerequisite),
     Race(RacePrerequisite),
@@ -359,12 +414,14 @@ pub type ProfessionPrerequisite =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ProfessionListPrerequisite {
     Plain(Vec<ProfessionPrerequisite>)
 }
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum PersonalityTraitPrerequisiteNoDisplay {
     Culture(CulturePrerequisite),
     Special
@@ -375,6 +432,65 @@ pub type PersonalityTraitPrerequisite =
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum PersonalityTraitListPrerequisite {
     Plain(Vec<PersonalityTraitPrerequisite>)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
+pub enum LiturgicalChantPrerequisite {
+    Rule(RulePrerequisite)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
+pub enum LiturgicalChantListPrerequisite {
+    Plain(Vec<LiturgicalChantPrerequisite>)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
+pub enum LanguagePrerequisiteNoDisplay {
+    Race(RacePrerequisite),
+    Activatable(ActivatablePrerequisite)
+}
+
+pub type LanguagePrerequisite =
+    DisplayPrerequisite<LanguagePrerequisiteNoDisplay>;
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
+pub enum IneligiblePrerequisiteNoDisplay {
+    Ineligible
+}
+
+pub type IneligiblePrerequisite =
+    DisplayPrerequisite<IneligiblePrerequisiteNoDisplay>;
+
+#[derive(Deserialize, Serialize)]
+#[serde(untagged)]
+#[serde(deny_unknown_fields)]
+pub enum LanguageListPrerequisite {
+    Language(Vec<LanguagePrerequisite>),
+    Ineligible(Vec<IneligiblePrerequisite>)
+}
+
+pub type LanguageByLevelPrerequisite =
+    Vec<ByLevelPrerequisiteSingle<LanguageListPrerequisite>>;
+
+pub type LanguageListOrByLevelPrerequisite =
+    ListOrByLevelPrerequisite<LanguageListPrerequisite,
+        LanguageByLevelPrerequisite>;
+
+#[derive(Deserialize, Serialize)]
+#[serde(untagged)]
+#[serde(deny_unknown_fields)]
+pub enum MagicalTraditionPrerequisite {
+    General(GeneralListOrByLevelPrerequisite),
+    Ineligible(IneligiblePrerequisite)
 }

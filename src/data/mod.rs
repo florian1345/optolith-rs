@@ -94,6 +94,7 @@ use crate::data::personality_trait::PersonalityTrait;
 use crate::data::property::Property;
 use crate::data::publication::Publication;
 use crate::data::race::Race;
+use crate::data::sex::SexPractice;
 use crate::data::simple::{
     ArmorType,
     Brew,
@@ -158,6 +159,7 @@ pub mod prerequisite;
 pub mod property;
 pub mod publication;
 pub mod race;
+pub mod sex;
 pub mod simple;
 pub mod skill;
 pub mod src;
@@ -262,6 +264,7 @@ const RING_ENCHANTMENT_DIR: &str = "RingEnchantments";
 const RITUAL_DIR: &str = "Rituals";
 const SCRIPT_DIR: &str = "Scripts";
 const SERMON_DIR: &str = "Sermons";
+const SEX_PRACTICE_DIR: &str = "SexPractices";
 const SEX_SPECIAL_ABILITY_DIR: &str = "SexSpecialAbilities";
 const SICKLE_RITUAL_DIR: &str = "SickleRituals";
 const SIKARYAN_DRAIN_SPECIAL_ABILITY_DIR: &str =
@@ -288,7 +291,14 @@ const WAND_ENCHANTMENT_DIR: &str = "WandEnchantments";
 const WEAPON_ENCHANTMENT_DIR: &str = "WeaponEnchantments";
 const ZIBILJA_RITUAL_DIR: &str = "ZibiljaRituals";
 
-type UI = HashMap<String, String>;
+#[derive(Deserialize, Serialize)]
+#[serde(untagged)]
+pub enum UIValue {
+    Simple(String),
+    SubMap(HashMap<String, String>)
+}
+
+type UI = HashMap<String, UIValue>;
 
 type IdMap<T> = HashMap<u32, T>;
 
@@ -387,6 +397,7 @@ pub struct OptolithData {
     ring_enchantments: IdMap<RingEnchantment>,
     rituals: IdMap<Ritual>,
     scripts: IdMap<Script>,
+    sex_practices: IdMap<SexPractice>,
     sex_special_abilities: IdMap<SexSpecialAbility>,
     sermons: IdMap<Sermon>,
     sickle_rituals: IdMap<SickleRitual>,
@@ -415,6 +426,11 @@ pub struct OptolithData {
 }
 
 fn is_placeholder(path: &str) -> bool {
+    // TODO remove once sorted out
+    if path == "25_Waldschrate.yml" || path == "5_Toad-Poison.yml" {
+        return true;
+    }
+
     if let Some(underscore) = path.find('_') {
         match path[0..underscore].parse::<u32>() {
             Ok(n) => n >= 1000,
@@ -431,7 +447,9 @@ struct IdMapBuilder<'a> {
 }
 
 impl<'a> IdMapBuilder<'a> {
-    fn map<K, V>(&self, dir_name: &str, key_builder: impl Fn(&V, &DirEntry) -> K)
+    fn map<K, V>(&self, dir_name: &str,
+        placeholder_predicate: impl Fn(&DirEntry) -> bool,
+        key_builder: impl Fn(&V, &DirEntry) -> K)
         -> OptolithDataResult<HashMap<K, V>>
     where
         for<'de> V : Deserialize<'de>,
@@ -446,7 +464,7 @@ impl<'a> IdMapBuilder<'a> {
             // TODO remove once a more permanent solution for placeholders has been
             // found
     
-            if is_placeholder(file.file_name().to_str().unwrap()) {
+            if placeholder_predicate(&file) {
                 continue;
             }
     
@@ -462,7 +480,8 @@ impl<'a> IdMapBuilder<'a> {
     where
         for<'de> V : Deserialize<'de> + Identifiable
     {
-        self.map(dir_name, |v: &V, _| v.id().internal_id())
+        self.map(dir_name, |d| is_placeholder(d.file_name().to_str().unwrap()),
+            |v: &V, _| v.id().internal_id())
     }
 }
 
@@ -595,6 +614,7 @@ impl OptolithData {
         let ring_enchantments = builder.map_u32(RING_ENCHANTMENT_DIR)?;
         let rituals = builder.map_u32(RITUAL_DIR)?;
         let scripts = builder.map_u32(SCRIPT_DIR)?;
+        let sex_practices = builder.map_u32(SEX_PRACTICE_DIR)?;
         let sex_special_abilities = builder.map_u32(SEX_SPECIAL_ABILITY_DIR)?;
         let sermons = builder.map_u32(SERMON_DIR)?;
         let sickle_rituals = builder.map_u32(SICKLE_RITUAL_DIR)?;
@@ -624,6 +644,7 @@ impl OptolithData {
         let zibilja_rituals = builder.map_u32(ZIBILJA_RITUAL_DIR)?;
         let uis =
             builder.map(UI_DIR,
+                |_| false,
                 |_: &UI, d| {
                     let os_file_name = d.file_name();
                     let file_name = os_file_name.to_str().unwrap();
@@ -722,6 +743,7 @@ impl OptolithData {
             ring_enchantments,
             rituals,
             scripts,
+            sex_practices,
             sex_special_abilities,
             sermons,
             sickle_rituals,
@@ -1153,6 +1175,10 @@ impl OptolithData {
         self.scripts.get(&id)
     }
 
+    pub fn get_sex_practice(&self, id: u32) -> Option<&SexPractice> {
+        self.sex_practices.get(&id)
+    }
+
     pub fn get_sex_special_ability(&self, id: u32)
             -> Option<&SexSpecialAbility> {
         self.sex_special_abilities.get(&id)
@@ -1257,7 +1283,10 @@ impl OptolithData {
 
     pub fn get_ui_string(&self, locale: &str, id: &str) -> Option<&String> {
         self.uis.get(locale)
-            .map(|ui| ui.get(id))
+            .map(|ui| ui.get(id)
+                .map(|v|
+                    if let UIValue::Simple(s) = v { Some(s) } else { None })
+                .flatten())
             .flatten()
     }
 
@@ -1446,6 +1475,8 @@ impl OptolithData {
                 to_dyn(self.get_ritual(int_id)),
             Category::Scripts =>
                 to_dyn(self.get_script(int_id)),
+            Category::SexPractices =>
+                to_dyn(self.get_sex_practice(int_id)),
             Category::SexSpecialAbilities =>
                 to_dyn(self.get_sex_special_ability(int_id)),
             Category::SickleRituals =>

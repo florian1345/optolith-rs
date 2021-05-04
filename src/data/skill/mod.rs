@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{Localization, Translatable, Translations};
 use crate::data::errata::Errata;
-use crate::data::prerequisite::ActivatablePrerequisite;
 use crate::data::simple::SimpleTranslations;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
@@ -12,13 +11,29 @@ pub mod non_profane;
 
 /// This is one data structure used for "applications" and "uses".
 #[derive(Deserialize, Serialize)]
-pub struct ApplicationUse {
+#[serde(deny_unknown_fields)]
+pub struct ExplicitApplication {
     pub id: i32,
-    pub prerequisite: Option<ActivatablePrerequisite>,
     pub translations: SimpleTranslations
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub enum DerivedApplications {
+    Regions,
+    Diseases
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
+pub enum Applications {
+    Derived(DerivedApplications),
+    Explicit(Vec<ExplicitApplication>)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum ImprovementCost {
     A,
     B,
@@ -27,6 +42,7 @@ pub enum ImprovementCost {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum EncumbranceAffected {
     #[serde(rename = "true")]
     Yes,
@@ -37,6 +53,7 @@ pub enum EncumbranceAffected {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SkillLocalization {
     pub name: String,
     #[serde(rename = "applicationsInput")]
@@ -58,10 +75,10 @@ impl Localization for SkillLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Skill {
     pub id: u32,
-    pub applications: Option<Vec<ApplicationUse>>,
-    pub uses: Option<Vec<ApplicationUse>>,
+    pub applications: Option<Applications>,
     pub check: [u32; 3],
     pub ic: ImprovementCost,
     pub enc: EncumbranceAffected,
@@ -85,6 +102,7 @@ impl Translatable for Skill {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SkillGroupLocalization {
     pub name: String,
     #[serde(rename = "fullName")]
@@ -98,6 +116,7 @@ impl Localization for SkillGroupLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SkillGroup {
     pub id: u32,
     pub check: [u32; 3],

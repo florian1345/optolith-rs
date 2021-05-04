@@ -1,11 +1,12 @@
 use crate::data::{Localization, Translations, Translatable};
-use crate::data::errata::{Errata, ErrataLocalization, ErrataTranslations};
+use crate::data::errata::Errata;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize,Serialize)]
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ConditionLocalization {
     pub name: String,
     pub description: Option<String>,
@@ -22,6 +23,7 @@ impl Localization for ConditionLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Condition {
     pub id: u32,
     pub src: SourceRefs,
@@ -43,6 +45,7 @@ impl Translatable for Condition {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct StateLocalization {
     pub name: String,
     pub description: String,
@@ -56,6 +59,7 @@ impl Localization for StateLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct State {
     pub id: u32,
 
@@ -83,13 +87,116 @@ impl Translatable for State {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub enum Resistance {
+    Spirit,
+    Toughness
+}
+
+/// A single disease cause.
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct DiseaseCause {
+
+    /// The cause's name in different languages.
+    pub name: Translations<String>,
+
+    /// The change to get infected by this cause, in percent.
+    pub chance: Option<u32>
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(untagged)]
+#[serde(deny_unknown_fields)]
+pub enum AlternativeName {
+    General(String),
+    InRegion {
+        name: String,
+
+        /// The region where this alternative name is used.
+        region: String
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct DiseaseProgressDependent {
+
+    /// The information for the disease's default progress.
+    pub default: String,
+
+    /// The information for the disease's lessened progress.
+    pub lessened: Option<String>
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct DiseaseLocalization {
+    pub name: String,
+
+    /// A list of alternative names.
+    #[serde(rename = "alternativeNames")]
+    pub alternative_names: Option<Vec<AlternativeName>>,
+
+    /// The disease's progress, in detail.
+    // TODO remove Option once possible
+    pub progress: Option<String>,
+
+    /// After infection, how much time passes before symptoms appear?
+    // TODO remove Option once possible
+    #[serde(rename = "incubationTime")]
+    pub incubation_time: Option<String>,
+
+    /// The damage caused by the disease. If the disease check fails, apply the
+    /// lessened effects.
+    // TODO remove Option once possible
+    pub damage: Option<DiseaseProgressDependent>,
+
+    /// The duration of the disease. If the disease check fails, use the
+    /// lessened duration.
+    // TODO remove Option once possible
+    pub duration: Option<DiseaseProgressDependent>,
+
+    /// Special information about the disease.
+    pub special: Option<String>,
+
+    /// Methods known to lessen the disease’s progress or relieve symptoms.
+    /// Markdown is available.
+    // TODO remove Option once possible
+    pub treatment: Option<String>,
+
+    /// Known remedies for the disease.
+    // TODO remove Option once possible
+    pub cure: Option<String>,
+    pub errata: Option<Errata>
+}
+
+impl Localization for DiseaseLocalization {
+    fn name(&self) -> &str {
+        &self.name
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Disease {
     pub id: u32,
 
     /// The disease's level.
     pub level: u32,
+
+    /// Depending on the disease, apply Spirit or Toughness as a penalty to the
+    /// disease roll.
+    // TODO remove Option whenever possible
+    pub resistance: Option<Resistance>,
+
+    /// What causes the disease? The GM rolls 1D20 to see if a character gets
+    /// infected. If the infection check succeeds, the GM makes a disease check
+    /// to determine the severity of the infection.
+    // TODO remove Option whenever possible
+    pub cause: Option<Vec<DiseaseCause>>,
     pub src: SourceRefs,
-    pub translations: ErrataTranslations
+    pub translations: Translations<DiseaseLocalization>
 }
 
 impl Identifiable for Disease {
@@ -99,22 +206,24 @@ impl Identifiable for Disease {
 }
 
 impl Translatable for Disease {
-    type Localization = ErrataLocalization;
+    type Localization = DiseaseLocalization;
 
-    fn translations(&self) -> &Translations<ErrataLocalization> {
+    fn translations(&self) -> &Translations<DiseaseLocalization> {
         &self.translations
     }
 }
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum PoisonLevel {
     QL,
     Fixed(u32)
 }
 
 #[derive(Deserialize, Serialize)]
-pub enum PoisonUseType {
+#[serde(deny_unknown_fields)]
+pub enum PoisonApplicationType {
     Weapon,
     Ingestion,
     Inhalation,
@@ -122,29 +231,125 @@ pub enum PoisonUseType {
 }
 
 #[derive(Deserialize, Serialize)]
-pub enum PoisonType {
+#[serde(deny_unknown_fields)]
+pub enum Legality {
+    Legal,
+    Illegal
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct IntoxicantLocalization {
+
+    /// How to ingest the intoxicant.
+    pub ingestion: String,
+
+    /// The intoxicant's side effects, if any. Markdown is available.
+    #[serde(rename = "sideEffects")]
+    pub side_effects: Option<String>,
+
+    /// What happens if the intoxicant has been overdosed. Markdown is
+    /// available.
+    pub overdose: String,
+    pub special: Option<String>,
+    pub addiction: Option<String>
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "category")]
+#[serde(deny_unknown_fields)]
+pub enum PlantPoisonData {
+    Default,
+    Intoxicant {
+
+        /// Whether the use of the intoxicant is legal or not.
+        legality: Legality,
+        translations: Translations<IntoxicantLocalization>
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "sourceType", content = "categorySpecific")]
+#[serde(deny_unknown_fields)]
+pub enum PoisonSourceType {
     AnimalVenom,
-    PlantPoison,
+    PlantPoison(Option<PlantPoisonData>),
     AlchemicalPoison,
     MineralPoison
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct PoisonProgressDependent {
+
+    /// The information if the poison gets the default effect.
+    pub default: String,
+
+    /// The information if the poison gets the degraded effect.
+    pub degraded: String
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct PoisonLocalization {
+
+    /// The poison's name.
+    pub name: String,
+
+    /// A list of alternative names.
+    #[serde(rename = "alternativeNames")]
+    pub alternative_names: Option<Vec<AlternativeName>>,
+
+    /// The normal and degraded poison's effects. Markdown is available.
+    // TODO remove Option once possible
+    pub effect: Option<PoisonProgressDependent>,
+
+    /// When the poison takes effect.
+    // TODO remove Option once possible
+    pub start: Option<String>,
+
+    /// The normal and degraded poison's duration.
+    // TODO remove Option once possible
+    pub duration: Option<PoisonProgressDependent>,
+    pub errata: Option<Errata>
+}
+
+impl Localization for PoisonLocalization {
+    fn name(&self) -> &str {
+        &self.name
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Poison {
     pub id: u32,
 
     /// The poison's level.
     pub level: PoisonLevel,
 
-    /// The poison's use type(s).
-    #[serde(rename = "useType")]
-    pub use_type: Vec<PoisonUseType>,
+    /// The poison's application type(s).
+    #[serde(rename = "applicationType")]
+    pub application_type: Vec<PoisonApplicationType>,
 
-    /// The poison's type.
-    #[serde(rename = "type")]
-    pub poison_type: PoisonType,
+    /// The poison's source type and dependent additional values.
+    #[serde(rename = "sourceTypeSpecific")]
+    pub source_type_specific: PoisonSourceType,
+
+    /// Depending on the poison, apply Spirit or Toughness as a penalty to the
+    /// poison roll.
+    // TODO remove Option once possible
+    pub resistance: Option<Resistance>,
+
+    /// The raw (ingredients) value, in silverthalers.
+    // TODO remove Option once possible
+    pub value: Option<u32>,
+
+    /// Price for one dose, in silverthalers.
+    // TODO remove Option once possible
+    pub cost: Option<u32>,
     pub src: SourceRefs,
-    pub translations: ErrataTranslations
+    pub translations: Translations<PoisonLocalization>
 }
 
 impl Identifiable for Poison {
@@ -154,9 +359,9 @@ impl Identifiable for Poison {
 }
 
 impl Translatable for Poison {
-    type Localization = ErrataLocalization;
+    type Localization = PoisonLocalization;
 
-    fn translations(&self) -> &Translations<ErrataLocalization> {
+    fn translations(&self) -> &Translations<PoisonLocalization> {
         &self.translations
     }
 }

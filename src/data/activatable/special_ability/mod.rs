@@ -1,7 +1,12 @@
 use crate::data::{Localization, Translatable, Translations};
-use crate::data::activatable::{APValue, SelectOptions};
+use crate::data::activatable::{
+    APValue,
+    SelectOptions,
+    SkillApplications,
+    SkillUses
+};
 use crate::data::errata::Errata;
-use crate::data::prerequisite::GeneralListOrByLevelPrerequisite;
+use crate::data::prerequisite::{DisplayOption, GeneralListOrByLevelPrerequisite};
 use crate::data::simple::SimpleEntity;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, CategoryProvider, Id, Identifiable};
@@ -21,6 +26,7 @@ pub mod trade_secret;
 pub mod tradition;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SpecialAbilityLocalization {
 
     /// The name of the entry.
@@ -28,8 +34,8 @@ pub struct SpecialAbilityLocalization {
 
     /// The name of the entry shown in Wiki. Only use when `name` needs to be
     /// different from full name.
-    #[serde(rename = "nameInWiki")]
-    pub name_in_wiki: Option<String>,
+    #[serde(rename = "nameInLibrary")]
+    pub name_in_library: Option<String>,
 
     /// A string that is used as a placeholder text for an input field.
     pub input: Option<String>,
@@ -79,6 +85,7 @@ impl Localization for SpecialAbilityLocalization {
 /// A normal special ability localization with a field `effect` instead of
 /// `rules`.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct EffectSpecialAbilityLocalization {
     
     /// The name of the entry.
@@ -132,24 +139,90 @@ impl Localization for EffectSpecialAbilityLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum SingleAdvancedSpecialAbilityOption {
-    Single(u32),
-    Multiple(Vec<u32>)
+#[serde(deny_unknown_fields)]
+pub enum RestrictOptionsType {
+    Element
 }
 
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
-pub enum AdvancedSpecialAbility {
-    Single {
-        id: u32,
+#[serde(deny_unknown_fields)]
+pub enum RestrictOption {
+    Direct(u32),
 
-        /// Specify, if only one specific select option or one of a set of
-        /// select options is allowed for the referenced advanced special
-        /// ability.
-        option: Option<SingleAdvancedSpecialAbilityOption>
+    /// Specify, if only one specific select option or one of a set of select
+    /// options is allowed for the referenced advanced special ability.
+    ByType {
+        #[serde(rename = "type")]
+        ro_type: RestrictOptionsType,
+        value: u32
     },
-    Multiple(Vec<u32>)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(untagged)]
+#[serde(deny_unknown_fields)]
+pub enum RestrictOptions {
+    Single(RestrictOption),
+    Multiple(Vec<RestrictOption>)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
+pub enum ExternalEntry {
+    MagicalTradition(u32)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
+pub enum FromOption {
+    Patron(u32)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Mapping {
+    #[serde(rename = "fromOption")]
+    from_option: FromOption,
+    #[serde(rename = "toAdvanced")]
+    to_advanced: u32
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type")]
+#[serde(deny_unknown_fields)]
+pub enum ComplexAdvancedSpecialAbility {
+    RestrictOptions {
+        id: u32,
+        option: RestrictOptions
+    },
+    OneOf {
+        options: Vec<u32>,
+        #[serde(rename = "isSelectionRequiredOnPurchase")]
+        is_selection_required_on_purchase: bool,
+        #[serde(rename = "displayOption")]
+        display_option: Option<DisplayOption>
+    },
+    DeriveFromExternalOption {
+        #[serde(rename = "externalEntry")]
+        external_entry: ExternalEntry,
+        mappings: Vec<Mapping>
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(untagged)]
+#[serde(deny_unknown_fields)]
+pub enum AdvancedSpecialAbility {
+    Simple(u32),
+    // TODO figure out how to model this properly
+    SimpleWithOptions {
+        id: u32,
+        option: RestrictOptions
+    },
+    Complex(ComplexAdvancedSpecialAbility)
 }
 
 /// The Advanced Special Abilities for the respective Style Special Ability.
@@ -160,6 +233,7 @@ pub enum AdvancedSpecialAbility {
 pub type AdvancedSpecialAbilities = [AdvancedSpecialAbility; 3];
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SimpleSpecialAbility<C: CategoryProvider, L: Localization> {
     pub id: u32,
     pub levels: Option<u32>,
@@ -198,6 +272,64 @@ where
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct SkillInfluencingSpecialAbility<C, L>
+where
+    C: CategoryProvider,
+    L: Localization
+{
+    pub id: u32,
+    pub levels: Option<u32>,
+    pub max: Option<u32>,
+
+    /// Registers new applications, which get enabled once this entry is
+    /// activated. It specifies an entry-unique identifier and the skill it
+    /// belongs to. A translation can be left out if its name equals the name
+    /// of the origin entry.
+    #[serde(rename = "skillApplications")]
+    pub skill_applications: Option<SkillApplications>,
+
+    /// Registers uses, which get enabled once this entry is activated. It
+    /// specifies an entry-unique identifier and the skill it belongs to. A
+    /// translation can be left out if its name equals the name of the origin
+    /// entry.
+    #[serde(rename = "skillUses")]
+    pub skill_uses: Option<SkillUses>,
+    #[serde(rename = "selectOptions")]
+    pub select_options: Option<SelectOptions>,
+    pub prerequisites: Option<GeneralListOrByLevelPrerequisite>,
+    #[serde(rename = "apValue")]
+    pub ap_value: Option<APValue>,
+    pub src: SourceRefs,
+    pub translations: Translations<L>,
+    #[serde(skip)]
+    category: PhantomData<C>
+}
+
+impl<C, L> Translatable for SkillInfluencingSpecialAbility<C, L>
+where
+    C: CategoryProvider,
+    L: Localization
+{
+    type Localization = L;
+
+    fn translations(&self) -> &Translations<L> {
+        &self.translations
+    }
+}
+
+impl<C, L> Identifiable for SkillInfluencingSpecialAbility<C, L>
+where
+    C: CategoryProvider,
+    L: Localization
+{
+    fn id(&self) -> Id {
+        Id::new(C::CATEGORY, self.id)
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum SpecialAbilityType {
     GeneralSpecialAbility,
     FatePointSpecialAbility,
@@ -246,6 +378,7 @@ pub enum SpecialAbilityType {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SpecialAbilityId {
     #[serde(rename = "type")]
     pub sa_type: SpecialAbilityType,

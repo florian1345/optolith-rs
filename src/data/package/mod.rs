@@ -4,6 +4,7 @@ pub mod culture;
 pub mod profession;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct PackageSkill {
     pub id: u32,
 

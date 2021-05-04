@@ -10,11 +10,13 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum ElectiveSpellworkRestriction {
     Element(u32)
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ElectiveSpellwork {
     #[serde(flatten)]
     pub spellwork: StandardSpellworkId,
@@ -29,6 +31,7 @@ pub struct ElectiveSpellwork {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum RestrictedSpellwork {
 
     /// Spellworks of a property are disallowed. It might be specified that
@@ -46,6 +49,7 @@ pub enum RestrictedSpellwork {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SpellworkAdjustment {
     pub id: StandardSpellworkId,
 
@@ -54,6 +58,7 @@ pub struct SpellworkAdjustment {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SpellworkChange {
     pub replacement: SpellworkAdjustment,
     pub base: SpellworkAdjustment
@@ -61,6 +66,7 @@ pub struct SpellworkChange {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum LessonPackageSkillId {
     MeleeCombatTechnique(u32),
     RangedCombatTechnique(u32),
@@ -70,6 +76,7 @@ pub enum LessonPackageSkillId {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct LessonPackageSkill {
     pub id: LessonPackageSkillId,
 
@@ -78,6 +85,7 @@ pub struct LessonPackageSkill {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct LessonPackage {
     pub id: u32,
 
@@ -100,6 +108,7 @@ impl Translatable for LessonPackage {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Curriculum {
     pub id: u32,
     pub guideline: u32,
@@ -133,6 +142,7 @@ impl Translatable for Curriculum {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Guideline {
     pub id: u32,
 
@@ -157,6 +167,7 @@ impl Translatable for Guideline {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Influence {
     pub id: u32,
     pub prerequisites: InfluenceListPrerequisite,

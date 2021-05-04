@@ -8,11 +8,15 @@ use serde::{Deserialize, Serialize};
 pub mod karmal;
 pub mod magical;
 
-/// If the check will be modified by Spirit or Toughness, insert `SPI` or `TOU`
-/// respectively. If the higher is the characteristic to choose, insert an
-/// array with both instead.
 #[derive(Deserialize, Serialize)]
-pub enum CheckMod {
+#[serde(deny_unknown_fields)]
+pub enum CheckModTarget {
+    Creature
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub enum SimpleCheckMod {
     #[serde(rename = "SPI")]
     Spirit,
     #[serde(rename = "SPI/2")]
@@ -21,10 +25,31 @@ pub enum CheckMod {
     Toughness,
     #[serde(rename = "SPI/TOU")]
     Higher,
+    CreationDifficulty,
     SummoningDifficulty
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct CheckModOf {
+    #[serde(rename = "type")]
+    pub simple: SimpleCheckMod,
+    pub of: CheckModTarget
+}
+
+/// If the check will be modified by Spirit or Toughness, insert `SPI` or `TOU`
+/// respectively. If the higher is the characteristic to choose, insert an
+/// array with both instead.
+#[derive(Deserialize, Serialize)]
+#[serde(untagged)]
+#[serde(deny_unknown_fields)]
+pub enum CheckMod {
+    Simple(SimpleCheckMod),
+    Of(CheckModOf)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct EnhancementLocalization {
     pub name: String,
     pub effect: String,
@@ -38,6 +63,7 @@ impl Localization for EnhancementLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Enhancement {
     pub id: u32,
 
@@ -65,6 +91,7 @@ pub type Enhancements = Vec<Enhancement>;
 /// for each 2 QL.
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
+#[serde(deny_unknown_fields)]
 pub enum QualityLevelEffectLocalization {
 
     /// Gives an effect description for every quality level (first is QL 1,
@@ -77,6 +104,7 @@ pub enum QualityLevelEffectLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct MainParameterLocalization {
 
     /// The full parameter text.
@@ -87,6 +115,7 @@ pub struct MainParameterLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct NonProfaneSkillLocalization {
 
     /// The name of the spell/ritual/liturgy/ceremony.
@@ -136,6 +165,7 @@ impl Localization for NonProfaneSkillLocalization {
 
 /// A localization for blessings and cantrips.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SmallNonProfaneSkillLocalization {
 
     /// The name of the cantrip/blessing.

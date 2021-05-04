@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Occurrence {
     #[serde(rename = "firstPage")]
     pub first_page: u32,
@@ -12,14 +13,24 @@ pub struct Occurrence {
 
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
+#[serde(deny_unknown_fields)]
 pub enum Occurrences {
     One(Occurrence),
     Many(Vec<Occurrence>)
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SourceRef {
     pub id: u32,
+
+    /// The book's universal printing identifier since which the entry is
+    /// present.
+    pub since: Option<u32>,
+
+    /// The book's universal printing identifier since which the entry has been
+    /// removed.
+    pub deprecated: Option<u32>,
 
     /// Maps the language ID to the occurrences in the books of that language.
     pub occurrences: HashMap<String, Occurrences>

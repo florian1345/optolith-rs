@@ -1,6 +1,7 @@
 use std::io;
 use std::ffi::OsString;
 use std::fmt::{self, Display, Formatter};
+use std::path::PathBuf;
 
 /// An enumeration of all kinds errors that can occur in this program.
 #[derive(Debug)]
@@ -71,9 +72,9 @@ impl From<serde_yaml::Error> for OptolithDataError {
 /// Syntactic sugar for a result value that can also be an [OptolithDataError].
 pub type OptolithDataResult<T> = Result<T, OptolithDataError>;
 
-pub fn set_file<T>(r: &mut OptolithDataResult<T>, file: OsString) {
+pub fn set_file<T>(r: &mut OptolithDataResult<T>, file: &PathBuf) {
     match r {
         Ok(_) => { },
-        Err(e) => e.set_file(file)
+        Err(e) => e.set_file(OsString::from(file.as_os_str()))
     }
 }

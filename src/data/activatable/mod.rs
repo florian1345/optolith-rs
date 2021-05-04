@@ -1,6 +1,7 @@
-use crate::data::{Category, Localization, Translations};
+use crate::data::{Category, Ids, Localization, Translations};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::GeneralListOrByLevelPrerequisite;
+use crate::data::simple::SimpleTranslations;
 use crate::data::src::SourceRefs;
 
 use serde::{Deserialize, Serialize};
@@ -9,6 +10,7 @@ pub mod character_trait;
 pub mod special_ability;
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum ActivatableType {
     Advantage,
     Disadvantage,
@@ -59,6 +61,7 @@ pub enum ActivatableType {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ActivatableId {
     #[serde(rename = "type")]
     pub act_type: ActivatableType,
@@ -66,6 +69,7 @@ pub struct ActivatableId {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct CategorySelectOptionPrerequisite {
     pub target: ActivatableId,
     pub active: bool,
@@ -74,6 +78,7 @@ pub struct CategorySelectOptionPrerequisite {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum CategoryPrerequisite {
 
     /// The category entry requires or prohibits itself as a select option of
@@ -86,6 +91,7 @@ pub enum CategoryPrerequisite {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct DerivedFromAbilityEntryAPValue {
     pub id: u32,
     #[serde(rename = "apValue")]
@@ -94,6 +100,7 @@ pub struct DerivedFromAbilityEntryAPValue {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum DerivedFromAbilityAPValue {
 
     /// The wrapped number is multiplied with the improvement cost of the entry
@@ -111,8 +118,32 @@ pub enum DerivedFromAbilityAPValue {
     }
 }
 
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct DerivedSelectOptionSkillMod {
+
+    /// An unique, increasing integer, identifying the application in the entry
+    /// it is registered for.
+    pub id: u32,
+    pub translations: Option<SimpleTranslations>
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct RequiredSkillRating {
+
+    /// The minimum number of skills that need to be on the defined minimum
+    /// skill rating.
+    pub number: u32,
+
+    /// The minimum skill rating the defined minimum number of skills need to
+    /// be on.
+    pub value: u32
+}
+
 /// Entries of the list of category IDs of derived select options.
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct DerivedSelectOption {
     pub category: Category,
 
@@ -123,6 +154,9 @@ pub struct DerivedSelectOption {
     /// aspect/property knowledge? (Only for category Aspects/Properties)
     #[serde(rename = "requireKnowledge")]
     pub require_knowledge: Option<bool>,
+
+    #[serde(rename = "requireSkillRating")]
+    pub require_skill_rating: Option<RequiredSkillRating>,
 
     /// The generated name should be the Master of (Aspect) suffix for this
     /// aspect instead of the aspect's name. If an aspect does not provide
@@ -135,6 +169,27 @@ pub struct DerivedSelectOption {
     /// category Diseases/Poisons)
     #[serde(rename = "useHalfLevelAsApValue")]
     pub use_half_level_as_ap_value: Option<bool>,
+
+    /// Should the principles (code) of the tradition be required to select the
+    /// respective tradition? (Only for category BlessedTraditions)
+    #[serde(rename = "requirePrinciples")]
+    pub require_principles: Option<bool>,
+
+    /// Registers new applications, which get enabled once this entry is
+    /// activated with its respective select option. It specifies an
+    /// entry-unique identifier, the skill it belongs to is derived from the
+    /// select option automatically. A translation can be left out if its name
+    /// equals the name of the origin entry.
+    #[serde(rename = "skillApplications")]
+    pub skill_applications: Option<Vec<DerivedSelectOptionSkillMod>>,
+
+    /// Registers uses, which get enabled once this entry is activated with its
+    /// respective select option. It specifies an entry-unique identifier, the
+    /// skill it belongs to is derived from the select option automatically. A
+    /// translation can be left out if its name equals the name of the origin
+    /// entry.
+    #[serde(rename = "skillUses")]
+    pub skill_uses: Option<Vec<DerivedSelectOptionSkillMod>>,
 
     /// Generate prerequisites for each entry of the category. (Only for
     /// category Languages/Skills/MeleeCombatTechniques/
@@ -157,6 +212,7 @@ pub struct DerivedSelectOption {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum SelectOptionAbility {
     Skill,
     MeleeCombatTechnique,
@@ -167,6 +223,7 @@ pub enum SelectOptionAbility {
 /// activatable is apparent from context.
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
+#[serde(deny_unknown_fields)]
 pub enum SelectOptionId {
     Integer(i32),
     Ability {
@@ -178,9 +235,19 @@ pub enum SelectOptionId {
 
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
+#[serde(deny_unknown_fields)]
 pub enum ExplicitSelectOptionLocalization {
     Ordinary {
         name: String,
+
+        /// The name of the select option when displayed in a generated
+        /// profession text.
+        #[serde(rename = "nameInProfession")]
+        name_in_profession: Option<String>,
+
+        /// The description of the select option. Useful for Bad Habits, Trade
+        /// Secrets and other entries where a description is available.
+        /// Markdown is available.
         description: Option<String>,
         errata: Option<Errata>
     },
@@ -192,11 +259,7 @@ pub enum ExplicitSelectOptionLocalization {
 impl Localization for ExplicitSelectOptionLocalization {
     fn name(&self) -> &str {
         match self {
-            ExplicitSelectOptionLocalization::Ordinary {
-                name,
-                description: _,
-                errata: _
-            } => {
+            ExplicitSelectOptionLocalization::Ordinary { name, .. } => {
                 name
             },
             ExplicitSelectOptionLocalization::ErrataOnly { errata: _ } => {
@@ -208,9 +271,31 @@ impl Localization for ExplicitSelectOptionLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ExplicitSelectOption {
     pub id: SelectOptionId,
+
+    /// Sometimes, professions use specific text selections that are not
+    /// contained in described lists. This ensures you can use them for
+    /// professions only. They are not going to be displayed as options to the
+    /// user.
+    #[serde(rename = "professionOnly")]
+    pub profession_only: Option<bool>,
     pub prerequisites: Option<GeneralListOrByLevelPrerequisite>,
+
+    /// Registers new applications, which get enabled once this entry is
+    /// activated with its respective select option. It specifies an
+    /// entry-unique identifier and the skill it belongs to. A translation can
+    /// be left out if its name equals the name of the origin select option.
+    #[serde(rename = "skillApplications")]
+    pub skill_applications: Option<SkillApplications>,
+
+    /// Registers uses, which get enabled once this entry is activated with its
+    /// respective select option. It specifies an entry-unique identifier and
+    /// the skill it belongs to. A translation can be left out if its name
+    /// equals the name of the origin select option.
+    #[serde(rename = "skillUses")]
+    pub skill_uses: Option<SkillUses>,
 
     /// Specific AP cost for the select option.
     #[serde(rename = "apValue")]
@@ -221,6 +306,7 @@ pub struct ExplicitSelectOption {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum SelectOptions {
 
     /// A list of category ids. All available entries from the specified
@@ -240,9 +326,47 @@ pub enum SelectOptions {
 
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
 pub enum APValue {
     Flat(u32),
     PerLevel(Vec<u32>),
     /// Used if AP value is defined by the selected option(s).
     Option
 }
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct SkillApplication {
+
+    /// An unique, increasing integer, identifying the application in the entry
+    /// it is registered for.
+    pub id: u32,
+
+    /// The identifiers of the skills this application is for.
+    #[serde(rename = "skillId")]
+    pub skill_id: Ids,
+
+    /// If an application applies to multiple skills, it may need to ensure the
+    /// respective skill is on a certain skill rating.
+    #[serde(rename = "requiredSkillRating")]
+    pub required_skill_rating: Option<u32>,
+    pub translations: Option<SimpleTranslations>
+}
+
+pub type SkillApplications = Vec<SkillApplication>;
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct SkillUse {
+
+    /// An unique, increasing integer, identifying the use in the entry it is
+    /// registered for.
+    pub id: u32,
+
+    /// The identifiers of the skills this application is for.
+    #[serde(rename = "skillId")]
+    pub skill_id: Ids,
+    pub translations: Option<SimpleTranslations>
+}
+
+pub type SkillUses = Vec<SkillUse>;

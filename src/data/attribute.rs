@@ -4,10 +4,12 @@ use crate::data::{Localization, Translatable, Translations};
 use crate::id::{Category, Id, Identifiable};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct AttributeLocalization {
     pub name: String,
     #[serde(rename = "nameAbbr")]
-    pub name_abbr: String
+    pub name_abbr: String,
+    pub description: String
 }
 
 impl Localization for AttributeLocalization {
@@ -17,6 +19,7 @@ impl Localization for AttributeLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Attribute {
     pub id: u32,
     pub translations: Translations<AttributeLocalization>

@@ -4,6 +4,7 @@ use crate::id::{Category, Id, Identifiable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub enum PublicationType {
     CoreRules,
     ExpansionRules,
@@ -13,6 +14,7 @@ pub enum PublicationType {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct PrintingLocalization {
 
     /// The printing's number.
@@ -20,6 +22,7 @@ pub struct PrintingLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Printing {
 
     /// The universal printing identifier.
@@ -28,6 +31,7 @@ pub struct Printing {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct PublicationLocalization {
 
     /// The book's publisher ID.
@@ -57,6 +61,7 @@ impl Localization for PublicationLocalization {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Publication {
     pub id: u32,
 

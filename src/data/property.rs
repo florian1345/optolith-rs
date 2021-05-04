@@ -5,6 +5,7 @@ use crate::id::{Category, Id, Identifiable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Property {
     pub id: u32,
     pub check: Option<[u32; 3]>, // TODO resolve optionality

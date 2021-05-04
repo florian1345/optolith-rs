@@ -1,10 +1,80 @@
 use crate::data::Translatable;
 use crate::data::simple::{SimpleLocalization, SimpleTranslations};
+use crate::data::skill::ImprovementCost;
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(tag = "type")]
+#[serde(deny_unknown_fields)]
+pub enum AdvantageSkillPatronPower {
+    Advantage {
+
+        /// The advantage identifier.
+        id: u32,
+
+        /// It grants a higher level of the advantage.
+        level: Option<u32>,
+
+        /// It grants a specific option of the advantage.
+        option: Option<u32>
+    },
+    Skill {
+
+        /// The skill identifier.
+        id: u32,
+
+        /// The value that gets added to the skill.
+        value: u32
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub enum CombatPatronPowerId {
+    Attack,
+    Parry,
+    RangedCombat,
+    Dodge,
+    DamagePoints,
+    Protection
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type")]
+#[serde(deny_unknown_fields)]
+pub enum CombatPatronPower {
+    Combat {
+        id: CombatPatronPowerId,
+
+        /// The value that gets added to the skill.
+        value: u32
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type")]
+#[serde(deny_unknown_fields)]
+pub enum AttributePatronPower {
+    Attribute {
+
+        /// The attribute identifier.
+        id: u32,
+
+        /// The value that gets added to the attribute.
+        value: u32
+    }
+}
+
+pub type PatronPowers = (
+    Vec<AdvantageSkillPatronPower>,
+    Vec<CombatPatronPower>,
+    Vec<AttributePatronPower>
+);
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Patron {
     pub id: u32,
 
@@ -23,6 +93,15 @@ pub struct Patron {
     /// `limitedToCultures` is not defined.
     #[serde(rename = "isLimitedToCulturesReverse")]
     pub is_limited_to_cultures_reverse: Option<bool>,
+
+    /// The patron-specific powers. Used by animist power Animal Powers I–III.
+    pub powers: Option<PatronPowers>,
+
+    /// The patron-specific AE cost. Used by several animist forces.
+    pub cost: Option<u32>,
+
+    /// "The patron-specific improvement cost. Used by several animist forces.
+    pub ic: Option<ImprovementCost>,
     pub translations: SimpleTranslations
 }
 
@@ -41,6 +120,7 @@ impl Translatable for Patron {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct PatronCategory {
     pub id: u32,
 

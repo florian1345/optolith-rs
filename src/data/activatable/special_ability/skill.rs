@@ -1,9 +1,12 @@
-use crate::data::{Ids, Translatable, Translations};
+use crate::data::{Translatable, Translations};
 use crate::data::activatable::special_ability::{
+    AdvancedSpecialAbilities,
     APValue,
     SelectOptions,
-    SimpleSpecialAbility,
     SpecialAbilityLocalization
+};
+use crate::data::activatable::special_ability::ordinary::{
+    OrdinarySkillInfluencingSpecialAbility
 };
 use crate::data::prerequisite::GeneralListOrByLevelPrerequisite;
 use crate::data::src::SourceRefs;
@@ -12,20 +15,7 @@ use crate::id::{Category, CategoryProvider, Id, Identifiable};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum AdvancedSpecialAbility {
-    Specific {
-        id: u32,
-
-        /// Specify, if only one specific select option or one of a set of
-        /// select options is allowed for the referenced advanced special
-        /// ability.
-        option: Option<Ids>
-    },
-    General(Vec<u32>)
-}
-
-#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SkillStyleSpecialAbility {
     pub id: u32,
     pub levels: Option<u32>,
@@ -38,7 +28,7 @@ pub struct SkillStyleSpecialAbility {
     /// options of an entry is allowed, which can be modelled by the option
     /// property. It can also be that you can choose from a set of special
     /// abilities, but then you cant specify an option.
-    pub advanced: Vec<AdvancedSpecialAbility>,
+    pub advanced: AdvancedSpecialAbilities,
     pub prerequisites: Option<GeneralListOrByLevelPrerequisite>,
     #[serde(rename = "apValue")]
     pub ap_value: Option<APValue>,
@@ -67,5 +57,4 @@ impl CategoryProvider for AdvancedSkillSpecialAbilityCategory {
 }
 
 pub type AdvancedSkillSpecialAbility =
-    SimpleSpecialAbility<AdvancedSkillSpecialAbilityCategory,
-        SpecialAbilityLocalization>;
+    OrdinarySkillInfluencingSpecialAbility<AdvancedSkillSpecialAbilityCategory>;

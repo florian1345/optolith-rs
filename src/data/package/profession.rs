@@ -1,6 +1,7 @@
 use crate::data::{
     Ids,
     Localization,
+    SingleOrList,
     SuggestedUnsuitable,
     Translatable,
     Translations
@@ -106,7 +107,7 @@ pub type SpellSelectOptions = Vec<Vec<SpellSelectOption>>;
 
 /// Define one or more lists of separate select options for improving a
 /// liturgical chant SR.
-pub type LiturgicalChantSelectOptions = Vec<Vec<ProfessionLiturgicalChants>>;
+pub type LiturgicalChantSelectOptions = Vec<Vec<ProfessionLiturgicalChant>>;
 
 #[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
@@ -148,6 +149,8 @@ pub struct ProfessionSpecialAbility {
     pub options: Option<Vec<SelectOptionId>>
 }
 
+pub type ProfessionSpecialAbilities = SingleOrList<ProfessionSpecialAbility>;
+
 #[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ProfessionCombatTechnique {
@@ -169,7 +172,7 @@ pub struct ProfessionSpell {
 
 #[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct ProfessionLiturgicalChants {
+pub struct ProfessionLiturgicalChant {
     pub id: KarmalWorksId,
 
     /// `value` will be added to the current SR.
@@ -276,14 +279,19 @@ pub struct ProfessionVariantSpell {
     pub value: i32
 }
 
+pub type ProfessionVariantSpells = SingleOrList<ProfessionVariantSpell>;
+
 #[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct ProfessionVariantLiturgicalChants {
+pub struct ProfessionVariantLiturgicalChant {
     pub id: KarmalWorksId,
 
     /// `value` will be added to the current SR.
     pub value: i32
 }
+
+pub type ProfessionVariantLiturgicalChants =
+    SingleOrList<ProfessionVariantLiturgicalChant>;
 
 /// If a profession name is different for male and female heroes, use this
 /// object.
@@ -360,7 +368,7 @@ pub struct ProfessionVariant {
     /// reflects the changes (difference) to the field of the same name in the
     /// profession package. If a spell gets to SR 0 because of this, it will be
     /// removed completely.
-    pub spells: Option<Vec<ProfessionVariantSpell>>,
+    pub spells: Option<Vec<ProfessionVariantSpells>>,
 
     /// The chant values difference of the profession variant. This field
     /// reflects the changes (difference) to the field of the same name in the
@@ -417,7 +425,7 @@ impl Localization for ProfessionLocalization {
 
 #[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct Profession {
+pub struct SubProfession {
     pub id: u32,
 
     /// The AP value you have to pay for the package.
@@ -428,7 +436,7 @@ pub struct Profession {
 
     /// The list of special abilties contained in the profession package.
     #[serde(rename = "specialAbilities")]
-    pub special_abilities: Option<Vec<ProfessionSpecialAbility>>,
+    pub special_abilities: Option<Vec<ProfessionSpecialAbilities>>,
 
     /// The combat technique values of the profession package. If you buy the
     /// profession package, the `value` will be *added* to the current CtR,
@@ -449,21 +457,25 @@ pub struct Profession {
     /// package, the value will be *added* to the current SR and the chant will
     /// get activated.
     #[serde(rename = "liturgicalChants")]
-    pub liturgical_chants: Option<Vec<ProfessionLiturgicalChants>>,
+    pub liturgical_chants: Option<Vec<ProfessionLiturgicalChant>>,
 
     /// The list of blessings to activate for the profession package.
     pub blessings: Option<Vec<u32>>,
 
     /// A list of suggested advantages.
+    #[serde(rename = "suggestedAdvantages")]
     pub suggested_advantages: Option<Vec<SuggestedUnsuitable>>,
 
     /// A list of suggested disadvantages.
+    #[serde(rename = "suggestedDisadvantages")]
     pub suggested_disadvantages: Option<Vec<SuggestedUnsuitable>>,
 
     /// A list of unsuitable advantages.
+    #[serde(rename = "unsuitableAdvantages")]
     pub unsuitable_advantages: Option<Vec<SuggestedUnsuitable>>,
 
     /// A list of unsuitable disadvantages.
+    #[serde(rename = "unsuitableDisadvantages")]
     pub unsuitable_disadvantages: Option<Vec<SuggestedUnsuitable>>,
 
     /// A list of available profession variants.
@@ -486,6 +498,21 @@ pub struct Profession {
     pub translations: Translations<ProfessionLocalization>
 }
 
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Profession {
+    pub id: u32,
+
+    /// A list of professions representing the same profession but with
+    /// (slightly) different stats. For example, there may be a profession in a
+    /// regional sourcebook or in the core rules and a profession in an
+    /// extension rulebook like Magic of Aventuria, where the profession is
+    /// basically called the same and almost has the same values, but the
+    /// version from Magic of Aventuria features a spell style special ability
+    /// that does not exist in the core rules or regional sourcebook.
+    pub instances: Vec<SubProfession>
+}
+
 impl Identifiable for Profession {
     fn id(&self) -> Id {
         Id::new(Category::Professions, self.id)
@@ -496,6 +523,6 @@ impl Translatable for Profession {
     type Localization = ProfessionLocalization;
 
     fn translations(&self) -> &Translations<ProfessionLocalization> {
-        &self.translations
+        &self.instances[0].translations
     }
 }

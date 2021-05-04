@@ -1618,10 +1618,12 @@ impl<T: Translatable> DynTranslatable for T {
 
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
-pub enum Ids {
-    Single(u32),
-    List(Vec<u32>)
+pub enum SingleOrList<T> {
+    Single(T),
+    List(Vec<T>)
 }
+
+pub type Ids = SingleOrList<u32>;
 
 #[derive(Deserialize, Serialize)]
 pub struct SuggestedUnsuitable {

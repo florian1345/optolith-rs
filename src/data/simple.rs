@@ -121,6 +121,14 @@ impl CategoryProvider for ReachCategory {
 
 pub type Reach = SimpleEntity<ReachCategory>;
 
+pub struct RegionCategory;
+
+impl CategoryProvider for RegionCategory {
+    const CATEGORY: Category = Category::Regions;
+}
+
+pub type Region = SimpleEntity<RegionCategory>;
+
 pub struct SocialStatusCategory;
 
 impl CategoryProvider for SocialStatusCategory {

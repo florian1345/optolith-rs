@@ -94,6 +94,7 @@ use crate::data::personality_trait::PersonalityTrait;
 use crate::data::property::Property;
 use crate::data::publication::Publication;
 use crate::data::race::Race;
+use crate::data::rule::{FocusRule, OptionalRule};
 use crate::data::sex::SexPractice;
 use crate::data::simple::{
     ArmorType,
@@ -105,6 +106,7 @@ use crate::data::simple::{
     HairColor,
     LiturgicalChantGroup,
     Reach,
+    Region,
     SocialStatus,
     SpellGroup,
     Subject,
@@ -159,6 +161,7 @@ pub mod prerequisite;
 pub mod property;
 pub mod publication;
 pub mod race;
+pub mod rule;
 pub mod sex;
 pub mod simple;
 pub mod skill;
@@ -220,6 +223,7 @@ const FAMILIAR_SPECIAL_ABILITY_DIR: &str = "FamiliarSpecialAbilities";
 const FATE_POINT_SEX_SPECIAL_ABILITY_DIR: &str =
     "FatePointSexSpecialAbilities";
 const FATE_POINT_SPECIAL_ABILITY_DIR: &str = "FatePointSpecialAbilities";
+const FOCUS_RULE_DIR: &str = "FocusRules";
 const FOOLS_HAT_ENCHANTMENT_DIR: &str = "FoolsHatEnchantments";
 const GENERAL_SPECIAL_ABILITY_DIR: &str = "GeneralSpecialAbilities";
 const GEODE_RITUAL_DIR: &str = "GeodeRituals";
@@ -245,6 +249,7 @@ const MAGICAL_TRADITION_DIR: &str = "MagicalTraditions";
 const MAGICAL_TRADITION_PLACEHOLDER_DIR: &str = "MagicalTraditionPlaceholders";
 const MAGIC_STYLE_SPECIAL_ABILITY_DIR: &str = "MagicStyleSpecialAbilities";
 const MELEE_COMBAT_TECHNIQUE_DIR: &str = "MeleeCombatTechniques";
+const OPTIONAL_RULE_DIR: &str = "OptionalRules";
 const ORB_ENCHANTMENT_DIR: &str = "OrbEnchantments";
 const PACT_CATEGORY_DIR: &str = "PactCategories";
 const PACT_GIFT_DIR: &str = "PactGifts";
@@ -260,6 +265,7 @@ const PUBLICATION_DIR: &str = "Publications";
 const RACE_DIR: &str = "Races";
 const RANGED_COMBAT_TECHNIQUE_DIR: &str = "RangedCombatTechniques";
 const REACH_DIR: &str = "Reaches";
+const REGION_DIR: &str = "Regions";
 const RING_ENCHANTMENT_DIR: &str = "RingEnchantments";
 const RITUAL_DIR: &str = "Rituals";
 const SCRIPT_DIR: &str = "Scripts";
@@ -355,6 +361,7 @@ pub struct OptolithData {
     familiar_special_abilities: IdMap<FamiliarSpecialAbility>,
     fate_point_sex_special_abilities: IdMap<FatePointSexSpecialAbility>,
     fate_point_special_abilities: IdMap<FatePointSpecialAbility>,
+    focus_rules: IdMap<FocusRule>,
     fools_hat_enchantments: IdMap<FoolsHatEnchantment>,
     general_special_abilities: IdMap<GeneralSpecialAbility>,
     geode_rituals: IdMap<GeodeRitual>,
@@ -379,6 +386,7 @@ pub struct OptolithData {
     magical_tradition_placeholders: IdMap<MagicalTraditionPlaceholder>,
     magic_style_special_abilities: IdMap<MagicStyleSpecialAbility>,
     melee_combat_techniques: IdMap<MeleeCombatTechnique>,
+    optional_rules: IdMap<OptionalRule>,
     orb_enchantments: IdMap<OrbEnchantment>,
     pact_categories: IdMap<PactCategory>,
     pact_gifts: IdMap<PactGift>,
@@ -394,6 +402,7 @@ pub struct OptolithData {
     races: IdMap<Race>,
     ranged_combat_techniques: IdMap<RangedCombatTechnique>,
     reaches: IdMap<Reach>,
+    regions: IdMap<Region>,
     ring_enchantments: IdMap<RingEnchantment>,
     rituals: IdMap<Ritual>,
     scripts: IdMap<Script>,
@@ -560,6 +569,7 @@ impl OptolithData {
             builder.map_u32(FATE_POINT_SEX_SPECIAL_ABILITY_DIR)?;
         let fate_point_special_abilities =
             builder.map_u32(FATE_POINT_SPECIAL_ABILITY_DIR)?;
+        let focus_rules = builder.map_u32(FOCUS_RULE_DIR)?;
         let fools_hat_enchantments =
             builder.map_u32(FOOLS_HAT_ENCHANTMENT_DIR)?;
         let general_special_abilities =
@@ -594,6 +604,7 @@ impl OptolithData {
             builder.map_u32(MAGIC_STYLE_SPECIAL_ABILITY_DIR)?;
         let melee_combat_techniques =
             builder.map_u32(MELEE_COMBAT_TECHNIQUE_DIR)?;
+        let optional_rules = builder.map_u32(OPTIONAL_RULE_DIR)?;
         let orb_enchantments = builder.map_u32(ORB_ENCHANTMENT_DIR)?;
         let pact_categories = builder.map_u32(PACT_CATEGORY_DIR)?;
         let pact_gifts = builder.map_u32(PACT_GIFT_DIR)?;
@@ -611,6 +622,7 @@ impl OptolithData {
         let ranged_combat_techniques =
             builder.map_u32(RANGED_COMBAT_TECHNIQUE_DIR)?;
         let reaches = builder.map_u32(REACH_DIR)?;
+        let regions = builder.map_u32(REGION_DIR)?;
         let ring_enchantments = builder.map_u32(RING_ENCHANTMENT_DIR)?;
         let rituals = builder.map_u32(RITUAL_DIR)?;
         let scripts = builder.map_u32(SCRIPT_DIR)?;
@@ -702,6 +714,7 @@ impl OptolithData {
             familiar_special_abilities,
             fate_point_sex_special_abilities,
             fate_point_special_abilities,
+            focus_rules,
             fools_hat_enchantments,
             general_special_abilities,
             geode_rituals,
@@ -726,6 +739,7 @@ impl OptolithData {
             magical_tradition_placeholders,
             magic_style_special_abilities,
             melee_combat_techniques,
+            optional_rules,
             orb_enchantments,
             pact_categories,
             pact_gifts,
@@ -740,6 +754,7 @@ impl OptolithData {
             races,
             ranged_combat_techniques,
             reaches,
+            regions,
             ring_enchantments,
             rituals,
             scripts,
@@ -998,6 +1013,10 @@ impl OptolithData {
         self.fate_point_special_abilities.get(&id)
     }
 
+    pub fn get_focus_rule(&self, id: u32) -> Option<&FocusRule> {
+        self.focus_rules.get(&id)
+    }
+
     pub fn get_fools_hat_enchantment(&self, id: u32)
             -> Option<&FoolsHatEnchantment> {
         self.fools_hat_enchantments.get(&id)
@@ -1105,6 +1124,10 @@ impl OptolithData {
         self.melee_combat_techniques.get(&id)
     }
 
+    pub fn get_optional_rule(&self, id: u32) -> Option<&OptionalRule> {
+        self.optional_rules.get(&id)
+    }
+
     pub fn get_orb_enchantment(&self, id: u32) -> Option<&OrbEnchantment> {
         self.orb_enchantments.get(&id)
     }
@@ -1161,6 +1184,10 @@ impl OptolithData {
 
     pub fn get_reach(&self, id: u32) -> Option<&Reach> {
         self.reaches.get(&id)
+    }
+
+    pub fn get_region(&self, id: u32) -> Option<&Region> {
+        self.regions.get(&id)
     }
 
     pub fn get_ring_enchantment(&self, id: u32) -> Option<&RingEnchantment> {
@@ -1392,6 +1419,8 @@ impl OptolithData {
                 to_dyn(self.get_fate_point_sex_special_ability(int_id)),
             Category::FatePointSpecialAbilities =>
                 to_dyn(self.get_fate_point_special_ability(int_id)),
+            Category::FocusRules =>
+                to_dyn(self.get_focus_rule(int_id)),
             Category::FoolsHatEnchantments =>
                 to_dyn(self.get_fools_hat_enchantment(int_id)),
             Category::GeneralSpecialAbilities =>
@@ -1440,6 +1469,8 @@ impl OptolithData {
                 to_dyn(self.get_magic_style_special_ability(int_id)),
             Category::MeleeCombatTechniques =>
                 to_dyn(self.get_melee_combat_technique(int_id)),
+            Category::OptionalRules =>
+                to_dyn(self.get_optional_rule(int_id)),
             Category::OrbEnchantments =>
                 to_dyn(self.get_orb_enchantment(int_id)),
             Category::PactCategories =>
@@ -1469,12 +1500,16 @@ impl OptolithData {
                 to_dyn(self.get_ranged_combat_technique(int_id)),
             Category::Reaches =>
                 to_dyn(self.get_reach(int_id)),
+            Category::Regions =>
+                to_dyn(self.get_region(int_id)),
             Category::RingEnchantments =>
                 to_dyn(self.get_ring_enchantment(int_id)),
             Category::Rituals =>
                 to_dyn(self.get_ritual(int_id)),
             Category::Scripts =>
                 to_dyn(self.get_script(int_id)),
+            Category::Sermons =>
+                to_dyn(self.get_sermon(int_id)),
             Category::SexPractices =>
                 to_dyn(self.get_sex_practice(int_id)),
             Category::SexSpecialAbilities =>

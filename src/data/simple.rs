@@ -48,6 +48,14 @@ where
     }
 }
 
+pub struct AnimalTypeCategory;
+
+impl CategoryProvider for AnimalTypeCategory {
+    const CATEGORY: Category = Category::AnimalTypes;
+}
+
+pub type AnimalType = SimpleEntity<AnimalTypeCategory>;
+
 pub struct ArmorTypeCategory;
 
 impl CategoryProvider for ArmorTypeCategory {

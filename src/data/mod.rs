@@ -77,12 +77,6 @@ use crate::data::activatable::special_ability::{
 };
 use crate::data::aspect::Aspect;
 use crate::data::attribute::Attribute;
-use crate::data::status_effect::{
-    Condition,
-    Disease,
-    Poison,
-    State
-};
 use crate::data::derived_characteristic::DerivedCharacteristic;
 use crate::data::experience_level::ExperienceLevel;
 use crate::data::item::{EquipmentPackage, ItemGroup};
@@ -97,6 +91,7 @@ use crate::data::race::Race;
 use crate::data::rule::{FocusRule, OptionalRule};
 use crate::data::sex::SexPractice;
 use crate::data::simple::{
+    AnimalType,
     ArmorType,
     Brew,
     CombatSpecialAbilityGroup,
@@ -133,6 +128,13 @@ use crate::data::skill::non_profane::magical::{
     Ritual,
     Spell,
     ZibiljaRitual
+};
+use crate::data::status_effect::{
+    AnimalDisease,
+    Condition,
+    Disease,
+    Poison,
+    State
 };
 use crate::id::{Category, Id, Identifiable};
 use crate::error::OptolithDataResult;
@@ -178,9 +180,11 @@ const ADVANCED_SKILL_SPECIAL_ABILITY_DIR: &str =
     "AdvancedSkillSpecialAbilities";
 const ADVANTAGE_DIR: &str = "Advantages";
 const ANCESTOR_GLYPH_DIR: &str = "AncestorGlyphs";
+const ANIMAL_DISEASE_DIR: &str = "AnimalDiseases";
 const ANIMAL_SHAPE_DIR: &str = "AnimalShapes";
 const ANIMAL_SHAPE_PATH_DIR: &str = "AnimalShapePaths";
 const ANIMAL_SHAPE_SIZE_DIR: &str = "AnimalShapeSizes";
+const ANIMAL_TYPE_DIR: &str = "AnimalTypes";
 const ANIMIST_POWER_DIR: &str = "AnimistPowers";
 const ARCANE_BARD_TRADITION_DIR: &str = "ArcaneBardTraditions";
 const ARCANE_DANCER_TRADITION_DIR: &str = "ArcaneDancerTraditions";
@@ -297,6 +301,14 @@ const WAND_ENCHANTMENT_DIR: &str = "WandEnchantments";
 const WEAPON_ENCHANTMENT_DIR: &str = "WeaponEnchantments";
 const ZIBILJA_RITUAL_DIR: &str = "ZibiljaRituals";
 
+const EXCLUDED_FILES: &[&str] = &[
+    "25_Waldschrate.yml",
+    "5_Toad-Poison.yml",
+    "53_Mond.yml",
+    "128_Keulenweihe.yml",
+    "129_Keulenwurf.yml"
+];
+
 #[derive(Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum UIValue {
@@ -318,9 +330,11 @@ pub struct OptolithData {
     advanced_skill_special_abilities: IdMap<AdvancedSkillSpecialAbility>,
     advantages: IdMap<Advantage>,
     ancestor_glyphs: IdMap<AncestorGlyph>,
+    animal_diseases: IdMap<AnimalDisease>,
     animal_shapes: IdMap<AnimalShape>,
     animal_shape_paths: IdMap<AnimalShapePath>,
     animal_shape_sizes: IdMap<AnimalShapeSize>,
+    animal_types: IdMap<AnimalType>,
     animist_powers: IdMap<AnimistPower>,
     arcane_bard_traditions: IdMap<ArcaneBardTradition>,
     arcane_dancer_traditions: IdMap<ArcaneDancerTradition>,
@@ -436,7 +450,7 @@ pub struct OptolithData {
 
 fn is_placeholder(path: &str) -> bool {
     // TODO remove once sorted out
-    if path == "25_Waldschrate.yml" || path == "5_Toad-Poison.yml" {
+    if EXCLUDED_FILES.contains(&path) {
         return true;
     }
 
@@ -510,9 +524,11 @@ impl OptolithData {
             builder.map_u32(ADVANCED_SKILL_SPECIAL_ABILITY_DIR)?;
         let advantages = builder.map_u32(ADVANTAGE_DIR)?;
         let ancestor_glyphs = builder.map_u32(ANCESTOR_GLYPH_DIR)?;
+        let animal_diseases = builder.map_u32(ANIMAL_DISEASE_DIR)?;
         let animal_shapes = builder.map_u32(ANIMAL_SHAPE_DIR)?;
         let animal_shape_paths = builder.map_u32(ANIMAL_SHAPE_PATH_DIR)?;
         let animal_shape_sizes = builder.map_u32(ANIMAL_SHAPE_SIZE_DIR)?;
+        let animal_types = builder.map_u32(ANIMAL_TYPE_DIR)?;
         let animist_powers = builder.map_u32(ANIMIST_POWER_DIR)?;
         let arcane_bard_traditions =
             builder.map_u32(ARCANE_BARD_TRADITION_DIR)?;
@@ -671,9 +687,11 @@ impl OptolithData {
             advanced_skill_special_abilities,
             advantages,
             ancestor_glyphs,
+            animal_diseases,
             animal_shapes,
             animal_shape_paths,
             animal_shape_sizes,
+            animal_types,
             animist_powers,
             arcane_bard_traditions,
             arcane_dancer_traditions,
@@ -823,6 +841,10 @@ impl OptolithData {
         self.ancestor_glyphs.get(&id)
     }
 
+    pub fn get_animal_disease(&self, id: u32) -> Option<&AnimalDisease> {
+        self.animal_diseases.get(&id)
+    }
+
     pub fn get_animal_shape(&self, id: u32) -> Option<&AnimalShape> {
         self.animal_shapes.get(&id)
     }
@@ -833,6 +855,10 @@ impl OptolithData {
 
     pub fn get_animal_shape_size(&self, id: u32) -> Option<&AnimalShapeSize> {
         self.animal_shape_sizes.get(&id)
+    }
+
+    pub fn get_animal_type(&self, id: u32) -> Option<&AnimalType> {
+        self.animal_types.get(&id)
     }
 
     pub fn get_animist_power(&self, id: u32) -> Option<&AnimistPower> {
@@ -1333,12 +1359,16 @@ impl OptolithData {
                 to_dyn(self.get_advantage(int_id)),
             Category::AncestorGlyphs =>
                 to_dyn(self.get_ancestor_glyph(int_id)),
+            Category::AnimalDiseases =>
+                to_dyn(self.get_animal_disease(int_id)),
             Category::AnimalShapes =>
                 to_dyn(self.get_animal_shape(int_id)),
             Category::AnimalShapePaths =>
                 to_dyn(self.get_animal_shape_path(int_id)),
             Category::AnimalShapeSizes =>
                 to_dyn(self.get_animal_shape_size(int_id)),
+            Category::AnimalTypes =>
+                to_dyn(self.get_animal_type(int_id)),
             Category::AnimistPowers =>
                 to_dyn(self.get_animist_power(int_id)),
             Category::ArcaneBardTraditions =>

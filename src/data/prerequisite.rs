@@ -206,6 +206,31 @@ pub enum WhenSingle {
 
 pub type When = Vec<WhenSingle>;
 
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type")]
+#[serde(deny_unknown_fields)]
+pub enum SpecialActivatablePrerequisite {
+    MagicalTradition {
+
+        /// Can a member of the tradition learn rituals?
+        #[serde(default)]
+        #[serde(rename = "canLearnRituals")]
+        can_learn_rituals: bool,
+
+        /// Can this magical tradition bind familiars?
+        #[serde(default)]
+        #[serde(rename = "canBindFamiliars")]
+        can_bind_familiars: bool
+    },
+    BlessedTradition {
+
+        /// Is this a schamanistic tradition?
+        #[serde(default)]
+        #[serde(rename = "isShamanistic")]
+        is_shamanistic: bool
+    }
+}
+
 // TODO add deny_unknown_fields to this, TraitPrerequisiteNoDisplayNoWhen,
 // DisplayPrerequisite and WhenPrerequisite once
 // https://github.com/serde-rs/serde/issues/1547 is fixed.
@@ -224,6 +249,7 @@ pub enum GeneralPrerequisiteNoDisplayNoWhen {
     Activatable(ActivatablePrerequisite),
     ActivatableMultiEntry(ActivatableMultiEntryPrerequisite),
     ActivatableMultiSelect(ActivatableMultiSelectPrerequisite),
+    ActivatableSpecial(SpecialActivatablePrerequisite),
     Increasable(IncreasablePrerequisite),
     IncreasableMultiEntry(IncreasableMultiEntryPrerequisite),
     TraditionCanUseRituals

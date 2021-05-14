@@ -93,16 +93,27 @@ pub enum Resistance {
     Toughness
 }
 
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct DiseaseCauseLocalization {
+
+    /// The cause's name.
+    pub name: String,
+
+    /// The chance to get infected by this cause. If present for this language,
+    /// this overrides the universal `chance` property; they cannot be used at
+    /// the same time.
+    pub chance: Option<String>
+}
+
 /// A single disease cause.
 #[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct DiseaseCause {
 
-    /// The cause's name in different languages.
-    pub name: Translations<String>,
-
     /// The change to get infected by this cause, in percent.
-    pub chance: Option<u32>
+    pub chance: Option<u32>,
+    pub translations: Translations<DiseaseCauseLocalization>
 }
 
 #[derive(Deserialize, Serialize)]
@@ -206,6 +217,84 @@ impl Identifiable for Disease {
 }
 
 impl Translatable for Disease {
+    type Localization = DiseaseLocalization;
+
+    fn translations(&self) -> &Translations<DiseaseLocalization> {
+        &self.translations
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct CommunicationCauseLocalization {
+
+    /// The cause's name.
+    pub name: String,
+
+    /// The chance to get infected by this cause. If present for this language,
+    /// this overrides the universal `chance` property; they cannot be used at
+    /// the same time.
+    pub chance: Option<String>,
+
+    /// An additional note about this communication cause.
+    pub node: Option<String>
+}
+
+/// A single cause.
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct CommunicationCause {
+
+    /// The change to get infected by this cause, in percent.
+    pub chance: Option<u32>,
+    pub translations: Translations<CommunicationCauseLocalization>
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
+pub enum Communicability {
+    NonCommunicable,
+    Communicable(Vec<CommunicationCause>)
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct AnimalDisease {
+    pub id: u32,
+
+    /// The disease's level.
+    pub level: u32,
+
+    /// Depending on the disease, apply Spirit or Toughness as a penalty to the
+    /// disease roll.
+    pub resistance: Resistance,
+
+    /// What causes the disease? The GM rolls 1D20 to see if a character gets
+    /// infected. If the infection check succeeds, the GM makes a disease check
+    /// to determine the severity of the infection.
+    pub cause: Vec<DiseaseCause>,
+
+    /// The animal types this disease applies to. If empty, it applies to all
+    /// animal types.
+    #[serde(rename = "animalTypes")]
+    pub animal_types: Vec<u32>,
+
+    /// If the animal disease is communicable to intelligent creatures and the
+    /// circumstances of a communication.
+    #[serde(rename = "communicabilityToIntelligentCreatures")]
+    pub communicability_to_intelligent_creatures: Communicability,
+    pub src: SourceRefs,
+    pub translations: Translations<DiseaseLocalization>
+}
+
+impl Identifiable for AnimalDisease {
+    fn id(&self) -> Id {
+        Id::new(Category::AnimalDiseases, self.id)
+    }
+}
+
+impl Translatable for AnimalDisease {
     type Localization = DiseaseLocalization;
 
     fn translations(&self) -> &Translations<DiseaseLocalization> {

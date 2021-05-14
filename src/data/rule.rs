@@ -52,15 +52,38 @@ impl Translatable for FocusRule {
 }
 
 #[derive(Deserialize, Serialize)]
+#[serde(tag = "type", content = "value")]
+#[serde(deny_unknown_fields)]
+pub enum OptionalRuleRelevance {
+    Extraneous,
+    Linked {
+
+        /// Does the optional rule have an impact on character creation or
+        /// character sheet and this effect has not been implemented in
+        /// Optolith yet? If \"true\", the optional rule cannot be activated.
+        #[serde(default)]
+        #[serde(rename = "isMissingImplementation")]
+        is_missing_implementation: bool
+    }
+}
+
+#[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct OptionalRule {
     pub id: u32,
 
-    /// Does the optional rule have an impact on character creation? If true,
-    /// it needs to be managed by the player so they can customize character
-    /// creation to their needs.
-    #[serde(rename = "isPrerequisite")]
-    pub is_prerequisite: bool,
+    /// The relevance of the optional rule for Optolith. It may be that it
+    /// influences character creating but it may also just influnce the
+    /// character sheet. If it is linked to systems in Optolith, it may be
+    /// specified if this rule has not been implemented in Optolith yet.
+    pub relevance: OptionalRuleRelevance,
+
+    /// Does the optional rule have an impact on character creation or
+    /// character sheet and this effect has not been implemented in Optolith
+    /// yet? If \"true\", the optional rule cannot be activated.
+    #[serde(default)]
+    #[serde(rename = "isMissingImplementation")]
+    pub is_missing_implementation: bool,
     pub src: SourceRefs,
     pub translations: Translations<RuleLocalization>
 }

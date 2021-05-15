@@ -1,10 +1,10 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SexPracticeLocalization {
     pub name: String,
@@ -20,7 +20,7 @@ impl Localization for SexPracticeLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SexPractice {
     pub id: u32,
@@ -34,7 +34,7 @@ impl Identifiable for SexPractice {
     }
 }
 
-impl Translatable for SexPractice {
+impl TranslationsTranslatable for SexPractice {
     type Localization = SexPracticeLocalization;
 
     fn translations(&self) -> &Translations<SexPracticeLocalization> {

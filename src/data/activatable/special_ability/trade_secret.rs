@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::ProfessionListPrerequisite;
 use crate::data::src::SourceRefs;
@@ -6,7 +6,7 @@ use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TradeSecretLocalization {
     pub name: String,
@@ -22,7 +22,7 @@ impl Localization for TradeSecretLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TradeSecret {
     pub id: u32,
@@ -45,7 +45,7 @@ impl Identifiable for TradeSecret {
     }
 }
 
-impl Translatable for TradeSecret {
+impl TranslationsTranslatable for TradeSecret {
     type Localization = TradeSecretLocalization;
 
     fn translations(&self) -> &Translations<TradeSecretLocalization> {

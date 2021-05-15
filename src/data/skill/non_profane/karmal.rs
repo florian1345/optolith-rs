@@ -1,4 +1,4 @@
-use crate::data::{Translatable, Translations};
+use crate::data::{TranslationsTranslatable, Translations};
 use crate::data::prerequisite::LiturgicalChantListPrerequisite;
 use crate::data::skill::non_profane::{
     CheckMod,
@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 
 use std::marker::PhantomData;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ImprovableKarmalSkill<C: CategoryProvider> {
     pub id: u32,
@@ -63,7 +63,7 @@ impl<C: CategoryProvider> Identifiable for ImprovableKarmalSkill<C> {
     }
 }
 
-impl<C> Translatable for ImprovableKarmalSkill<C>
+impl<C> TranslationsTranslatable for ImprovableKarmalSkill<C>
 where
     C: CategoryProvider
 {
@@ -74,6 +74,7 @@ where
     }
 }
 
+#[derive(Clone)]
 pub struct LiturgicalChantCategory;
 
 impl CategoryProvider for LiturgicalChantCategory {
@@ -82,6 +83,7 @@ impl CategoryProvider for LiturgicalChantCategory {
 
 pub type LiturgicalChant = ImprovableKarmalSkill<LiturgicalChantCategory>;
 
+#[derive(Clone)]
 pub struct CeremonyCategory;
 
 impl CategoryProvider for CeremonyCategory {
@@ -90,7 +92,8 @@ impl CategoryProvider for CeremonyCategory {
 
 pub type Ceremony = ImprovableKarmalSkill<CeremonyCategory>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Blessing {
     pub id: u32,
     pub src: SourceRefs,
@@ -103,7 +106,7 @@ impl Identifiable for Blessing {
     }
 }
 
-impl Translatable for Blessing {
+impl TranslationsTranslatable for Blessing {
     type Localization = SmallNonProfaneSkillLocalization;
 
     fn translations(&self) -> &Translations<SmallNonProfaneSkillLocalization> {
@@ -111,7 +114,7 @@ impl Translatable for Blessing {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum KarmalWorksId {

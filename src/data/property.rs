@@ -1,10 +1,10 @@
-use crate::data::Translatable;
+use crate::data::TranslationsTranslatable;
 use crate::data::simple::{SimpleLocalization, SimpleTranslations};
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Property {
     pub id: u32,
@@ -18,7 +18,7 @@ impl Identifiable for Property {
     }
 }
 
-impl Translatable for Property {
+impl TranslationsTranslatable for Property {
     type Localization = SimpleLocalization;
 
     fn translations(&self) -> &SimpleTranslations {

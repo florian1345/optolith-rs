@@ -53,6 +53,26 @@ pub enum SelectionId {
     String(String)
 }
 
+impl SelectionId {
+    pub fn to_u32(&self) -> Option<u32> {
+        if let SelectionId::Integer(i) = self {
+            Some(*i)
+        }
+        else {
+            None
+        }
+    }
+
+    pub fn to_str(&self) -> Option<&str> {
+        if let SelectionId::String(s) = self {
+            Some(s)
+        }
+        else {
+            None
+        }
+    }
+}
+
 #[derive(Deserialize)]
 pub struct Activatable {
     pub sid: Option<SelectionId>,

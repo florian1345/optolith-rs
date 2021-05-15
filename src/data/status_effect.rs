@@ -1,11 +1,11 @@
-use crate::data::{Localization, Translations, Translatable};
+use crate::data::{Localization, Translations, TranslationsTranslatable};
 use crate::data::errata::Errata;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ConditionLocalization {
     pub name: String,
@@ -22,7 +22,7 @@ impl Localization for ConditionLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Condition {
     pub id: u32,
@@ -36,7 +36,7 @@ impl Identifiable for Condition {
     }
 }
 
-impl Translatable for Condition {
+impl TranslationsTranslatable for Condition {
     type Localization = ConditionLocalization;
 
     fn translations(&self) -> &Translations<ConditionLocalization> {
@@ -44,7 +44,7 @@ impl Translatable for Condition {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct StateLocalization {
     pub name: String,
@@ -58,7 +58,7 @@ impl Localization for StateLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct State {
     pub id: u32,
@@ -78,7 +78,7 @@ impl Identifiable for State {
     }
 }
 
-impl Translatable for State {
+impl TranslationsTranslatable for State {
     type Localization = StateLocalization;
 
     fn translations(&self) -> &Translations<StateLocalization> {
@@ -86,14 +86,14 @@ impl Translatable for State {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum Resistance {
     Spirit,
     Toughness
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct DiseaseCauseLocalization {
 
@@ -107,7 +107,7 @@ pub struct DiseaseCauseLocalization {
 }
 
 /// A single disease cause.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct DiseaseCause {
 
@@ -116,7 +116,7 @@ pub struct DiseaseCause {
     pub translations: Translations<DiseaseCauseLocalization>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 #[serde(deny_unknown_fields)]
 pub enum AlternativeName {
@@ -129,7 +129,7 @@ pub enum AlternativeName {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct DiseaseProgressDependent {
 
@@ -140,7 +140,7 @@ pub struct DiseaseProgressDependent {
     pub lessened: Option<String>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct DiseaseLocalization {
     pub name: String,
@@ -188,7 +188,7 @@ impl Localization for DiseaseLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Disease {
     pub id: u32,
@@ -216,7 +216,7 @@ impl Identifiable for Disease {
     }
 }
 
-impl Translatable for Disease {
+impl TranslationsTranslatable for Disease {
     type Localization = DiseaseLocalization;
 
     fn translations(&self) -> &Translations<DiseaseLocalization> {
@@ -224,7 +224,7 @@ impl Translatable for Disease {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CommunicationCauseLocalization {
 
@@ -241,7 +241,7 @@ pub struct CommunicationCauseLocalization {
 }
 
 /// A single cause.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CommunicationCause {
 
@@ -250,7 +250,7 @@ pub struct CommunicationCause {
     pub translations: Translations<CommunicationCauseLocalization>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum Communicability {
@@ -258,7 +258,7 @@ pub enum Communicability {
     Communicable(Vec<CommunicationCause>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct AnimalDisease {
     pub id: u32,
@@ -294,7 +294,7 @@ impl Identifiable for AnimalDisease {
     }
 }
 
-impl Translatable for AnimalDisease {
+impl TranslationsTranslatable for AnimalDisease {
     type Localization = DiseaseLocalization;
 
     fn translations(&self) -> &Translations<DiseaseLocalization> {
@@ -302,7 +302,7 @@ impl Translatable for AnimalDisease {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum PoisonLevel {
@@ -310,7 +310,7 @@ pub enum PoisonLevel {
     Fixed(u32)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum PoisonApplicationType {
     Weapon,
@@ -319,14 +319,14 @@ pub enum PoisonApplicationType {
     Contact
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum Legality {
     Legal,
     Illegal
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct IntoxicantLocalization {
 
@@ -344,7 +344,7 @@ pub struct IntoxicantLocalization {
     pub addiction: Option<String>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "category")]
 #[serde(deny_unknown_fields)]
 pub enum PlantPoisonData {
@@ -357,7 +357,7 @@ pub enum PlantPoisonData {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "sourceType", content = "categorySpecific")]
 #[serde(deny_unknown_fields)]
 pub enum PoisonSourceType {
@@ -367,7 +367,7 @@ pub enum PoisonSourceType {
     MineralPoison
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct PoisonProgressDependent {
 
@@ -378,7 +378,7 @@ pub struct PoisonProgressDependent {
     pub degraded: String
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct PoisonLocalization {
 
@@ -409,7 +409,7 @@ impl Localization for PoisonLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Poison {
     pub id: u32,
@@ -447,7 +447,7 @@ impl Identifiable for Poison {
     }
 }
 
-impl Translatable for Poison {
+impl TranslationsTranslatable for Poison {
     type Localization = PoisonLocalization;
 
     fn translations(&self) -> &Translations<PoisonLocalization> {

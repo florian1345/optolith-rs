@@ -1,9 +1,9 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum PublicationType {
     CoreRules,
@@ -13,7 +13,7 @@ pub enum PublicationType {
     Adventure
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct PrintingLocalization {
 
@@ -21,7 +21,7 @@ pub struct PrintingLocalization {
     pub number: u32
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Printing {
 
@@ -30,7 +30,7 @@ pub struct Printing {
     pub translations: Translations<PrintingLocalization>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct PublicationLocalization {
 
@@ -60,7 +60,7 @@ impl Localization for PublicationLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Publication {
     pub id: u32,
@@ -90,7 +90,7 @@ impl Identifiable for Publication {
     }
 }
 
-impl Translatable for Publication {
+impl TranslationsTranslatable for Publication {
     type Localization = PublicationLocalization;
 
     fn translations(&self) -> &Translations<PublicationLocalization> {

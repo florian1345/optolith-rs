@@ -1,4 +1,4 @@
-use crate::data::{Translatable, Translations};
+use crate::data::{TranslationsTranslatable, Translations};
 use crate::data::effects_localization::EffectsLocalization;
 use crate::data::prerequisite::InfluenceListPrerequisite;
 use crate::data::simple::{SimpleLocalization, SimpleTranslations};
@@ -8,14 +8,14 @@ use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum ElectiveSpellworkRestriction {
     Element(u32)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ElectiveSpellwork {
     #[serde(flatten)]
@@ -29,7 +29,7 @@ pub struct ElectiveSpellwork {
     pub restriction: Option<ElectiveSpellworkRestriction>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum RestrictedSpellwork {
@@ -48,7 +48,7 @@ pub enum RestrictedSpellwork {
     DamageIntelligent
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SpellworkAdjustment {
     pub id: StandardSpellworkId,
@@ -57,14 +57,14 @@ pub struct SpellworkAdjustment {
     pub value: u32
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SpellworkChange {
     pub replacement: SpellworkAdjustment,
     pub base: SpellworkAdjustment
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum LessonPackageSkillId {
@@ -75,7 +75,7 @@ pub enum LessonPackageSkillId {
     Ritual(u32)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LessonPackageSkill {
     pub id: LessonPackageSkillId,
@@ -84,7 +84,7 @@ pub struct LessonPackageSkill {
     pub value: i32
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LessonPackage {
     pub id: u32,
@@ -99,7 +99,7 @@ pub struct LessonPackage {
     pub translations: SimpleTranslations
 }
 
-impl Translatable for LessonPackage {
+impl TranslationsTranslatable for LessonPackage {
     type Localization = SimpleLocalization;
 
     fn translations(&self) -> &SimpleTranslations {
@@ -107,7 +107,7 @@ impl Translatable for LessonPackage {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Curriculum {
     pub id: u32,
@@ -133,7 +133,7 @@ impl Identifiable for Curriculum {
     }
 }
 
-impl Translatable for Curriculum {
+impl TranslationsTranslatable for Curriculum {
     type Localization = SimpleLocalization;
 
     fn translations(&self) -> &SimpleTranslations {
@@ -141,7 +141,7 @@ impl Translatable for Curriculum {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Guideline {
     pub id: u32,
@@ -158,7 +158,7 @@ impl Identifiable for Guideline {
     }
 }
 
-impl Translatable for Guideline {
+impl TranslationsTranslatable for Guideline {
     type Localization = SimpleLocalization;
 
     fn translations(&self) -> &SimpleTranslations {
@@ -166,7 +166,7 @@ impl Translatable for Guideline {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Influence {
     pub id: u32,
@@ -181,7 +181,7 @@ impl Identifiable for Influence {
     }
 }
 
-impl Translatable for Influence {
+impl TranslationsTranslatable for Influence {
     type Localization = EffectsLocalization;
 
     fn translations(&self) -> &Translations<EffectsLocalization> {

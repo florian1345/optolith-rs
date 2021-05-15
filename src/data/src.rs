@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use std::collections::HashMap;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Occurrence {
     #[serde(rename = "firstPage")]
@@ -11,7 +11,7 @@ pub struct Occurrence {
     pub last_page: Option<u32>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 #[serde(deny_unknown_fields)]
 pub enum Occurrences {
@@ -19,7 +19,7 @@ pub enum Occurrences {
     Many(Vec<Occurrence>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SourceRef {
     pub id: u32,

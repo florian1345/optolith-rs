@@ -1,4 +1,4 @@
-use crate::data::{Translatable, Translations};
+use crate::data::{TranslationsTranslatable, Translations};
 use crate::data::effects_localization::EffectsLocalization;
 use crate::data::prerequisite::PersonalityTraitListPrerequisite;
 use crate::data::src::SourceRefs;
@@ -6,7 +6,7 @@ use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct PersonalityTrait {
     pub id: u32,
@@ -28,7 +28,7 @@ impl Identifiable for PersonalityTrait {
     }
 }
 
-impl Translatable for PersonalityTrait {
+impl TranslationsTranslatable for PersonalityTrait {
     type Localization = EffectsLocalization;
 
     fn translations(&self) -> &Translations<EffectsLocalization> {

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 pub mod culture;
 pub mod profession;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct PackageSkill {
     pub id: u32,

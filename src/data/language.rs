@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::LanguageListOrByLevelPrerequisite;
 use crate::data::src::SourceRefs;
@@ -6,7 +6,7 @@ use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LanguageSpecializationLocalization {
 
@@ -18,14 +18,14 @@ pub struct LanguageSpecializationLocalization {
     pub description: Option<String>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LanguageSpecialization {
     pub id: u32,
     pub translations: Translations<LanguageSpecializationLocalization>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LanguageLocalization {
     pub name: String,
@@ -54,7 +54,7 @@ impl Localization for LanguageLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Continent {
     pub id: u32,
@@ -64,7 +64,7 @@ pub struct Continent {
     pub is_extinct: bool
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Language {
     pub id: u32,
@@ -83,7 +83,7 @@ pub struct Language {
     pub translations: Translations<LanguageLocalization>
 }
 
-impl Translatable for Language {
+impl TranslationsTranslatable for Language {
     type Localization = LanguageLocalization;
 
     fn translations(&self) -> &Translations<LanguageLocalization> {
@@ -97,13 +97,13 @@ impl Identifiable for Language {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct AssociatedLanguage {
     pub id: u32
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ScriptLocalization {
 
@@ -125,7 +125,7 @@ impl Localization for ScriptLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Script {
     pub id: u32,
@@ -150,7 +150,7 @@ impl Identifiable for Script {
     }
 }
 
-impl Translatable for Script {
+impl TranslationsTranslatable for Script {
     type Localization = ScriptLocalization;
 
     fn translations(&self) -> &Translations<ScriptLocalization> {

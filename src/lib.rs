@@ -7,7 +7,7 @@ pub mod error;
 pub mod id;
 pub mod util;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum Sex {
     #[serde(rename = "f")]

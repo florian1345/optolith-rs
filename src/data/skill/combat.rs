@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::skill::ImprovementCost;
 use crate::data::src::SourceRefs;
@@ -6,7 +6,7 @@ use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CombatTechniqueLocalization {
     pub name: String,
@@ -23,7 +23,7 @@ impl Localization for CombatTechniqueLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MeleeCombatTechnique {
     pub id: u32,
@@ -51,7 +51,7 @@ impl Identifiable for MeleeCombatTechnique {
     }
 }
 
-impl Translatable for MeleeCombatTechnique {
+impl TranslationsTranslatable for MeleeCombatTechnique {
     type Localization = CombatTechniqueLocalization;
 
     fn translations(&self) -> &Translations<CombatTechniqueLocalization> {
@@ -59,7 +59,7 @@ impl Translatable for MeleeCombatTechnique {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RangedCombatTechnique {
     pub id: u32,
@@ -83,7 +83,7 @@ impl Identifiable for RangedCombatTechnique {
     }
 }
 
-impl Translatable for RangedCombatTechnique {
+impl TranslationsTranslatable for RangedCombatTechnique {
     type Localization = CombatTechniqueLocalization;
 
     fn translations(&self) -> &Translations<CombatTechniqueLocalization> {
@@ -91,7 +91,7 @@ impl Translatable for RangedCombatTechnique {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum CombatTechniqueId {

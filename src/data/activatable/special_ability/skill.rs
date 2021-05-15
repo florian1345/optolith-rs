@@ -1,4 +1,4 @@
-use crate::data::{Translatable, Translations};
+use crate::data::{TranslationsTranslatable, Translations};
 use crate::data::activatable::special_ability::{
     AdvancedSpecialAbilities,
     APValue,
@@ -14,7 +14,7 @@ use crate::id::{Category, CategoryProvider, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SkillStyleSpecialAbility {
     pub id: u32,
@@ -42,7 +42,7 @@ impl Identifiable for SkillStyleSpecialAbility {
     }
 }
 
-impl Translatable for SkillStyleSpecialAbility {
+impl TranslationsTranslatable for SkillStyleSpecialAbility {
     type Localization = SpecialAbilityLocalization;
 
     fn translations(&self) -> &Translations<SpecialAbilityLocalization> {
@@ -50,6 +50,7 @@ impl Translatable for SkillStyleSpecialAbility {
     }
 }
 
+#[derive(Clone)]
 pub struct AdvancedSkillSpecialAbilityCategory;
 
 impl CategoryProvider for AdvancedSkillSpecialAbilityCategory {

@@ -1,10 +1,10 @@
-use crate::data::Translatable;
+use crate::data::TranslationsTranslatable;
 use crate::data::simple::{SimpleLocalization, SimpleTranslations};
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ExperienceLevel {
     pub id: u32,
@@ -44,7 +44,7 @@ impl Identifiable for ExperienceLevel {
     }
 }
 
-impl Translatable for ExperienceLevel {
+impl TranslationsTranslatable for ExperienceLevel {
     type Localization = SimpleLocalization;
 
     fn translations(&self) -> &SimpleTranslations {

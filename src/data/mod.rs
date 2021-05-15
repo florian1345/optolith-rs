@@ -79,6 +79,7 @@ use crate::data::activatable::special_ability::{
 use crate::data::aspect::Aspect;
 use crate::data::attribute::Attribute;
 use crate::data::derived_characteristic::DerivedCharacteristic;
+use crate::data::entity::Entity;
 use crate::data::experience_level::ExperienceLevel;
 use crate::data::item::{EquipmentPackage, ItemGroup};
 use crate::data::language::{Language, Script};
@@ -154,6 +155,7 @@ pub mod aspect;
 pub mod attribute;
 pub mod derived_characteristic;
 pub mod effects_localization;
+pub mod entity;
 pub mod errata;
 pub mod experience_level;
 pub mod item;
@@ -1362,267 +1364,266 @@ impl OptolithData {
             .flatten()
     }
 
-    pub fn get_as_translatable(&self, id: Id) -> Option<&dyn DynTranslatable> {
+    pub fn get_as_entity(&self, id: Id) -> Option<Entity> {
         let int_id = id.internal_id();
 
         match id.category() {
             Category::AdvancedCombatSpecialAbilities =>
-                to_dyn(self.get_advanced_combat_special_ability(int_id)),
+                to_entity(self.get_advanced_combat_special_ability(int_id)),
             Category::AdvancedKarmaSpecialAbilities =>
-                to_dyn(self.get_advanced_karma_special_ability(int_id)),
+                to_entity(self.get_advanced_karma_special_ability(int_id)),
             Category::AdvancedMagicalSpecialAbilities =>
-                to_dyn(self.get_advanced_magical_special_ability(int_id)),
+                to_entity(self.get_advanced_magical_special_ability(int_id)),
             Category::AdvancedSkillSpecialAbilities =>
-                to_dyn(self.get_advanced_skill_special_ability(int_id)),
+                to_entity(self.get_advanced_skill_special_ability(int_id)),
             Category::Advantages =>
-                to_dyn(self.get_advantage(int_id)),
+                to_entity(self.get_advantage(int_id)),
             Category::AncestorGlyphs =>
-                to_dyn(self.get_ancestor_glyph(int_id)),
+                to_entity(self.get_ancestor_glyph(int_id)),
             Category::AnimalDiseases =>
-                to_dyn(self.get_animal_disease(int_id)),
+                to_entity(self.get_animal_disease(int_id)),
             Category::AnimalShapes =>
-                to_dyn(self.get_animal_shape(int_id)),
+                to_entity(self.get_animal_shape(int_id)),
             Category::AnimalShapePaths =>
-                to_dyn(self.get_animal_shape_path(int_id)),
+                to_entity(self.get_animal_shape_path(int_id)),
             Category::AnimalShapeSizes =>
-                to_dyn(self.get_animal_shape_size(int_id)),
+                to_entity(self.get_animal_shape_size(int_id)),
             Category::AnimalTypes =>
-                to_dyn(self.get_animal_type(int_id)),
+                to_entity(self.get_animal_type(int_id)),
             Category::AnimistPowers =>
-                to_dyn(self.get_animist_power(int_id)),
+                to_entity(self.get_animist_power(int_id)),
             Category::ArcaneBardTraditions =>
-                to_dyn(self.get_arcane_bard_tradition(int_id)),
+                to_entity(self.get_arcane_bard_tradition(int_id)),
             Category::ArcaneDancerTraditions =>
-                to_dyn(self.get_arcane_dancer_tradition(int_id)),
+                to_entity(self.get_arcane_dancer_tradition(int_id)),
             Category::ArcaneOrbEnchantments =>
-                to_dyn(self.get_arcane_orb_enchantment(int_id)),
+                to_entity(self.get_arcane_orb_enchantment(int_id)),
             Category::ArmorTypes =>
-                to_dyn(self.get_armor_type(int_id)),
+                to_entity(self.get_armor_type(int_id)),
             Category::Aspects =>
-                to_dyn(self.get_aspect(int_id)),
+                to_entity(self.get_aspect(int_id)),
             Category::AttireEnchantments =>
-                to_dyn(self.get_attire_enchantment(int_id)),
+                to_entity(self.get_attire_enchantment(int_id)),
             Category::Attributes =>
-                to_dyn(self.get_attribute(int_id)),
+                to_entity(self.get_attribute(int_id)),
             Category::BlessedTraditions =>
-                to_dyn(self.get_blessed_tradition(int_id)),
+                to_entity(self.get_blessed_tradition(int_id)),
             Category::Blessings =>
-                to_dyn(self.get_blessing(int_id)),
+                to_entity(self.get_blessing(int_id)),
             Category::BowlEnchantments =>
-                to_dyn(self.get_bowl_enchantment(int_id)),
+                to_entity(self.get_bowl_enchantment(int_id)),
             Category::BrawlingSpecialAbilities =>
-                to_dyn(self.get_brawling_special_ability(int_id)),
+                to_entity(self.get_brawling_special_ability(int_id)),
             Category::Brews =>
-                to_dyn(self.get_brew(int_id)),
+                to_entity(self.get_brew(int_id)),
             Category::Cantrips =>
-                to_dyn(self.get_cantrip(int_id)),
+                to_entity(self.get_cantrip(int_id)),
             Category::CauldronEnchantments =>
-                to_dyn(self.get_cauldron_enchantment(int_id)),
+                to_entity(self.get_cauldron_enchantment(int_id)),
             Category::CeremonialItemSpecialAbilities =>
-                to_dyn(self.get_ceremonial_item_special_ability(int_id)),
+                to_entity(self.get_ceremonial_item_special_ability(int_id)),
             Category::Ceremonies =>
-                to_dyn(self.get_ceremony(int_id)),
+                to_entity(self.get_ceremony(int_id)),
             Category::ChronicleEnchantments =>
-                to_dyn(self.get_chronicle_enchantment(int_id)),
+                to_entity(self.get_chronicle_enchantment(int_id)),
             Category::CombatSpecialAbilities =>
-                to_dyn(self.get_combat_special_ability(int_id)),
+                to_entity(self.get_combat_special_ability(int_id)),
             Category::CombatSpecialAbilityGroups =>
-                to_dyn(self.get_combat_special_ability_group(int_id)),
+                to_entity(self.get_combat_special_ability_group(int_id)),
             Category::CombatStyleSpecialAbilities =>
-                to_dyn(self.get_combat_style_special_ability(int_id)),
+                to_entity(self.get_combat_style_special_ability(int_id)),
             Category::CombatTechniqueGroups =>
-                to_dyn(self.get_combat_technique_group(int_id)),
+                to_entity(self.get_combat_technique_group(int_id)),
             Category::CommandSpecialAbilities =>
-                to_dyn(self.get_command_special_ability(int_id)),
+                to_entity(self.get_command_special_ability(int_id)),
             Category::Conditions =>
-                to_dyn(self.get_condition(int_id)),
+                to_entity(self.get_condition(int_id)),
             Category::Cultures =>
-                to_dyn(self.get_culture(int_id)),
+                to_entity(self.get_culture(int_id)),
             Category::Curricula =>
-                to_dyn(self.get_curriculum(int_id)),
+                to_entity(self.get_curriculum(int_id)),
             Category::Curses =>
-                to_dyn(self.get_curse(int_id)),
+                to_entity(self.get_curse(int_id)),
             Category::DaggerRituals =>
-                to_dyn(self.get_dagger_ritual(int_id)),
+                to_entity(self.get_dagger_ritual(int_id)),
             Category::DerivedCharacteristics =>
-                to_dyn(self.get_derived_characteristic(int_id)),
+                to_entity(self.get_derived_characteristic(int_id)),
             Category::Disadvantages =>
-                to_dyn(self.get_disadvantage(int_id)),
+                to_entity(self.get_disadvantage(int_id)),
             Category::Diseases =>
-                to_dyn(self.get_disease(int_id)),
+                to_entity(self.get_disease(int_id)),
             Category::DominationRituals =>
-                to_dyn(self.get_domination_ritual(int_id)),
+                to_entity(self.get_domination_ritual(int_id)),
             Category::Elements =>
-                to_dyn(self.get_element(int_id)),
+                to_entity(self.get_element(int_id)),
             Category::ElvenMagicalSongs =>
-                to_dyn(self.get_elven_magical_song(int_id)),
+                to_entity(self.get_elven_magical_song(int_id)),
             Category::EquipmentPackages =>
-                to_dyn(self.get_equipment_package(int_id)),
+                to_entity(self.get_equipment_package(int_id)),
             Category::ExperienceLevels =>
-                to_dyn(self.get_experience_level(int_id)),
+                to_entity(self.get_experience_level(int_id)),
             Category::EyeColors =>
-                to_dyn(self.get_eye_color(int_id)),
+                to_entity(self.get_eye_color(int_id)),
             Category::FamiliarSpecialAbilities =>
-                to_dyn(self.get_familiar_special_ability(int_id)),
+                to_entity(self.get_familiar_special_ability(int_id)),
             Category::FamiliarsTricks =>
-                to_dyn(self.get_familiars_trick(int_id)),
+                to_entity(self.get_familiars_trick(int_id)),
             Category::FatePointSexSpecialAbilities =>
-                to_dyn(self.get_fate_point_sex_special_ability(int_id)),
+                to_entity(self.get_fate_point_sex_special_ability(int_id)),
             Category::FatePointSpecialAbilities =>
-                to_dyn(self.get_fate_point_special_ability(int_id)),
+                to_entity(self.get_fate_point_special_ability(int_id)),
             Category::FocusRules =>
-                to_dyn(self.get_focus_rule(int_id)),
+                to_entity(self.get_focus_rule(int_id)),
             Category::FoolsHatEnchantments =>
-                to_dyn(self.get_fools_hat_enchantment(int_id)),
+                to_entity(self.get_fools_hat_enchantment(int_id)),
             Category::GeneralSpecialAbilities =>
-                to_dyn(self.get_general_special_ability(int_id)),
+                to_entity(self.get_general_special_ability(int_id)),
             Category::GeodeRituals =>
-                to_dyn(self.get_geode_ritual(int_id)),
+                to_entity(self.get_geode_ritual(int_id)),
             Category::Guidelines =>
-                to_dyn(self.get_guideline(int_id)),
+                to_entity(self.get_guideline(int_id)),
             Category::HairColors =>
-                to_dyn(self.get_hair_color(int_id)),
+                to_entity(self.get_hair_color(int_id)),
             Category::Influences =>
-                to_dyn(self.get_influence(int_id)),
+                to_entity(self.get_influence(int_id)),
             Category::InstrumentEnchantments =>
-                to_dyn(self.get_instrument_enchantment(int_id)),
+                to_entity(self.get_instrument_enchantment(int_id)),
             Category::ItemGroups =>
-                to_dyn(self.get_item_group(int_id)),
+                to_entity(self.get_item_group(int_id)),
             Category::JesterTricks =>
-                to_dyn(self.get_jester_trick(int_id)),
+                to_entity(self.get_jester_trick(int_id)),
             Category::KarmaSpecialAbilities =>
-                to_dyn(self.get_karma_special_ability(int_id)),
+                to_entity(self.get_karma_special_ability(int_id)),
             Category::Krallenkettenzauber =>
-                to_dyn(self.get_krallenkettenzauber(int_id)),
+                to_entity(self.get_krallenkettenzauber(int_id)),
             Category::Languages =>
-                to_dyn(self.get_language(int_id)),
+                to_entity(self.get_language(int_id)),
             Category::LiturgicalChants =>
-                to_dyn(self.get_liturgical_chant(int_id)),
+                to_entity(self.get_liturgical_chant(int_id)),
             Category::LiturgicalChantGroups =>
-                to_dyn(self.get_liturgical_chant_group(int_id)),
+                to_entity(self.get_liturgical_chant_group(int_id)),
             Category::LiturgicalStyleSpecialAbilities =>
-                to_dyn(self.get_liturgical_style_special_ability(int_id)),
+                to_entity(self.get_liturgical_style_special_ability(int_id)),
             Category::LycantropicGifts =>
-                to_dyn(self.get_lycantropic_gift(int_id)),
+                to_entity(self.get_lycantropic_gift(int_id)),
             Category::MagicalDances =>
-                to_dyn(self.get_magical_dance(int_id)),
+                to_entity(self.get_magical_dance(int_id)),
             Category::MagicalMelodies =>
-                to_dyn(self.get_magical_melody(int_id)),
+                to_entity(self.get_magical_melody(int_id)),
             Category::MagicalRunes =>
-                to_dyn(self.get_magical_rune(int_id)),
+                to_entity(self.get_magical_rune(int_id)),
             Category::MagicalSpecialAbilities =>
-                to_dyn(self.get_magical_special_ability(int_id)),
+                to_entity(self.get_magical_special_ability(int_id)),
             Category::MagicalTraditions =>
-                to_dyn(self.get_magical_tradition(int_id)),
+                to_entity(self.get_magical_tradition(int_id)),
             Category::MagicalTraditionPlaceholders =>
-                to_dyn(self.get_magical_tradition_placeholder(int_id)),
+                to_entity(self.get_magical_tradition_placeholder(int_id)),
             Category::MagicStyleSpecialAbilities =>
-                to_dyn(self.get_magic_style_special_ability(int_id)),
+                to_entity(self.get_magic_style_special_ability(int_id)),
             Category::MeleeCombatTechniques =>
-                to_dyn(self.get_melee_combat_technique(int_id)),
+                to_entity(self.get_melee_combat_technique(int_id)),
             Category::OptionalRules =>
-                to_dyn(self.get_optional_rule(int_id)),
+                to_entity(self.get_optional_rule(int_id)),
             Category::OrbEnchantments =>
-                to_dyn(self.get_orb_enchantment(int_id)),
+                to_entity(self.get_orb_enchantment(int_id)),
             Category::PactCategories =>
-                to_dyn(self.get_pact_category(int_id)),
+                to_entity(self.get_pact_category(int_id)),
             Category::PactGifts =>
-                to_dyn(self.get_pact_gift(int_id)),
+                to_entity(self.get_pact_gift(int_id)),
             Category::Patrons =>
-                to_dyn(self.get_patron(int_id)),
+                to_entity(self.get_patron(int_id)),
             Category::PatronCategories =>
-                to_dyn(self.get_patron_categories(int_id)),
+                to_entity(self.get_patron_categories(int_id)),
             Category::PersonalityTraits =>
-                to_dyn(self.get_personality_trait(int_id)),
+                to_entity(self.get_personality_trait(int_id)),
             Category::Poisons =>
-                to_dyn(self.get_poison(int_id)),
+                to_entity(self.get_poison(int_id)),
             Category::Professions =>
-                to_dyn(self.get_profession(int_id)),
+                to_entity(self.get_profession(int_id)),
             Category::Properties =>
-                to_dyn(self.get_property(int_id)),
+                to_entity(self.get_property(int_id)),
             Category::ProtectiveWardingCircleSpecialAbilities =>
-                to_dyn(self.get_protective_warding_circle_special_ability(
+                to_entity(self.get_protective_warding_circle_special_ability(
                     int_id)),
             Category::Publications =>
-                to_dyn(self.get_publication(int_id)),
+                to_entity(self.get_publication(int_id)),
             Category::Races =>
-                to_dyn(self.get_race(int_id)),
+                to_entity(self.get_race(int_id)),
             Category::RangedCombatTechniques =>
-                to_dyn(self.get_ranged_combat_technique(int_id)),
+                to_entity(self.get_ranged_combat_technique(int_id)),
             Category::Reaches =>
-                to_dyn(self.get_reach(int_id)),
+                to_entity(self.get_reach(int_id)),
             Category::Regions =>
-                to_dyn(self.get_region(int_id)),
+                to_entity(self.get_region(int_id)),
             Category::RingEnchantments =>
-                to_dyn(self.get_ring_enchantment(int_id)),
+                to_entity(self.get_ring_enchantment(int_id)),
             Category::Rituals =>
-                to_dyn(self.get_ritual(int_id)),
+                to_entity(self.get_ritual(int_id)),
             Category::Scripts =>
-                to_dyn(self.get_script(int_id)),
+                to_entity(self.get_script(int_id)),
             Category::Sermons =>
-                to_dyn(self.get_sermon(int_id)),
+                to_entity(self.get_sermon(int_id)),
             Category::Services =>
-                to_dyn(self.get_service(int_id)),
+                to_entity(self.get_service(int_id)),
             Category::SexPractices =>
-                to_dyn(self.get_sex_practice(int_id)),
+                to_entity(self.get_sex_practice(int_id)),
             Category::SexSpecialAbilities =>
-                to_dyn(self.get_sex_special_ability(int_id)),
+                to_entity(self.get_sex_special_ability(int_id)),
             Category::SickleRituals =>
-                to_dyn(self.get_sickle_ritual(int_id)),
+                to_entity(self.get_sickle_ritual(int_id)),
             Category::SikaryanDrainSpecialAbilities =>
-                to_dyn(self.get_sikaryan_drain_special_ability(int_id)),
+                to_entity(self.get_sikaryan_drain_special_ability(int_id)),
             Category::Skills =>
-                to_dyn(self.get_skill(int_id)),
+                to_entity(self.get_skill(int_id)),
             Category::SkillGroups =>
-                to_dyn(self.get_skill_group(int_id)),
+                to_entity(self.get_skill_group(int_id)),
             Category::SkillStyleSpecialAbilities =>
-                to_dyn(self.get_skill_style_special_ability(int_id)),
+                to_entity(self.get_skill_style_special_ability(int_id)),
             Category::SocialStatuses =>
-                to_dyn(self.get_social_status(int_id)),
+                to_entity(self.get_social_status(int_id)),
             Category::SpecialAbilityGroups =>
-                to_dyn(self.get_special_ability_group(int_id)),
+                to_entity(self.get_special_ability_group(int_id)),
             Category::Spells =>
-                to_dyn(self.get_spell(int_id)),
+                to_entity(self.get_spell(int_id)),
             Category::SpellGroups =>
-                to_dyn(self.get_spell_group(int_id)),
+                to_entity(self.get_spell_group(int_id)),
             Category::SpellSwordEnchantments =>
-                to_dyn(self.get_spell_sword_enchantment(int_id)),
+                to_entity(self.get_spell_sword_enchantment(int_id)),
             Category::StaffEnchantments =>
-                to_dyn(self.get_staff_enchantment(int_id)),
+                to_entity(self.get_staff_enchantment(int_id)),
             Category::States =>
-                to_dyn(self.get_state(int_id)),
+                to_entity(self.get_state(int_id)),
             Category::Subjects =>
-                to_dyn(self.get_subject(int_id)),
+                to_entity(self.get_subject(int_id)),
             Category::ToyEnchantments =>
-                to_dyn(self.get_toy_enchantment(int_id)),
+                to_entity(self.get_toy_enchantment(int_id)),
             Category::TradeSecrets =>
-                to_dyn(self.get_trade_secret(int_id)),
+                to_entity(self.get_trade_secret(int_id)),
             Category::Tribes =>
-                to_dyn(self.get_tribe(int_id)),
+                to_entity(self.get_tribe(int_id)),
             Category::Trinkhornzauber =>
-                to_dyn(self.get_trinkhornzauber(int_id)),
+                to_entity(self.get_trinkhornzauber(int_id)),
             Category::VampiricGifts =>
-                to_dyn(self.get_vampiric_gift(int_id)),
+                to_entity(self.get_vampiric_gift(int_id)),
             Category::Visions =>
-                to_dyn(self.get_vision(int_id)),
+                to_entity(self.get_vision(int_id)),
             Category::WandEnchantments =>
-                to_dyn(self.get_wand_enchantment(int_id)),
+                to_entity(self.get_wand_enchantment(int_id)),
             Category::WeaponEnchantments =>
-                to_dyn(self.get_weapon_enchantment(int_id)),
+                to_entity(self.get_weapon_enchantment(int_id)),
             Category::ZibiljaRituals =>
-                to_dyn(self.get_zibilja_ritual(int_id)),
+                to_entity(self.get_zibilja_ritual(int_id)),
             _ => None // TODO update until all are implemented
         }
     }
 }
 
-// TODO why is this ridiculous thing needed?
-
-fn to_dyn<T: Translatable>(t: Option<&T>) -> Option<&dyn DynTranslatable> {
-    match t {
-        Some(t) => Some(t),
-        None => None
-    }
+fn to_entity<'a, T>(opt_t: Option<&'a T>) -> Option<Entity>
+where
+    Entity: From<&'a T>,
+    T: 'a
+{
+    Some(Entity::from(opt_t?))
 }
 
 /// A trait for localizations for entities. The minimal requirement for each
@@ -1641,35 +1642,45 @@ impl Localization for String {
     }
 }
 
+impl<L: Localization> Localization for &L {
+    fn name(&self) -> &str {
+        (*self).name()
+    }
+
+    fn name_as_select_option(&self) -> &str {
+        (*self).name_as_select_option()
+    }
+}
+
 /// A map of language identifiers to [Localization]s of type `L`.
 pub type Translations<L> = HashMap<String, L>;
 
-/// A trait for entities which are translatable, i.e. for which [Translation]s
-/// of some [Localization] type `L` exist.
-pub trait Translatable {
+/// A trait for entities which are translatable, i.e. for which translations
+/// of some [Localization] type exist.
+pub trait Translatable<'a, L: Localization> {
+    fn translate(&'a self, locale: &str) -> Option<L>;
+}
+
+/// A trait for entities which are translatable by providing [Translations] of
+/// some [Localization] type. The [Translatable] trait is implemented by
+/// blanket-implementation.
+pub trait TranslationsTranslatable {
     type Localization: Localization;
 
     fn translations(&self) -> &Translations<Self::Localization>;
+}
 
-    fn translation(&self, locale: &str) -> Option<&Self::Localization> {
+impl<'a, T, L> Translatable<'a, &'a L> for T
+where
+    L: Localization,
+    T: TranslationsTranslatable<Localization = L>
+{
+    fn translate(&'a self, locale: &str) -> Option<&'a L> {
         self.translations().get(locale)
     }
 }
 
-pub trait DynTranslatable {
-    fn translation(&self, locale: &str) -> Option<&dyn Localization>;
-}
-
-impl<T: Translatable> DynTranslatable for T {
-    fn translation(&self, locale: &str) -> Option<&dyn Localization> {
-        match Translatable::translation(self, locale) {
-            Some(t) => Some(t),
-            None => None
-        }
-    }
-}
-
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 pub enum SingleOrList<T> {
     Single(T),
@@ -1678,7 +1689,7 @@ pub enum SingleOrList<T> {
 
 pub type Ids = SingleOrList<u32>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 pub struct SuggestedUnsuitable {
     pub id: u32
 }

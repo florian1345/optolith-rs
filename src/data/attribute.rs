@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::id::{Category, Id, Identifiable};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct AttributeLocalization {
     pub name: String,
@@ -18,7 +18,7 @@ impl Localization for AttributeLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Attribute {
     pub id: u32,
@@ -31,7 +31,7 @@ impl Identifiable for Attribute {
     }
 }
 
-impl Translatable for Attribute {
+impl TranslationsTranslatable for Attribute {
     type Localization = AttributeLocalization;
 
     fn translations(&self) -> &Translations<AttributeLocalization> {

@@ -3,7 +3,7 @@ use crate::data::errata::Errata;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct LabelText {
 
@@ -14,7 +14,7 @@ pub struct LabelText {
     pub text: String
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct EffectsLocalization {
     pub name: String,

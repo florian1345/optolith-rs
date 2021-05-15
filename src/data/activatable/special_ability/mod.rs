@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::activatable::{
     APValue,
     SelectOptions,
@@ -26,7 +26,7 @@ pub mod skill;
 pub mod trade_secret;
 pub mod tradition;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SpecialAbilityLocalization {
 
@@ -85,7 +85,7 @@ impl Localization for SpecialAbilityLocalization {
 
 /// A normal special ability localization with a field `effect` instead of
 /// `rules`.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct EffectSpecialAbilityLocalization {
     
@@ -139,13 +139,13 @@ impl Localization for EffectSpecialAbilityLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum RestrictOptionsType {
     Element
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 #[serde(deny_unknown_fields)]
 pub enum RestrictOption {
@@ -160,7 +160,7 @@ pub enum RestrictOption {
     },
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 #[serde(deny_unknown_fields)]
 pub enum RestrictOptions {
@@ -168,21 +168,21 @@ pub enum RestrictOptions {
     Multiple(Vec<RestrictOption>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum ExternalEntry {
     MagicalTradition(u32)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum FromOption {
     Patron(u32)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Mapping {
     #[serde(rename = "fromOption")]
@@ -191,7 +191,7 @@ pub struct Mapping {
     to_advanced: u32
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type")]
 #[serde(deny_unknown_fields)]
 pub enum ComplexAdvancedSpecialAbility {
@@ -213,7 +213,7 @@ pub enum ComplexAdvancedSpecialAbility {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 #[serde(deny_unknown_fields)]
 pub enum AdvancedSpecialAbility {
@@ -233,7 +233,7 @@ pub enum AdvancedSpecialAbility {
 /// specify an option.
 pub type AdvancedSpecialAbilities = [AdvancedSpecialAbility; 3];
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SimpleSpecialAbility<C: CategoryProvider, L: Localization> {
     pub id: u32,
@@ -250,7 +250,7 @@ pub struct SimpleSpecialAbility<C: CategoryProvider, L: Localization> {
     category: PhantomData<C>
 }
 
-impl<C, L> Translatable for SimpleSpecialAbility<C, L>
+impl<C, L> TranslationsTranslatable for SimpleSpecialAbility<C, L>
 where
     C: CategoryProvider,
     L: Localization
@@ -272,7 +272,7 @@ where
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SkillInfluencingSpecialAbility<C, L>
 where
@@ -307,7 +307,7 @@ where
     category: PhantomData<C>
 }
 
-impl<C, L> Translatable for SkillInfluencingSpecialAbility<C, L>
+impl<C, L> TranslationsTranslatable for SkillInfluencingSpecialAbility<C, L>
 where
     C: CategoryProvider,
     L: Localization
@@ -329,7 +329,7 @@ where
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum SpecialAbilityType {
     GeneralSpecialAbility,
@@ -378,7 +378,7 @@ pub enum SpecialAbilityType {
     ChronicleEnchantment
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SpecialAbilityId {
     #[serde(rename = "type")]
@@ -386,6 +386,7 @@ pub struct SpecialAbilityId {
     pub value: u32
 }
 
+#[derive(Clone)]
 pub struct SpecialAbilityGroupCategory;
 
 impl CategoryProvider for SpecialAbilityGroupCategory {

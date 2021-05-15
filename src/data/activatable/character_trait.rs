@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::activatable::{
     APValue,
     SelectOptions,
@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-#[derive(Deserialize_repr, Serialize_repr)]
+#[derive(Clone, Deserialize_repr, Serialize_repr)]
 #[repr(u32)]
 pub enum TraitGroup {
     Profane = 1,
@@ -21,7 +21,7 @@ pub enum TraitGroup {
     Karmal = 3
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TraitLocalization {
 
@@ -79,7 +79,7 @@ impl Localization for TraitLocalization {
 
 /// The intrinsic trait of a character. This is used as a generic term for
 /// advantages and disadvantages.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Trait {
     pub id: u32,
@@ -119,7 +119,7 @@ pub struct Trait {
     pub translations: Translations<TraitLocalization>
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Advantage {
     #[serde(flatten)]
@@ -132,7 +132,7 @@ impl Identifiable for Advantage {
     }
 }
 
-impl Translatable for Advantage {
+impl TranslationsTranslatable for Advantage {
     type Localization = TraitLocalization;
 
     fn translations(&self) -> &Translations<TraitLocalization> {
@@ -140,7 +140,7 @@ impl Translatable for Advantage {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Disadvantage {
     #[serde(flatten)]
@@ -153,7 +153,7 @@ impl Identifiable for Disadvantage {
     }
 }
 
-impl Translatable for Disadvantage {
+impl TranslationsTranslatable for Disadvantage {
     type Localization = TraitLocalization;
 
     fn translations(&self) -> &Translations<TraitLocalization> {

@@ -1,11 +1,11 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RuleLocalization {
 
@@ -23,7 +23,7 @@ impl Localization for RuleLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct FocusRule {
     pub id: u32,
@@ -43,7 +43,7 @@ impl Identifiable for FocusRule {
     }
 }
 
-impl Translatable for FocusRule {
+impl TranslationsTranslatable for FocusRule {
     type Localization = RuleLocalization;
 
     fn translations(&self) -> &Translations<RuleLocalization> {
@@ -51,7 +51,7 @@ impl Translatable for FocusRule {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum OptionalRuleRelevance {
@@ -67,7 +67,7 @@ pub enum OptionalRuleRelevance {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct OptionalRule {
     pub id: u32,
@@ -94,7 +94,7 @@ impl Identifiable for OptionalRule {
     }
 }
 
-impl Translatable for OptionalRule {
+impl TranslationsTranslatable for OptionalRule {
     type Localization = RuleLocalization;
 
     fn translations(&self) -> &Translations<RuleLocalization> {

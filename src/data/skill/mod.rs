@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::simple::SimpleTranslations;
 use crate::data::src::SourceRefs;
@@ -10,21 +10,21 @@ pub mod combat;
 pub mod non_profane;
 
 /// This is one data structure used for "applications" and "uses".
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ExplicitApplication {
     pub id: i32,
     pub translations: SimpleTranslations
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum DerivedApplications {
     Regions,
     Diseases
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum Applications {
@@ -32,7 +32,7 @@ pub enum Applications {
     Explicit(Vec<ExplicitApplication>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum ImprovementCost {
     A,
@@ -41,7 +41,7 @@ pub enum ImprovementCost {
     D
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum EncumbranceAffected {
     #[serde(rename = "true")]
@@ -52,7 +52,7 @@ pub enum EncumbranceAffected {
     Maybe
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SkillLocalization {
     pub name: String,
@@ -74,7 +74,7 @@ impl Localization for SkillLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Skill {
     pub id: u32,
@@ -93,7 +93,7 @@ impl Identifiable for Skill {
     }
 }
 
-impl Translatable for Skill {
+impl TranslationsTranslatable for Skill {
     type Localization = SkillLocalization;
 
     fn translations(&self) -> &Translations<SkillLocalization> {
@@ -101,7 +101,7 @@ impl Translatable for Skill {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SkillGroupLocalization {
     pub name: String,
@@ -115,7 +115,7 @@ impl Localization for SkillGroupLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SkillGroup {
     pub id: u32,
@@ -129,7 +129,7 @@ impl Identifiable for SkillGroup {
     }
 }
 
-impl Translatable for SkillGroup {
+impl TranslationsTranslatable for SkillGroup {
     type Localization = SkillGroupLocalization;
 
     fn translations(&self) -> &Translations<SkillGroupLocalization> {

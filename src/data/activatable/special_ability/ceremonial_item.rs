@@ -1,4 +1,4 @@
-use crate::data::{Translatable, Translations};
+use crate::data::{TranslationsTranslatable, Translations};
 use crate::data::activatable::{
     APValue,
     SelectOptions,
@@ -14,7 +14,7 @@ use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CeremonialItemSpecialAbility {
     pub id: u32,
@@ -53,7 +53,7 @@ impl Identifiable for CeremonialItemSpecialAbility {
     }
 }
 
-impl Translatable for CeremonialItemSpecialAbility {
+impl TranslationsTranslatable for CeremonialItemSpecialAbility {
     type Localization = EffectSpecialAbilityLocalization;
 
     fn translations(&self) -> &Translations<Self::Localization> {

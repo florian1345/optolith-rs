@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 pub mod character_trait;
 pub mod special_ability;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum ActivatableType {
     Advantage,
@@ -60,7 +60,7 @@ pub enum ActivatableType {
     ChronicleEnchantment
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ActivatableId {
     #[serde(rename = "type")]
@@ -68,7 +68,7 @@ pub struct ActivatableId {
     pub value: u32
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CategorySelectOptionPrerequisite {
     pub target: ActivatableId,
@@ -76,7 +76,7 @@ pub struct CategorySelectOptionPrerequisite {
     pub level: Option<u32>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum CategoryPrerequisite {
@@ -90,7 +90,7 @@ pub enum CategoryPrerequisite {
     SelfRating(u32)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct DerivedFromAbilityEntryAPValue {
     pub id: u32,
@@ -98,7 +98,7 @@ pub struct DerivedFromAbilityEntryAPValue {
     pub ap_value: u32
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum DerivedFromAbilityAPValue {
@@ -118,7 +118,7 @@ pub enum DerivedFromAbilityAPValue {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct DerivedSelectOptionSkillMod {
 
@@ -128,7 +128,7 @@ pub struct DerivedSelectOptionSkillMod {
     pub translations: Option<SimpleTranslations>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RequiredSkillRating {
 
@@ -142,7 +142,7 @@ pub struct RequiredSkillRating {
 }
 
 /// Entries of the list of category IDs of derived select options.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct DerivedSelectOption {
     pub category: Category,
@@ -211,7 +211,7 @@ pub struct DerivedSelectOption {
     pub ap_value: Option<DerivedFromAbilityAPValue>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum SelectOptionAbility {
     Skill,
@@ -221,7 +221,7 @@ pub enum SelectOptionAbility {
 
 /// An identification of a select option for a specific activatable, if the
 /// activatable is apparent from context.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 #[serde(deny_unknown_fields)]
 pub enum SelectOptionId {
@@ -233,7 +233,7 @@ pub enum SelectOptionId {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 #[serde(deny_unknown_fields)]
 pub enum ExplicitSelectOptionLocalization {
@@ -270,7 +270,7 @@ impl Localization for ExplicitSelectOptionLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ExplicitSelectOption {
     pub id: SelectOptionId,
@@ -304,7 +304,7 @@ pub struct ExplicitSelectOption {
     pub translations: Option<Translations<ExplicitSelectOptionLocalization>>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum SelectOptions {
@@ -324,7 +324,7 @@ pub enum SelectOptions {
     Explicit(Vec<ExplicitSelectOption>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum APValue {
@@ -334,7 +334,7 @@ pub enum APValue {
     Option
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SkillApplication {
 
@@ -355,7 +355,7 @@ pub struct SkillApplication {
 
 pub type SkillApplications = Vec<SkillApplication>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SkillUse {
 

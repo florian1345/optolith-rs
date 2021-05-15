@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::EnhancementListPrerequisite;
 use crate::data::src::SourceRefs;
@@ -8,13 +8,13 @@ use serde::{Deserialize, Serialize};
 pub mod karmal;
 pub mod magical;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum CheckModTarget {
     Creature
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum SimpleCheckMod {
     #[serde(rename = "SPI")]
@@ -29,7 +29,7 @@ pub enum SimpleCheckMod {
     SummoningDifficulty
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CheckModOf {
     #[serde(rename = "type")]
@@ -40,7 +40,7 @@ pub struct CheckModOf {
 /// If the check will be modified by Spirit or Toughness, insert `SPI` or `TOU`
 /// respectively. If the higher is the characteristic to choose, insert an
 /// array with both instead.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 #[serde(deny_unknown_fields)]
 pub enum CheckMod {
@@ -48,7 +48,7 @@ pub enum CheckMod {
     Of(CheckModOf)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct EnhancementLocalization {
     pub name: String,
@@ -62,7 +62,7 @@ impl Localization for EnhancementLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Enhancement {
     pub id: u32,
@@ -77,7 +77,7 @@ pub struct Enhancement {
     pub translations: Translations<EnhancementLocalization>
 }
 
-impl Translatable for Enhancement {
+impl TranslationsTranslatable for Enhancement {
     type Localization = EnhancementLocalization;
 
     fn translations(&self) -> &Translations<EnhancementLocalization> {
@@ -89,7 +89,7 @@ pub type Enhancements = Vec<Enhancement>;
 
 /// Effect descriptions for a reached QL. You can set an effect for each QL or
 /// for each 2 QL.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(untagged)]
 #[serde(deny_unknown_fields)]
 pub enum QualityLevelEffectLocalization {
@@ -103,7 +103,7 @@ pub enum QualityLevelEffectLocalization {
     Pairs([String; 3])
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MainParameterLocalization {
 
@@ -114,7 +114,7 @@ pub struct MainParameterLocalization {
     pub abbr: String
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct NonProfaneSkillLocalization {
 
@@ -164,7 +164,7 @@ impl Localization for NonProfaneSkillLocalization {
 }
 
 /// A localization for blessings and cantrips.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SmallNonProfaneSkillLocalization {
 

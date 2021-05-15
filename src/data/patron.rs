@@ -1,11 +1,11 @@
-use crate::data::Translatable;
+use crate::data::TranslationsTranslatable;
 use crate::data::simple::{SimpleLocalization, SimpleTranslations};
 use crate::data::skill::ImprovementCost;
 use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type")]
 #[serde(deny_unknown_fields)]
 pub enum AdvantageSkillPatronPower {
@@ -30,7 +30,7 @@ pub enum AdvantageSkillPatronPower {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum CombatPatronPowerId {
     Attack,
@@ -41,7 +41,7 @@ pub enum CombatPatronPowerId {
     Protection
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type")]
 #[serde(deny_unknown_fields)]
 pub enum CombatPatronPower {
@@ -53,7 +53,7 @@ pub enum CombatPatronPower {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type")]
 #[serde(deny_unknown_fields)]
 pub enum AttributePatronPower {
@@ -73,7 +73,7 @@ pub type PatronPowers = (
     Vec<AttributePatronPower>
 );
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Patron {
     pub id: u32,
@@ -111,7 +111,7 @@ impl Identifiable for Patron {
     }
 }
 
-impl Translatable for Patron {
+impl TranslationsTranslatable for Patron {
     type Localization = SimpleLocalization;
 
     fn translations(&self) -> &SimpleTranslations {
@@ -119,7 +119,7 @@ impl Translatable for Patron {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct PatronCategory {
     pub id: u32,
@@ -137,7 +137,7 @@ impl Identifiable for PatronCategory {
     }
 }
 
-impl Translatable for PatronCategory {
+impl TranslationsTranslatable for PatronCategory {
     type Localization = SimpleLocalization;
 
     fn translations(&self) -> &SimpleTranslations {

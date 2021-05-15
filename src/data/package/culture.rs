@@ -1,7 +1,7 @@
 use crate::data::{
     Localization, 
     SuggestedUnsuitable,
-    Translatable,
+    TranslationsTranslatable,
     Translations
 };
 use crate::data::errata::Errata;
@@ -11,7 +11,7 @@ use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum ProfessionsException {
@@ -21,7 +21,7 @@ pub enum ProfessionsException {
 
 pub type ProfessionsExceptions = Vec<ProfessionsException>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CultureLocalization {
 
@@ -76,7 +76,7 @@ impl Localization for CultureLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Culture {
     pub id: u32,
@@ -167,7 +167,7 @@ impl Identifiable for Culture {
     }
 }
 
-impl Translatable for Culture {
+impl TranslationsTranslatable for Culture {
     type Localization = CultureLocalization;
 
     fn translations(&self) -> &Translations<CultureLocalization> {

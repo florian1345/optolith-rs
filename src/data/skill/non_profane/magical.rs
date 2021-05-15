@@ -1,4 +1,4 @@
-use crate::data::{Ids, Localization, Translatable, Translations};
+use crate::data::{Ids, Localization, TranslationsTranslatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::skill::non_profane::{
     CheckMod,
@@ -22,7 +22,7 @@ use serde::{Deserialize, Serialize};
 use std::marker::PhantomData;
 
 /// A spell or ritual.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MagicalSkill<C: CategoryProvider> {
     pub id: u32,
@@ -73,7 +73,7 @@ impl<C: CategoryProvider> Identifiable for MagicalSkill<C> {
     }
 }
 
-impl<C> Translatable for MagicalSkill<C>
+impl<C> TranslationsTranslatable for MagicalSkill<C>
 where
     C: CategoryProvider
 {
@@ -84,6 +84,7 @@ where
     }
 }
 
+#[derive(Clone)]
 pub struct SpellCategory;
 
 impl CategoryProvider for SpellCategory {
@@ -92,6 +93,7 @@ impl CategoryProvider for SpellCategory {
 
 pub type Spell = MagicalSkill<SpellCategory>;
 
+#[derive(Clone)]
 pub struct RitualCategory;
 
 impl CategoryProvider for RitualCategory {
@@ -100,7 +102,7 @@ impl CategoryProvider for RitualCategory {
 
 pub type Ritual = MagicalSkill<RitualCategory>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Cantrip {
     pub id: u32,
@@ -124,7 +126,7 @@ impl Identifiable for Cantrip {
     }
 }
 
-impl Translatable for Cantrip {
+impl TranslationsTranslatable for Cantrip {
     type Localization = SmallNonProfaneSkillLocalization;
 
     fn translations(&self) -> &Translations<SmallNonProfaneSkillLocalization> {
@@ -134,7 +136,7 @@ impl Translatable for Cantrip {
 
 /// Stores the information about a music tradition in the context of a magical
 /// dance/melody.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MusicTraditionSpecificData {
 
@@ -146,7 +148,7 @@ pub struct MusicTraditionSpecificData {
 }
 
 /// A localization of a magical dance or melody.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MusicalMagicLocalization {
 
@@ -180,7 +182,7 @@ impl Localization for MusicalMagicLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MagicalDance {
     pub id: u32,
@@ -204,7 +206,7 @@ impl Identifiable for MagicalDance {
     }
 }
 
-impl Translatable for MagicalDance {
+impl TranslationsTranslatable for MagicalDance {
     type Localization = MusicalMagicLocalization;
 
     fn translations(&self) -> &Translations<MusicalMagicLocalization> {
@@ -212,7 +214,7 @@ impl Translatable for MagicalDance {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MagicalMelody {
     pub id: u32,
@@ -239,7 +241,7 @@ impl Identifiable for MagicalMelody {
     }
 }
 
-impl Translatable for MagicalMelody {
+impl TranslationsTranslatable for MagicalMelody {
     type Localization = MusicalMagicLocalization;
 
     fn translations(&self) -> &Translations<MusicalMagicLocalization> {
@@ -247,7 +249,7 @@ impl Translatable for MagicalMelody {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ElvenMagicalSongLocalization {
 
@@ -268,7 +270,7 @@ impl Localization for ElvenMagicalSongLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ElvenMagicalSong {
     pub id: u32,
@@ -296,7 +298,7 @@ impl Identifiable for ElvenMagicalSong {
     }
 }
 
-impl Translatable for ElvenMagicalSong {
+impl TranslationsTranslatable for ElvenMagicalSong {
     type Localization = ElvenMagicalSongLocalization;
 
     fn translations(&self) -> &Translations<ElvenMagicalSongLocalization> {
@@ -306,7 +308,7 @@ impl Translatable for ElvenMagicalSong {
 
 /// A struct which contains localizations for spells or rituals which have no
 /// specified range or casting time.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct NoRangeTimeLocalization {
     pub name: String,
@@ -324,7 +326,7 @@ impl Localization for NoRangeTimeLocalization {
 
 /// A struct for rituals for one specific tradition that share many rules such
 /// that they do not appear in the schema.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SimpleMagicalSkill<C: CategoryProvider, L: Localization> {
     pub id: u32,
@@ -357,7 +359,7 @@ where
     }
 }
 
-impl<C, L> Translatable for SimpleMagicalSkill<C, L>
+impl<C, L> TranslationsTranslatable for SimpleMagicalSkill<C, L>
 where
     C: CategoryProvider,
     L: Localization
@@ -369,6 +371,7 @@ where
     }
 }
 
+#[derive(Clone)]
 pub struct CurseCategory;
 
 impl CategoryProvider for CurseCategory {
@@ -377,6 +380,7 @@ impl CategoryProvider for CurseCategory {
 
 pub type Curse = SimpleMagicalSkill<CurseCategory, NoRangeTimeLocalization>;
 
+#[derive(Clone)]
 pub struct DominationRitualCategory;
 
 impl CategoryProvider for DominationRitualCategory {
@@ -386,6 +390,7 @@ impl CategoryProvider for DominationRitualCategory {
 pub type DominationRitual =
     SimpleMagicalSkill<DominationRitualCategory, NoRangeTimeLocalization>;
 
+#[derive(Clone)]
 pub struct GeodeRitualCategory;
 
 impl CategoryProvider for GeodeRitualCategory {
@@ -395,7 +400,7 @@ impl CategoryProvider for GeodeRitualCategory {
 pub type GeodeRitual =
     SimpleMagicalSkill<GeodeRitualCategory, NonProfaneSkillLocalization>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ZibiljaRitual {
     pub id: u32,
@@ -436,7 +441,7 @@ impl Identifiable for ZibiljaRitual {
     }
 }
 
-impl Translatable for ZibiljaRitual {
+impl TranslationsTranslatable for ZibiljaRitual {
     type Localization = NonProfaneSkillLocalization;
 
     fn translations(&self) -> &Translations<NonProfaneSkillLocalization> {
@@ -444,7 +449,7 @@ impl Translatable for ZibiljaRitual {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct AnimistPower {
     pub id: u32,
@@ -467,7 +472,7 @@ impl Identifiable for AnimistPower {
     }
 }
 
-impl Translatable for AnimistPower {
+impl TranslationsTranslatable for AnimistPower {
     type Localization = NoRangeTimeLocalization;
 
     fn translations(&self) -> &Translations<NoRangeTimeLocalization> {
@@ -475,7 +480,7 @@ impl Translatable for AnimistPower {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct JesterTrick {
     pub id: u32,
@@ -500,7 +505,7 @@ impl Identifiable for JesterTrick {
     }
 }
 
-impl Translatable for JesterTrick {
+impl TranslationsTranslatable for JesterTrick {
     type Localization = NonProfaneSkillLocalization;
 
     fn translations(&self) -> &Translations<NonProfaneSkillLocalization> {
@@ -508,20 +513,20 @@ impl Translatable for JesterTrick {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum MagicalRuneCheckMod {
     CombatTechnique
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SpeedSeparatedMainParameterLocalization {
     pub slow: MainParameterLocalization,
     pub fast: MainParameterLocalization
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MagicalRuneLocalization {
 
@@ -563,7 +568,7 @@ impl Localization for MagicalRuneLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MagicalRune {
     pub id: u32,
@@ -586,7 +591,7 @@ impl Identifiable for MagicalRune {
     }
 }
 
-impl Translatable for MagicalRune {
+impl TranslationsTranslatable for MagicalRune {
     type Localization = MagicalRuneLocalization;
 
     fn translations(&self) -> &Translations<MagicalRuneLocalization> {
@@ -594,7 +599,7 @@ impl Translatable for MagicalRune {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum StandardSpellworkId {
@@ -602,7 +607,7 @@ pub enum StandardSpellworkId {
     Ritual(u32)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum SpellworkId {

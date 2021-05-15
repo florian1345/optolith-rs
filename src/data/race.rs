@@ -4,21 +4,21 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 use crate::data::{
     Localization,
     SuggestedUnsuitable,
-    Translatable,
+    TranslationsTranslatable,
     Translations
 };
 use crate::data::errata::Errata;
 use crate::data::src::SourceRefs;
 use crate::id::{Category, Id, Identifiable};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct AttributeAdjustment {
     pub id: u32,
     pub value: i32
 }
 
-#[derive(Deserialize_repr, Serialize_repr)]
+#[derive(Clone, Deserialize_repr, Serialize_repr)]
 #[repr(u32)]
 pub enum DieSides {
     Three = 3,
@@ -26,14 +26,14 @@ pub enum DieSides {
     Twenty = 20
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Die {
     pub amount: i32,
     pub sides: DieSides
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct StartingAge {
     #[serde(rename = "experienceLevelId")]
@@ -42,7 +42,7 @@ pub struct StartingAge {
     pub random: Die
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RaceVariantLocalization {
     pub name: String,
@@ -62,7 +62,7 @@ impl Localization for RaceVariantLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Phenotype {
     #[serde(rename = "commonCultures")]
@@ -77,7 +77,7 @@ pub struct Phenotype {
     pub size_random: Vec<Die>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RaceVariant {
     pub id: u32,
@@ -94,7 +94,7 @@ pub struct RaceVariant {
     pub phenotype: Phenotype
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum TypeSpecificData {
@@ -104,7 +104,7 @@ pub enum TypeSpecificData {
     WithoutVariants(Phenotype)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RaceLocalization {
     pub name: String,
@@ -133,7 +133,7 @@ impl Localization for RaceLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Race {
     pub id: u32,
@@ -181,7 +181,7 @@ impl Identifiable for Race {
     }
 }
 
-impl Translatable for Race {
+impl TranslationsTranslatable for Race {
     type Localization = RaceLocalization;
 
     fn translations(&self) -> &Translations<RaceLocalization> {

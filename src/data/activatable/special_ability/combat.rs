@@ -1,4 +1,4 @@
-use crate::data::{Translatable, Translations};
+use crate::data::{TranslationsTranslatable, Translations};
 use crate::data::activatable::{
     APValue,
     SelectOptions,
@@ -19,7 +19,7 @@ use serde::{Deserialize, Serialize};
 use std::marker::PhantomData;
 
 /// Type of combat special ability. The type id.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum CombatSpecialAbilityType {
     Passive,
@@ -27,7 +27,7 @@ pub enum CombatSpecialAbilityType {
     SpecialManeuver
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum AllCombatTechniqueRestriction {
@@ -38,7 +38,7 @@ pub enum AllCombatTechniqueRestriction {
     ExcludeTechniques(Vec<CombatTechniqueId>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum AllMeleeCombatTechniqueRestriction {
@@ -52,7 +52,7 @@ pub enum AllMeleeCombatTechniqueRestriction {
     ExcludeTechniques(Vec<u32>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum AllRangedCombatTechniqueRestriction {
@@ -63,7 +63,7 @@ pub enum AllRangedCombatTechniqueRestriction {
     ExcludeTechniques(Vec<u32>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum SpecificCombatTechniqueRestriction {
@@ -75,7 +75,7 @@ pub enum SpecificCombatTechniqueRestriction {
     Weapons(Vec<u32>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SpecificCombatTechnique {
     pub id: CombatTechniqueId,
@@ -88,7 +88,7 @@ pub struct SpecificCombatTechnique {
 /// associated combat techniques (\"–\"). 1: All; 2: All melee CTs; 3: All
 /// ranged CTs; 4: All melee CTs with parry; 5: All melee CTs used with
 /// one-handed weapons.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum ApplicableCombatTechniques {
@@ -100,7 +100,7 @@ pub enum ApplicableCombatTechniques {
     Specific(Vec<SpecificCombatTechnique>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CombatSpecialAbilitySuper<C: CategoryProvider> {
     pub id: u32,
@@ -141,7 +141,7 @@ impl<C: CategoryProvider> Identifiable for CombatSpecialAbilitySuper<C> {
     }
 }
 
-impl<C> Translatable for CombatSpecialAbilitySuper<C>
+impl<C> TranslationsTranslatable for CombatSpecialAbilitySuper<C>
 where
     C: CategoryProvider
 {
@@ -152,6 +152,7 @@ where
     }
 }
 
+#[derive(Clone)]
 pub struct CombatSpecialAbilityCategory;
 
 impl CategoryProvider for CombatSpecialAbilityCategory {
@@ -161,6 +162,7 @@ impl CategoryProvider for CombatSpecialAbilityCategory {
 pub type CombatSpecialAbility =
     CombatSpecialAbilitySuper<CombatSpecialAbilityCategory>;
 
+#[derive(Clone)]
 pub struct AdvancedCombatSpecialAbilityCategory;
 
 impl CategoryProvider for AdvancedCombatSpecialAbilityCategory {
@@ -170,6 +172,7 @@ impl CategoryProvider for AdvancedCombatSpecialAbilityCategory {
 pub type AdvancedCombatSpecialAbility =
     CombatSpecialAbilitySuper<AdvancedCombatSpecialAbilityCategory>;
 
+    #[derive(Clone)]
 pub struct BrawlingSpecialAbilityCategory;
 
 impl CategoryProvider for BrawlingSpecialAbilityCategory {
@@ -179,6 +182,7 @@ impl CategoryProvider for BrawlingSpecialAbilityCategory {
 pub type BrawlingSpecialAbility =
     CombatSpecialAbilitySuper<BrawlingSpecialAbilityCategory>;
 
+    #[derive(Clone)]
 pub struct CommandSpecialAbilityCategory;
 
 impl CategoryProvider for CommandSpecialAbilityCategory {
@@ -188,7 +192,7 @@ impl CategoryProvider for CommandSpecialAbilityCategory {
 pub type CommandSpecialAbility =
     CombatSpecialAbilitySuper<CommandSpecialAbilityCategory>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CombatStyleSpecialAbility {
     pub id: u32,
@@ -218,7 +222,7 @@ impl Identifiable for CombatStyleSpecialAbility {
     }
 }
 
-impl Translatable for CombatStyleSpecialAbility {
+impl TranslationsTranslatable for CombatStyleSpecialAbility {
     type Localization = SpecialAbilityLocalization;
 
     fn translations(&self) -> &Translations<SpecialAbilityLocalization> {

@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::activatable::{APValue, SelectOptions};
 use crate::data::errata::Errata;
 use crate::data::prerequisite::GeneralListOrByLevelPrerequisite;
@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 
 use std::marker::PhantomData;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SimpleEnchantmentLocalization {
     
@@ -79,7 +79,7 @@ impl Localization for SimpleEnchantmentLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct UnboundEnchantmentLocalization {
     
@@ -139,7 +139,7 @@ impl Localization for UnboundEnchantmentLocalization {
 
 /// The magic property. See `Properties` to get the id. Use DependingOnProperty
 /// if there is no clear property.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum Property {
@@ -147,7 +147,7 @@ pub enum Property {
     Single(Option<u32>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct BasicEnchantment<C: CategoryProvider, L: Localization> {
     pub id: u32,
@@ -175,7 +175,7 @@ where
     }
 }
 
-impl<C, L> Translatable for BasicEnchantment<C, L>
+impl<C, L> TranslationsTranslatable for BasicEnchantment<C, L>
 where
     C: CategoryProvider,
     L: Localization
@@ -187,7 +187,7 @@ where
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct CauldronEnchantment {
     pub id: u32,
@@ -213,7 +213,7 @@ impl Identifiable for CauldronEnchantment {
     }
 }
 
-impl Translatable for CauldronEnchantment {
+impl TranslationsTranslatable for CauldronEnchantment {
     type Localization = SimpleEnchantmentLocalization;
 
     fn translations(&self) -> &Translations<SimpleEnchantmentLocalization> {
@@ -224,6 +224,7 @@ impl Translatable for CauldronEnchantment {
 pub type SimpleEnchantment<C> =
     BasicEnchantment<C, SimpleEnchantmentLocalization>;
 
+#[derive(Clone)]
 pub struct ArcaneOrbEnchantmentCategory;
 
 impl CategoryProvider for ArcaneOrbEnchantmentCategory {
@@ -233,6 +234,7 @@ impl CategoryProvider for ArcaneOrbEnchantmentCategory {
 pub type ArcaneOrbEnchantment =
     SimpleEnchantment<ArcaneOrbEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct AttireEnchantmentCategory;
 
 impl CategoryProvider for AttireEnchantmentCategory {
@@ -241,6 +243,7 @@ impl CategoryProvider for AttireEnchantmentCategory {
 
 pub type AttireEnchantment = SimpleEnchantment<AttireEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct BowlEnchantmentCategory;
 
 impl CategoryProvider for BowlEnchantmentCategory {
@@ -249,6 +252,7 @@ impl CategoryProvider for BowlEnchantmentCategory {
 
 pub type BowlEnchantment = SimpleEnchantment<BowlEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct ChronicleEnchantmentCategory;
 
 impl CategoryProvider for ChronicleEnchantmentCategory {
@@ -258,6 +262,7 @@ impl CategoryProvider for ChronicleEnchantmentCategory {
 pub type ChronicleEnchantment =
     SimpleEnchantment<ChronicleEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct DaggerRitualCategory;
 
 impl CategoryProvider for DaggerRitualCategory {
@@ -266,6 +271,7 @@ impl CategoryProvider for DaggerRitualCategory {
 
 pub type DaggerRitual = SimpleEnchantment<DaggerRitualCategory>;
 
+#[derive(Clone)]
 pub struct FoolsHatEnchantmentCategory;
 
 impl CategoryProvider for FoolsHatEnchantmentCategory {
@@ -274,6 +280,7 @@ impl CategoryProvider for FoolsHatEnchantmentCategory {
 
 pub type FoolsHatEnchantment = SimpleEnchantment<FoolsHatEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct InstrumentEnchantmentCategory;
 
 impl CategoryProvider for InstrumentEnchantmentCategory {
@@ -283,6 +290,7 @@ impl CategoryProvider for InstrumentEnchantmentCategory {
 pub type InstrumentEnchantment =
     SimpleEnchantment<InstrumentEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct KrallenkettenzauberCategory;
 
 impl CategoryProvider for KrallenkettenzauberCategory {
@@ -291,6 +299,7 @@ impl CategoryProvider for KrallenkettenzauberCategory {
 
 pub type Krallenkettenzauber = SimpleEnchantment<KrallenkettenzauberCategory>;
 
+#[derive(Clone)]
 pub struct OrbEnchantmentCategory;
 
 impl CategoryProvider for OrbEnchantmentCategory {
@@ -299,6 +308,7 @@ impl CategoryProvider for OrbEnchantmentCategory {
 
 pub type OrbEnchantment = SimpleEnchantment<OrbEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct RingEnchantmentCategory;
 
 impl CategoryProvider for RingEnchantmentCategory {
@@ -307,6 +317,7 @@ impl CategoryProvider for RingEnchantmentCategory {
 
 pub type RingEnchantment = SimpleEnchantment<RingEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct SickleRitualCategory;
 
 impl CategoryProvider for SickleRitualCategory {
@@ -315,6 +326,7 @@ impl CategoryProvider for SickleRitualCategory {
 
 pub type SickleRitual = SimpleEnchantment<SickleRitualCategory>;
 
+#[derive(Clone)]
 pub struct SpellSwordEnchantmentCategory;
 
 impl CategoryProvider for SpellSwordEnchantmentCategory {
@@ -324,6 +336,7 @@ impl CategoryProvider for SpellSwordEnchantmentCategory {
 pub type SpellSwordEnchantment =
     SimpleEnchantment<SpellSwordEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct StaffEnchantmentCategory;
 
 impl CategoryProvider for StaffEnchantmentCategory {
@@ -332,6 +345,7 @@ impl CategoryProvider for StaffEnchantmentCategory {
 
 pub type StaffEnchantment = SimpleEnchantment<StaffEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct ToyEnchantmentCategory;
 
 impl CategoryProvider for ToyEnchantmentCategory {
@@ -340,6 +354,7 @@ impl CategoryProvider for ToyEnchantmentCategory {
 
 pub type ToyEnchantment = SimpleEnchantment<ToyEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct TrinkhornzauberCategory;
 
 impl CategoryProvider for TrinkhornzauberCategory {
@@ -348,6 +363,7 @@ impl CategoryProvider for TrinkhornzauberCategory {
 
 pub type Trinkhornzauber = SimpleEnchantment<TrinkhornzauberCategory>;
 
+#[derive(Clone)]
 pub struct WandEnchantmentCategory;
 
 impl CategoryProvider for WandEnchantmentCategory {
@@ -357,6 +373,7 @@ impl CategoryProvider for WandEnchantmentCategory {
 pub type WandEnchantment =
     BasicEnchantment<WandEnchantmentCategory, UnboundEnchantmentLocalization>;
 
+#[derive(Clone)]
 pub struct WeaponEnchantmentCategory;
 
 impl CategoryProvider for WeaponEnchantmentCategory {
@@ -365,6 +382,7 @@ impl CategoryProvider for WeaponEnchantmentCategory {
 
 pub type WeaponEnchantment = SimpleEnchantment<WeaponEnchantmentCategory>;
 
+#[derive(Clone)]
 pub struct AnimalShapePathCategory;
 
 impl CategoryProvider for AnimalShapePathCategory {
@@ -373,7 +391,7 @@ impl CategoryProvider for AnimalShapePathCategory {
 
 pub type AnimalShapePath = SimpleEntity<AnimalShapePathCategory>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct AnimalShapeSize {
     pub id: u32,
@@ -393,7 +411,7 @@ impl Identifiable for AnimalShapeSize {
     }
 }
 
-impl Translatable for AnimalShapeSize {
+impl TranslationsTranslatable for AnimalShapeSize {
     type Localization = SimpleLocalization;
 
     fn translations(&self) -> &Translations<SimpleLocalization> {
@@ -401,7 +419,7 @@ impl Translatable for AnimalShapeSize {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct AnimalShape {
     pub id: u32,
@@ -420,7 +438,7 @@ impl Identifiable for AnimalShape {
     }
 }
 
-impl Translatable for AnimalShape {
+impl TranslationsTranslatable for AnimalShape {
     type Localization = SimpleLocalization;
 
     fn translations(&self) -> &Translations<SimpleLocalization> {

@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translations, Translatable};
+use crate::data::{Localization, Translations, TranslationsTranslatable};
 use crate::id::{Category, CategoryProvider, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::marker::PhantomData;
 
 /// A [Localization] that consists only of a string.
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SimpleLocalization {
     pub name: String
@@ -22,7 +22,7 @@ pub type SimpleTranslations = Translations<SimpleLocalization>;
 
 /// A data entity that consists of an ID and
 /// [SimpleTranslations](crate::data::SimpleTranslations).
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SimpleEntity<C: CategoryProvider> {
     pub id: u32,
@@ -37,7 +37,7 @@ impl<C: CategoryProvider> Identifiable for SimpleEntity<C> {
     }
 }
 
-impl<C> Translatable for SimpleEntity<C>
+impl<C> TranslationsTranslatable for SimpleEntity<C>
 where
     C: CategoryProvider
 {
@@ -48,6 +48,7 @@ where
     }
 }
 
+#[derive(Clone)]
 pub struct AnimalTypeCategory;
 
 impl CategoryProvider for AnimalTypeCategory {
@@ -56,6 +57,7 @@ impl CategoryProvider for AnimalTypeCategory {
 
 pub type AnimalType = SimpleEntity<AnimalTypeCategory>;
 
+#[derive(Clone)]
 pub struct ArmorTypeCategory;
 
 impl CategoryProvider for ArmorTypeCategory {
@@ -64,6 +66,7 @@ impl CategoryProvider for ArmorTypeCategory {
 
 pub type ArmorType = SimpleEntity<ArmorTypeCategory>;
 
+#[derive(Clone)]
 pub struct BrewCategory;
 
 impl CategoryProvider for BrewCategory {
@@ -72,6 +75,7 @@ impl CategoryProvider for BrewCategory {
 
 pub type Brew = SimpleEntity<BrewCategory>;
 
+#[derive(Clone)]
 pub struct CombatSpecialAbilityGroupCategory;
 
 impl CategoryProvider for CombatSpecialAbilityGroupCategory {
@@ -81,6 +85,7 @@ impl CategoryProvider for CombatSpecialAbilityGroupCategory {
 pub type CombatSpecialAbilityGroup =
     SimpleEntity<CombatSpecialAbilityGroupCategory>;
 
+    #[derive(Clone)]
 pub struct CombatTechniqueGroupCategory;
 
 impl CategoryProvider for CombatTechniqueGroupCategory {
@@ -89,6 +94,7 @@ impl CategoryProvider for CombatTechniqueGroupCategory {
 
 pub type CombatTechniqueGroup = SimpleEntity<CombatTechniqueGroupCategory>;
 
+#[derive(Clone)]
 pub struct ElementCategory;
 
 impl CategoryProvider for ElementCategory {
@@ -97,6 +103,7 @@ impl CategoryProvider for ElementCategory {
 
 pub type Element = SimpleEntity<ElementCategory>;
 
+#[derive(Clone)]
 pub struct EyeColorCategory;
 
 impl CategoryProvider for EyeColorCategory {
@@ -105,6 +112,7 @@ impl CategoryProvider for EyeColorCategory {
 
 pub type EyeColor = SimpleEntity<EyeColorCategory>;
 
+#[derive(Clone)]
 pub struct HairColorCategory;
 
 impl CategoryProvider for HairColorCategory {
@@ -113,6 +121,7 @@ impl CategoryProvider for HairColorCategory {
 
 pub type HairColor = SimpleEntity<HairColorCategory>;
 
+#[derive(Clone)]
 pub struct LiturgicalChantGroupCategory;
 
 impl CategoryProvider for LiturgicalChantGroupCategory {
@@ -121,6 +130,7 @@ impl CategoryProvider for LiturgicalChantGroupCategory {
 
 pub type LiturgicalChantGroup = SimpleEntity<LiturgicalChantGroupCategory>;
 
+#[derive(Clone)]
 pub struct ReachCategory;
 
 impl CategoryProvider for ReachCategory {
@@ -129,6 +139,7 @@ impl CategoryProvider for ReachCategory {
 
 pub type Reach = SimpleEntity<ReachCategory>;
 
+#[derive(Clone)]
 pub struct RegionCategory;
 
 impl CategoryProvider for RegionCategory {
@@ -137,6 +148,7 @@ impl CategoryProvider for RegionCategory {
 
 pub type Region = SimpleEntity<RegionCategory>;
 
+#[derive(Clone)]
 pub struct SocialStatusCategory;
 
 impl CategoryProvider for SocialStatusCategory {
@@ -145,6 +157,7 @@ impl CategoryProvider for SocialStatusCategory {
 
 pub type SocialStatus = SimpleEntity<SocialStatusCategory>;
 
+#[derive(Clone)]
 pub struct SpellGroupCategory;
 
 impl CategoryProvider for SpellGroupCategory {
@@ -153,6 +166,7 @@ impl CategoryProvider for SpellGroupCategory {
 
 pub type SpellGroup = SimpleEntity<SpellGroupCategory>;
 
+#[derive(Clone)]
 pub struct SubjectCategory;
 
 impl CategoryProvider for SubjectCategory {
@@ -162,6 +176,7 @@ impl CategoryProvider for SubjectCategory {
 /// Subjects or Subject Areas are the categories of Focus Rules.
 pub type Subject = SimpleEntity<SubjectCategory>;
 
+#[derive(Clone)]
 pub struct TribeCategory;
 
 impl CategoryProvider for TribeCategory {

@@ -1,4 +1,4 @@
-use crate::data::{Translatable, Translations};
+use crate::data::{TranslationsTranslatable, Translations};
 use crate::data::activatable::{ActivatableType, APValue, SelectOptions};
 use crate::data::activatable::special_ability::{
     EffectSpecialAbilityLocalization,
@@ -13,6 +13,7 @@ use crate::id::{CategoryProvider, Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
+#[derive(Clone)]
 pub struct LycantropicGiftCategory;
 
 impl CategoryProvider for LycantropicGiftCategory {
@@ -22,6 +23,7 @@ impl CategoryProvider for LycantropicGiftCategory {
 pub type LycantropicGift =
     SimpleSpecialAbility<LycantropicGiftCategory, SpecialAbilityLocalization>;
 
+#[derive(Clone)]
 pub struct VampiricGiftCategory;
 
 impl CategoryProvider for VampiricGiftCategory {
@@ -31,7 +33,7 @@ impl CategoryProvider for VampiricGiftCategory {
 pub type VampiricGift =
     SimpleSpecialAbility<VampiricGiftCategory, SpecialAbilityLocalization>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum PactGiftDemonicConsumption {
@@ -39,21 +41,21 @@ pub enum PactGiftDemonicConsumption {
     PerLevel(u32)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum AutomaticEntryAction {
     Add,
     Remove
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub enum AutomaticEntrySelectionTargetType {
     MagicalTraditions,
     MagicalDilettanteTraditions
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum AutomaticEntryTarget {
@@ -68,7 +70,7 @@ pub enum AutomaticEntryTarget {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct AutomaticEntry {
 
@@ -84,7 +86,7 @@ pub struct AutomaticEntry {
     pub target: AutomaticEntryTarget
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct PactGift {
     pub id: u32,
@@ -115,7 +117,7 @@ impl Identifiable for PactGift {
     }
 }
 
-impl Translatable for PactGift {
+impl TranslationsTranslatable for PactGift {
     type Localization = EffectSpecialAbilityLocalization;
 
     fn translations(&self) -> &Translations<EffectSpecialAbilityLocalization> {
@@ -123,7 +125,7 @@ impl Translatable for PactGift {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct UncategorizedSimpleEntity {
     pub id: u32,
@@ -133,7 +135,7 @@ pub struct UncategorizedSimpleEntity {
 pub type PactCategoryType = UncategorizedSimpleEntity;
 pub type PactCategoryDomain = UncategorizedSimpleEntity;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct PactCategory {
     pub id: u32,
@@ -153,7 +155,7 @@ impl Identifiable for PactCategory {
     }
 }
 
-impl Translatable for PactCategory {
+impl TranslationsTranslatable for PactCategory {
     type Localization = ErrataLocalization;
 
     fn translations(&self) -> &ErrataTranslations {

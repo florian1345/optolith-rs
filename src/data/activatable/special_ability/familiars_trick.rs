@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::errata::Errata;
 use crate::data::skill::non_profane::MainParameterLocalization;
 use crate::data::src::SourceRefs;
@@ -6,7 +6,7 @@ use crate::id::{Category, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum FamiliarAPValue {
@@ -14,7 +14,7 @@ pub enum FamiliarAPValue {
     Default
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct FamiliarsTrickLocalization {
 
@@ -38,7 +38,7 @@ impl Localization for FamiliarsTrickLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct FamiliarsTrick {
     pub id: u32,
@@ -65,7 +65,7 @@ impl Identifiable for FamiliarsTrick {
     }
 }
 
-impl Translatable for FamiliarsTrick {
+impl TranslationsTranslatable for FamiliarsTrick {
     type Localization = FamiliarsTrickLocalization;
 
     fn translations(&self) -> &Translations<FamiliarsTrickLocalization> {

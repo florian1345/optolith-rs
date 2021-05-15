@@ -1,4 +1,4 @@
-use crate::data::Translatable;
+use crate::data::TranslationsTranslatable;
 use crate::data::errata::{ErrataLocalization, ErrataTranslations};
 use crate::data::simple::SimpleEntity;
 use crate::data::src::SourceRefs;
@@ -6,14 +6,14 @@ use crate::id::{Category, CategoryProvider, Id, Identifiable};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemStack {
     pub id: u32,
     pub amount: Option<u32>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct EquipmentPackage {
     pub id: u32,
@@ -32,7 +32,7 @@ impl Identifiable for EquipmentPackage {
     }
 }
 
-impl Translatable for EquipmentPackage {
+impl TranslationsTranslatable for EquipmentPackage {
     type Localization = ErrataLocalization;
 
     fn translations(&self) -> &ErrataTranslations {
@@ -40,6 +40,7 @@ impl Translatable for EquipmentPackage {
     }
 }
 
+#[derive(Clone)]
 pub struct ItemGroupCategory;
 
 impl CategoryProvider for ItemGroupCategory {

@@ -1,4 +1,4 @@
-use crate::data::{Localization, Translatable, Translations};
+use crate::data::{Localization, TranslationsTranslatable, Translations};
 use crate::data::activatable::{
     APValue,
     SelectOptions,
@@ -24,7 +24,7 @@ use serde::{Deserialize, Serialize};
 
 use std::marker::PhantomData;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(tag = "type", content = "value")]
 #[serde(deny_unknown_fields)]
 pub enum FavoredCombatTechniques {
@@ -34,14 +34,14 @@ pub enum FavoredCombatTechniques {
     List(Vec<CombatTechniqueId>)
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct FavoredSkillsSelection {
     pub amount: u32,
     pub options: Vec<u32>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SpecialRuleLocalization {
 
@@ -52,7 +52,7 @@ pub struct SpecialRuleLocalization {
     pub text: String
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct BlessedTraditionLocalization {
 
@@ -113,7 +113,7 @@ impl Localization for BlessedTraditionLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct BlessedTradition {
     pub id: u32,
@@ -178,7 +178,7 @@ impl Identifiable for BlessedTradition {
     }
 }
 
-impl Translatable for BlessedTradition {
+impl TranslationsTranslatable for BlessedTradition {
     type Localization = BlessedTraditionLocalization;
 
     fn translations(&self) -> &Translations<BlessedTraditionLocalization> {
@@ -186,7 +186,7 @@ impl Translatable for BlessedTradition {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MagicalTraditionLocalization {
     pub name: String,
@@ -245,7 +245,7 @@ impl Localization for MagicalTraditionLocalization {
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct MagicalTradition {
     pub id: u32,
@@ -320,7 +320,7 @@ impl Identifiable for MagicalTradition {
     }
 }
 
-impl Translatable for MagicalTradition {
+impl TranslationsTranslatable for MagicalTradition {
     type Localization = MagicalTraditionLocalization;
 
     fn translations(&self) -> &Translations<MagicalTraditionLocalization> {
@@ -329,7 +329,7 @@ impl Translatable for MagicalTradition {
 }
 
 /// A schema that matches both the arcane bard and dancer traditions.
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ArcaneProfessionTradition<C: CategoryProvider> {
     pub id: u32,
@@ -345,7 +345,7 @@ impl<C: CategoryProvider> Identifiable for ArcaneProfessionTradition<C> {
     }
 }
 
-impl<C> Translatable for ArcaneProfessionTradition<C>
+impl<C> TranslationsTranslatable for ArcaneProfessionTradition<C>
 where
     C: CategoryProvider
 {
@@ -356,6 +356,7 @@ where
     }
 }
 
+#[derive(Clone)]
 pub struct ArcaneBardTraditionCategory;
 
 impl CategoryProvider for ArcaneBardTraditionCategory {
@@ -365,6 +366,7 @@ impl CategoryProvider for ArcaneBardTraditionCategory {
 pub type ArcaneBardTradition =
     ArcaneProfessionTradition<ArcaneBardTraditionCategory>;
 
+#[derive(Clone)]
 pub struct ArcaneDancerTraditionCategory;
 
 impl CategoryProvider for ArcaneDancerTraditionCategory {
@@ -374,6 +376,7 @@ impl CategoryProvider for ArcaneDancerTraditionCategory {
 pub type ArcaneDancerTradition =
     ArcaneProfessionTradition<ArcaneDancerTraditionCategory>;
 
+#[derive(Clone)]
 pub struct MagicalTraditionPlaceholderCategory;
 
 impl CategoryProvider for MagicalTraditionPlaceholderCategory {

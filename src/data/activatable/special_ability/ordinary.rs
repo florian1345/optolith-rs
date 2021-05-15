@@ -11,6 +11,7 @@ pub type OrdinarySpecialAbility<C> =
 pub type OrdinarySkillInfluencingSpecialAbility<C> =
     SkillInfluencingSpecialAbility<C, SpecialAbilityLocalization>;
 
+#[derive(Clone)]
 pub struct GeneralSpecialAbilityCategory;
 
 impl CategoryProvider for GeneralSpecialAbilityCategory {
@@ -20,6 +21,7 @@ impl CategoryProvider for GeneralSpecialAbilityCategory {
 pub type GeneralSpecialAbility =
     OrdinarySkillInfluencingSpecialAbility<GeneralSpecialAbilityCategory>;
 
+#[derive(Clone)]
 pub struct FatePointSpecialAbilityCategory;
 
 impl CategoryProvider for FatePointSpecialAbilityCategory {
@@ -29,6 +31,7 @@ impl CategoryProvider for FatePointSpecialAbilityCategory {
 pub type FatePointSpecialAbility =
     OrdinarySkillInfluencingSpecialAbility<FatePointSpecialAbilityCategory>;
 
+#[derive(Clone)]
 pub struct SexSpecialActivityCategory;
 
 impl CategoryProvider for SexSpecialActivityCategory {
@@ -38,6 +41,7 @@ impl CategoryProvider for SexSpecialActivityCategory {
 pub type SexSpecialAbility =
     OrdinarySkillInfluencingSpecialAbility<SexSpecialActivityCategory>;
 
+#[derive(Clone)]
 pub struct FatePointSexSpecialAbilityCategory;
 
 impl CategoryProvider for FatePointSexSpecialAbilityCategory {
@@ -47,6 +51,7 @@ impl CategoryProvider for FatePointSexSpecialAbilityCategory {
 pub type FatePointSexSpecialAbility =
     OrdinarySpecialAbility<FatePointSexSpecialAbilityCategory>;
 
+#[derive(Clone)]
 pub struct SikaryanDrainSpecialAbilityCategory;
 
 impl CategoryProvider for SikaryanDrainSpecialAbilityCategory {

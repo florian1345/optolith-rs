@@ -36,6 +36,7 @@ use crate::data::activatable::special_ability::{
         WandEnchantment,
         WeaponEnchantment
     },
+    familiars_trick::FamiliarsTrick,
     gift::{
         LycantropicGift,
         PactCategory,
@@ -89,6 +90,7 @@ use crate::data::property::Property;
 use crate::data::publication::Publication;
 use crate::data::race::Race;
 use crate::data::rule::{FocusRule, OptionalRule};
+use crate::data::service::Service;
 use crate::data::sex::SexPractice;
 use crate::data::simple::{
     AnimalType,
@@ -164,6 +166,7 @@ pub mod property;
 pub mod publication;
 pub mod race;
 pub mod rule;
+pub mod service;
 pub mod sex;
 pub mod simple;
 pub mod skill;
@@ -224,6 +227,7 @@ const EQUIPMENT_PACKAGE_DIR: &str = "EquipmentPackages";
 const EXPERIENCE_LEVEL_DIR: &str = "ExperienceLevels";
 const EYE_COLOR_DIR: &str = "EyeColors";
 const FAMILIAR_SPECIAL_ABILITY_DIR: &str = "FamiliarSpecialAbilities";
+const FAMILIARS_TRICK_DIR: &str = "FamiliarsTricks";
 const FATE_POINT_SEX_SPECIAL_ABILITY_DIR: &str =
     "FatePointSexSpecialAbilities";
 const FATE_POINT_SPECIAL_ABILITY_DIR: &str = "FatePointSpecialAbilities";
@@ -274,6 +278,7 @@ const RING_ENCHANTMENT_DIR: &str = "RingEnchantments";
 const RITUAL_DIR: &str = "Rituals";
 const SCRIPT_DIR: &str = "Scripts";
 const SERMON_DIR: &str = "Sermons";
+const SERVICE_DIR: &str = "Services";
 const SEX_PRACTICE_DIR: &str = "SexPractices";
 const SEX_SPECIAL_ABILITY_DIR: &str = "SexSpecialAbilities";
 const SICKLE_RITUAL_DIR: &str = "SickleRituals";
@@ -373,6 +378,7 @@ pub struct OptolithData {
     experience_levels: IdMap<ExperienceLevel>,
     eye_colors: IdMap<EyeColor>,
     familiar_special_abilities: IdMap<FamiliarSpecialAbility>,
+    familiars_tricks: IdMap<FamiliarsTrick>,
     fate_point_sex_special_abilities: IdMap<FatePointSexSpecialAbility>,
     fate_point_special_abilities: IdMap<FatePointSpecialAbility>,
     focus_rules: IdMap<FocusRule>,
@@ -420,9 +426,10 @@ pub struct OptolithData {
     ring_enchantments: IdMap<RingEnchantment>,
     rituals: IdMap<Ritual>,
     scripts: IdMap<Script>,
+    sermons: IdMap<Sermon>,
+    services: IdMap<Service>,
     sex_practices: IdMap<SexPractice>,
     sex_special_abilities: IdMap<SexSpecialAbility>,
-    sermons: IdMap<Sermon>,
     sickle_rituals: IdMap<SickleRitual>,
     sikaryan_drain_special_abilities: IdMap<SikaryanDrainSpecialAbility>,
     skills: IdMap<Skill>,
@@ -581,6 +588,7 @@ impl OptolithData {
         let eye_colors = builder.map_u32(EYE_COLOR_DIR)?;
         let familiar_special_abilities =
             builder.map_u32(FAMILIAR_SPECIAL_ABILITY_DIR)?;
+        let familiars_tricks = builder.map_u32(FAMILIARS_TRICK_DIR)?;
         let fate_point_sex_special_abilities =
             builder.map_u32(FATE_POINT_SEX_SPECIAL_ABILITY_DIR)?;
         let fate_point_special_abilities =
@@ -645,6 +653,7 @@ impl OptolithData {
         let sex_practices = builder.map_u32(SEX_PRACTICE_DIR)?;
         let sex_special_abilities = builder.map_u32(SEX_SPECIAL_ABILITY_DIR)?;
         let sermons = builder.map_u32(SERMON_DIR)?;
+        let services = builder.map_u32(SERVICE_DIR)?;
         let sickle_rituals = builder.map_u32(SICKLE_RITUAL_DIR)?;
         let sikaryan_drain_special_abilities =
             builder.map_u32(SIKARYAN_DRAIN_SPECIAL_ABILITY_DIR)?;
@@ -730,6 +739,7 @@ impl OptolithData {
             experience_levels,
             eye_colors,
             familiar_special_abilities,
+            familiars_tricks,
             fate_point_sex_special_abilities,
             fate_point_special_abilities,
             focus_rules,
@@ -776,9 +786,10 @@ impl OptolithData {
             ring_enchantments,
             rituals,
             scripts,
+            sermons,
+            services,
             sex_practices,
             sex_special_abilities,
-            sermons,
             sickle_rituals,
             sikaryan_drain_special_abilities,
             skills,
@@ -1029,6 +1040,10 @@ impl OptolithData {
         self.familiar_special_abilities.get(&id)
     }
 
+    pub fn get_familiars_trick(&self, id: u32) -> Option<&FamiliarsTrick> {
+        self.familiars_tricks.get(&id)
+    }
+
     pub fn get_fate_point_sex_special_ability(&self, id: u32)
             -> Option<&FatePointSexSpecialAbility> {
         self.fate_point_sex_special_abilities.get(&id)
@@ -1228,6 +1243,14 @@ impl OptolithData {
         self.scripts.get(&id)
     }
 
+    pub fn get_sermon(&self, id: u32) -> Option<&Sermon> {
+        self.sermons.get(&id)
+    }
+
+    pub fn get_service(&self, id: u32) -> Option<&Service> {
+        self.services.get(&id)
+    }
+
     pub fn get_sex_practice(&self, id: u32) -> Option<&SexPractice> {
         self.sex_practices.get(&id)
     }
@@ -1235,10 +1258,6 @@ impl OptolithData {
     pub fn get_sex_special_ability(&self, id: u32)
             -> Option<&SexSpecialAbility> {
         self.sex_special_abilities.get(&id)
-    }
-
-    pub fn get_sermon(&self, id: u32) -> Option<&Sermon> {
-        self.sermons.get(&id)
     }
 
     pub fn get_sickle_ritual(&self, id: u32) -> Option<&SickleRitual> {
@@ -1445,6 +1464,8 @@ impl OptolithData {
                 to_dyn(self.get_eye_color(int_id)),
             Category::FamiliarSpecialAbilities =>
                 to_dyn(self.get_familiar_special_ability(int_id)),
+            Category::FamiliarsTricks =>
+                to_dyn(self.get_familiars_trick(int_id)),
             Category::FatePointSexSpecialAbilities =>
                 to_dyn(self.get_fate_point_sex_special_ability(int_id)),
             Category::FatePointSpecialAbilities =>
@@ -1540,6 +1561,8 @@ impl OptolithData {
                 to_dyn(self.get_script(int_id)),
             Category::Sermons =>
                 to_dyn(self.get_sermon(int_id)),
+            Category::Services =>
+                to_dyn(self.get_service(int_id)),
             Category::SexPractices =>
                 to_dyn(self.get_sex_practice(int_id)),
             Category::SexSpecialAbilities =>

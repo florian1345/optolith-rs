@@ -172,7 +172,7 @@ impl CompatibilityLoader {
     fn load_prefix_map(&mut self, max: u32, prefix: &str, category: Category) {
         for i in 1..=max {
             let id = Id::new(category, i);
-            self.compat.str_id_map.insert(format!("{}_{}", prefix, max), id);
+            self.compat.str_id_map.insert(format!("{}_{}", prefix, i), id);
         }
     }
 

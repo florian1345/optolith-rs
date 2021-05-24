@@ -819,11 +819,11 @@ impl OptolithData {
     }
 
     pub fn from_file(path: &str) -> OptolithDataResult<OptolithData> {
-        util::from_compressed_file(path)
+        util::from_file(path)
     }
 
     pub fn save_to_file(&self, path: &str) -> OptolithDataResult<()> {
-        util::to_compressed_file(self, path)
+        util::to_file(self, path)
     }
 
     pub fn get_advanced_combat_special_ability(&self, id: u32)

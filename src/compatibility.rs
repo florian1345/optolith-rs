@@ -312,11 +312,11 @@ impl Compatibility {
     }
 
     pub fn from_file(path: &str) -> OptolithDataResult<Compatibility> {
-        util::from_compressed_file(path)
+        util::from_file(path)
     }
 
     pub fn save_to_file(&self, path: &str) -> OptolithDataResult<()> {
-        util::to_compressed_file(self, path)
+        util::to_file(self, path)
     }
 
     pub fn get_str_id(&self, str_id: &str) -> Option<Id> {

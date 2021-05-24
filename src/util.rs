@@ -6,9 +6,6 @@ use std::fs::{self, DirEntry, File, ReadDir};
 use std::io::{Read, Write};
 use std::path::PathBuf;
 
-use zip::{CompressionMethod, ZipArchive, ZipWriter};
-use zip::write::FileOptions;
-
 fn deserialize_yaml_file_do<T>(file: &PathBuf) -> OptolithDataResult<T>
 where
     for<'de> T : Deserialize<'de>
@@ -69,24 +66,21 @@ pub fn join(p1: &str, p2: &str) -> PathBuf {
     path_buf
 }
 
-pub fn to_compressed_file<T>(t: &T, path: &str) -> OptolithDataResult<()>
+pub fn to_file<T>(t: &T, path: &str) -> OptolithDataResult<()>
 where
     T : Serialize
 {
-    let file = File::create(path)?;
-    let mut writer = ZipWriter::new(file);
-    let file_options = FileOptions::default().compression_method(CompressionMethod::Bzip2);
-    writer.start_file("0", file_options).unwrap();
-    writer.write_all(&serde_json::to_vec(t)?)?;
+    let mut file = File::create(path)?;
+    file.write_all(&serde_json::to_vec(t)?)?;
     Ok(())
 }
 
-pub fn from_compressed_file<T>(path: &str) -> OptolithDataResult<T>
+pub fn from_file<T>(path: &str) -> OptolithDataResult<T>
 where
     for<'de> T : Deserialize<'de>
 {
-    let mut archive = ZipArchive::new(File::open(path).unwrap()).unwrap();
+    let mut file = File::open(path)?;
     let mut json = String::new();
-    archive.by_name("0").unwrap().read_to_string(&mut json).unwrap();
-    Ok(serde_json::from_str::<T>(&json)?)
+    file.read_to_string(&mut json)?;
+    Ok(serde_json::from_str(&json)?)
 }
